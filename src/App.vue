@@ -6,55 +6,124 @@
       dark
     >
       <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
+        ESPORT RANKING !
       </div>
 
-      <v-spacer></v-spacer>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+     
     </v-app-bar>
 
     <v-content>
-      <HelloWorld/>
+
+      <v-card>
+        <v-card-title>
+          Players
+          <v-spacer></v-spacer>
+          <v-text-field
+            v-model="playersSearch"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
+        </v-card-title>
+        <v-data-table
+          :headers="playersHeaders"
+          :items="players"
+          :items-per-page="100"
+          :search="playersSearch"
+          class="elevation-1"
+        ></v-data-table>
+      </v-card>
+
+      <v-card>
+        <v-card-title>
+          Melee Characters
+          <v-spacer></v-spacer>
+          <v-text-field
+            v-model="charSearch"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
+        </v-card-title>
+        <v-data-table
+          :headers="charHeaders"
+          :items="characters"
+          :items-per-page="5"
+          :search="charSearch"
+          class="elevation-1"
+        ></v-data-table>
+      </v-card>
+
+
+
+      
+
     </v-content>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+
+import gql from 'graphql-tag'
 
 export default {
   name: 'App',
 
-  components: {
-    HelloWorld,
+  data: () => ({
+    charSearch: "",
+    playersSearch: "",
+    charHeaders: [
+      {
+        text: "Name",
+        align: "left",
+        sortable: true,
+        value: "name"
+      }
+    ],
+    playersHeaders: [
+      {
+        text: "Name",
+        align: "left",
+        sortable: true,
+        value: "name"
+      },
+      {
+        text: "Score",
+        align: "left",
+        sortable: true,
+        value: "score"
+      }
+    ],
+    characters: [],
+    players: []
+
+  }),
+
+  mounted() {
+    this.queryCharacters()
+    this.queryPlayers()
   },
 
-  data: () => ({
-    //
-  }),
+  methods: {
+    queryCharacters() {
+      this.$apollo.query({
+        query: gql`{ characters { name game { name }}}`
+      }).then(data => {
+        this.characters = data.data.characters
+      })
+    },
+    queryPlayers() {
+      this.$apollo.query({
+        query: gql`{ players { name score }}`
+      }).then(data => {
+        console.log(data.data.players)
+        this.players = data.data.players
+      })
+    }
+  }
+
 };
 </script>
