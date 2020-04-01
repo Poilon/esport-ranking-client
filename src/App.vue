@@ -8,13 +8,8 @@
       <div class="d-flex align-center">
         ESPORT RANKING !
       </div>
-
-
-     
     </v-app-bar>
-
     <v-content>
-
       <v-card>
         <v-card-title>
           Players
@@ -30,36 +25,36 @@
         <v-data-table
           :headers="playersHeaders"
           :items="players"
-          :items-per-page="100"
+          :items-per-page="15"
           :search="playersSearch"
+          :loading="loading"
+          loading-text="Waiting for players..."
+          dense
           class="elevation-1"
-        ></v-data-table>
+        >
+          <template v-slot:item.ranks="{ item }">
+            <div v-for="res in item.results">
+
+              <v-chip
+                class="ma-2"
+                color="grey"
+                text-color="white"
+              >
+                <v-avatar
+                  left
+                  class="grey darken-4"
+                >
+                  {{ res.rank }}
+                </v-avatar>
+              {{ res.tournament.name }}
+              </v-chip>
+
+
+
+            </div>
+          </template>
+        </v-data-table>
       </v-card>
-
-      <v-card>
-        <v-card-title>
-          Melee Characters
-          <v-spacer></v-spacer>
-          <v-text-field
-            v-model="charSearch"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-          ></v-text-field>
-        </v-card-title>
-        <v-data-table
-          :headers="charHeaders"
-          :items="characters"
-          :items-per-page="5"
-          :search="charSearch"
-          class="elevation-1"
-        ></v-data-table>
-      </v-card>
-
-
-
-      
 
     </v-content>
   </v-app>
@@ -75,6 +70,7 @@ export default {
   data: () => ({
     charSearch: "",
     playersSearch: "",
+    loading: true,
     charHeaders: [
       {
         text: "Name",
@@ -95,6 +91,12 @@ export default {
         align: "left",
         sortable: true,
         value: "score"
+      },
+      {
+        text: "Tournament results",
+        align: "left",
+        sortable: false,
+        value: "ranks"
       }
     ],
     characters: [],
@@ -117,10 +119,10 @@ export default {
     },
     queryPlayers() {
       this.$apollo.query({
-        query: gql`{ players { name score }}`
+        query: gql`{ players { name score results { tournament { name } rank } } }`
       }).then(data => {
-        console.log(data.data.players)
         this.players = data.data.players
+        this.loading = false
       })
     }
   }
