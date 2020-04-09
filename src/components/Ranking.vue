@@ -3,6 +3,28 @@
     <v-card-title>
       Players
       <v-spacer></v-spacer>
+      <v-autocomplete
+        v-model="country"
+        :items="countries"
+        label="Country"
+        autocomplete="noautocomplete"
+        clearable
+      />
+
+      <v-autocomplete
+        v-model="state"
+        :items="states"
+        label="State"
+        autocomplete="noautocomplete"
+      />
+
+      <v-autocomplete
+        v-model="city"
+        :items="cities"
+        label="City"
+        autocomplete="noautocomplete"
+      />
+
       <v-text-field
         v-model="playersSearch"
         append-icon="mdi-magnify"
@@ -106,15 +128,38 @@ export default {
     ],
     characters: [],
     players: [],
-    ranks: []
-
+    ranks: [],
+    countries: [],
+    states: [],
+    cities: [],
+    country: "",
+    state: "",
+    city: ""
   }),
 
   mounted() {
     this.queryCharacters()
+    this.queryCountries()
     this.queryPlayers()
   },
 
+  watch: {
+    country: function (country) {
+      this.queryPlayers(country)
+      this.queryStates(country)
+      this.queryCities(country)
+      return country
+    },
+    state: function (state) {
+      this.queryPlayers(this.country, state)
+      this.queryCities(this.country, state)
+      return state
+    },
+    city: function (city) {
+      this.queryPlayers(this.country, this.state, city)
+      return city
+    }
+  },
   methods: {
     medalColor(rank) {
       if (rank == 1)
@@ -127,6 +172,31 @@ export default {
       return "grey darken-4"
 
     },
+    queryCountries() {
+      this.$apollo.query({
+        query: gql`{ countries }`
+      }).then(data => {
+        this.countries = data.data.countries
+      })
+    },
+    queryStates(country) {
+      this.$apollo.query({
+        query: gql`{ states(country: "${country}") }`
+      }).then(data => {
+        this.states = data.data.states
+      })
+    },
+    queryCities(country, state) {
+      let filter = ""
+      if (state)
+        filter += `, state: "${state}"`
+      this.$apollo.query({
+        query: gql`{ cities(country: "${country}"${filter}) }`
+      }).then(data => {
+        this.cities = data.data.cities
+      })
+    },
+
     queryCharacters() {
       this.$apollo.query({
         query: gql`{ characters { name game { name }}}`
@@ -134,24 +204,26 @@ export default {
         this.characters = data.data.characters
       })
     },
-    queryPlayers() {
+
+    queryPlayers(country, state, city) {
+      let filter = ""
+      if (country)
+        filter = `, filter: "country=='${country}'`
+      if (country && state)
+        filter += ` && state == '${state}'`
+      if (country && city)
+        filter += ` && city == '${city}'`
+      if (country)
+        filter += `"`
 
       this.$apollo.query({
-        query: gql`{ players(order_by: "elo desc", per_page: 20, page: 1) { id name score profile_picture_url elo } }`
-      }).then(data => {
-        this.players = data.data.players
-        this.ranks = this.players.map(p => p.elo)
-      })
-
-
-      this.$apollo.query({
-        query: gql`{ players(order_by: "elo desc", per_page: 500, page: 1) { id name score profile_picture_url elo } }`
+        query: gql`{ players(order_by: "elo desc", per_page: 500, page: 1${filter}) { id name score profile_picture_url elo } }`
       }).then(data => {
         this.players = data.data.players
         this.ranks = this.players.map(p => p.elo)
         this.loading = false
       })
-    }
+    },
   }
 
 };
