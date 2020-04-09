@@ -12,10 +12,6 @@
     <a :href="tournament.smashgg_link_url" target="_blank">
       {{ tournament.name }}
     </a>
-    <br>
-    Weight: {{ tournament.weight }}
-    <br>
-    <br>
 
     <v-card-title>
       Results
@@ -86,7 +82,7 @@ export default {
           name
           weight
           smashgg_link_url
-          results { rank player { id name } }
+          results { rank player { id name score profile_picture_url } }
         }
       }`
     }).then(data => {

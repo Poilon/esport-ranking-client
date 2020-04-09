@@ -22,7 +22,7 @@
       class="elevation-1"
     >
       <template v-slot:item.rank="{ item }">
-        {{ ranks.indexOf(item.score) + 1 }}
+        {{ ranks.indexOf(item.elo) + 1 }}
       </template>
 
       <template v-slot:item.name="{ item }">
@@ -32,6 +32,9 @@
           text-color="white"
           :to="{ name: 'player', params: { id: item.id } }"
         >
+          <v-avatar left v-if="item && item.profile_picture_url" >
+            <v-img :src="item.profile_picture_url"/>
+          </v-avatar>
           {{ item.name }}
         </v-chip>
       </template>
@@ -70,7 +73,7 @@ export default {
     playersSearch: "",
     loading: true,
     options: {
-      itemsPerPage: 10,
+      itemsPerPage: 20,
 
     },
     charHeaders: [
@@ -95,16 +98,10 @@ export default {
         value: "name"
       },
       {
-        text: "Score",
+        text: "Elo",
         align: "left",
         sortable: true,
-        value: "score"
-      },
-      {
-        text: "Tournament results",
-        align: "left",
-        sortable: false,
-        value: "ranks"
+        value: "elo"
       }
     ],
     characters: [],
@@ -138,12 +135,20 @@ export default {
       })
     },
     queryPlayers() {
+
       this.$apollo.query({
-        query: gql`{ players(order_by: "score desc", page: 1, per_page: 50) { id name score results { tournament { id name } rank } } }`
+        query: gql`{ players(order_by: "elo desc", per_page: 20, page: 1) { id name score profile_picture_url elo } }`
       }).then(data => {
         this.players = data.data.players
-        this.players.map(p => { p.ranks = p.results.map(t => t.tournament.name) })
-        this.ranks = this.players.map(p => p.score)
+        this.ranks = this.players.map(p => p.elo)
+      })
+
+
+      this.$apollo.query({
+        query: gql`{ players(order_by: "elo desc", per_page: 500, page: 1) { id name score profile_picture_url elo } }`
+      }).then(data => {
+        this.players = data.data.players
+        this.ranks = this.players.map(p => p.elo)
         this.loading = false
       })
     }
