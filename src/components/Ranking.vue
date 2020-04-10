@@ -12,17 +12,21 @@
       />
 
       <v-autocomplete
+        v-if="states.length > 0"
         v-model="state"
         :items="states"
         label="State"
         autocomplete="noautocomplete"
+        clearable
       />
 
       <v-autocomplete
+        v-if="cities.length > 0"
         v-model="city"
         :items="cities"
         label="City"
         autocomplete="noautocomplete"
+        clearable
       />
 
       <v-text-field
@@ -148,15 +152,21 @@ export default {
       this.queryPlayers(country)
       this.queryStates(country)
       this.queryCities(country)
+      this.city = ""
+      this.state = ""
+
       return country
     },
     state: function (state) {
       this.queryPlayers(this.country, state)
       this.queryCities(this.country, state)
+      this.city = ""
+
       return state
     },
     city: function (city) {
       this.queryPlayers(this.country, this.state, city)
+
       return city
     }
   },
@@ -217,7 +227,7 @@ export default {
         filter += `"`
 
       this.$apollo.query({
-        query: gql`{ players(order_by: "elo desc", per_page: 500, page: 1${filter}) { id name score profile_picture_url elo } }`
+        query: gql`{ players(order_by: "elo desc", per_page: 10000, page: 1${filter}) { id name score profile_picture_url elo } }`
       }).then(data => {
         this.players = data.data.players
         this.ranks = this.players.map(p => p.elo)
