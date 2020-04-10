@@ -16,6 +16,25 @@
     </div>
 
     {{ player.name }}
+
+    <v-autocomplete
+      v-model="otherPlayer"
+      :items="players"
+      item-text="name"
+      item-value="id"
+      label="Compare to"
+      autocomplete="noautocomplete"
+      clearable
+      @change="fetchOtherPlayerElo($event)"
+    />
+
+    <PlayerEloMap
+      v-if="player.elo_map != '{}'"
+      :compareTo="compareTo"
+      :eloMap="JSON.parse(player.elo_map)"
+      :key="compareTo.id"
+    />
+
     <v-layout row wrap style="padding-left: 10px;">
       <div style="width: 20px;" v-if="player.twitch">
         <a :href="player.twitch" target="_blank"> <v-img src="../assets/twitch.png" width="20"/> </a>
@@ -87,12 +106,22 @@
 
 <script>
 
-import gql from 'graphql-tag'
+import gql from "graphql-tag";
+import PlayerEloMap from "./PlayerEloMap"
 
 export default {
+  components: {
+    PlayerEloMap
+  },
   data: () => ({
-    player: {},
+    player: {
+      elo_map: "{}"
+    },
     results: [],
+    otherPlayer: "",
+    compareTo: {},
+    compareToLoaded: false,
+    players: [],
     search: "",
     loading: true,
     headers: [
@@ -111,14 +140,26 @@ export default {
     ],
   }),
   mounted() {
-
     this.$apollo.query({
       query: gql`{
-        player(id: "${this.$route.params.id}") {
+        players(order_by: "elo desc", per_page: 1000, page: 1) {
+          id
+          name
+        }
+      }`
+    }).then(data => {
+      this.players = data.data.players
+    })
+    this.$apollo.query({
+      query: gql`
+      query FetchPlayer($id: String!) {
+        player(id: $id) {
+          id
           name
           profile_picture_url
           current_mpgr_ranking
           elo
+          elo_map
           twitch
           twitter
           mixer
@@ -127,13 +168,39 @@ export default {
           worst_lose { winner { name } tournament { name } full_round_text }
           results { rank tournament { id name } }
         }
-      }`
+      }`,
+      variables: {
+        id: this.$route.params.id
+      }
     }).then(data => {
       this.player = data.data.player
       this.results = this.player.results
       this.loading = false
     })
+  },
+  methods: {
+    fetchOtherPlayerElo(id) {
+      if (id)
+        this.$apollo.query({
+          query: gql`
+            query EloMapOfPlayer($id: String!) {
+              player(id: $id) {
+                id
+                name
+                elo_map
+              }
+            }
+          `,
+          variables: {
+            id: id
+          }
+        }).then(data => {
+          this.compareTo = data.data.player
+          this.compareToLoaded = true
+        })
+      else
+        this.compareToLoaded = false
+    }
   }
-
 }
 </script>
