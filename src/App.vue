@@ -6,7 +6,7 @@
       dark
     >
       <div class="d-flex align-center">
-        ESPORT RANKING !
+        ESPORT RANKING ! DISCLAIMER: THIS IS AN ALPHA VERSION, DON'T USE IT FOR SEEDING, IT'S STILL WORK IN PROGRESS...
       </div>
     </v-app-bar>
     <v-content>

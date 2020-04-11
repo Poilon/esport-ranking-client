@@ -100,6 +100,11 @@
           {{item.tournament.name}}
         </v-chip>
       </template>
+
+      <template v-slot:item.tournament.date="{ item }">
+        {{ new Date(Date.parse(item.tournament.date)).toDateString() }}
+      </template>
+
     </v-data-table>
   </v-container>
 </template>
@@ -137,6 +142,12 @@ export default {
         sortable: true,
         value: "tournament.name"
       },
+      {
+        text: "Tournament Date",
+        align: "left",
+        sortable: true,
+        value: "tournament.date"
+      }
     ],
   }),
   mounted() {
@@ -166,7 +177,7 @@ export default {
           matches_count
           best_win { loser { name } tournament { name } full_round_text }
           worst_lose { winner { name } tournament { name } full_round_text }
-          results { rank tournament { id name } }
+          results { rank tournament { id name date } }
         }
       }`,
       variables: {
