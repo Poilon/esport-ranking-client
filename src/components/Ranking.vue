@@ -227,7 +227,7 @@ export default {
         filter += `"`
 
       this.$apollo.query({
-        query: gql`{ players(order_by: "elo desc", per_page: 10000, page: 1${filter}) { id name score profile_picture_url elo } }`
+        query: gql`{ players(order_by: "elo desc", per_page: 2000, page: 1${filter}) { id name score profile_picture_url elo } }`
       }).then(data => {
         this.players = data.data.players
         this.ranks = this.players.map(p => p.elo)
