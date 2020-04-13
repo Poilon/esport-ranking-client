@@ -7,86 +7,93 @@
         style="width: 140px;  height: 4px;  background-color: white; margin: auto; margin-top:0; margin-bottom:0"
       ></div>
     </v-parallax>
+    <v-container style="max-width:1024px; padding:24px;">
+      <v-card pa-4 flat color="transparent">
+        <v-card-title class="py-0">
+          <v-layout row>
+            <v-flex xs3 pr-4>
+              <v-text-field
+                v-model="playersSearch"
+                append-icon="mdi-magnify"
+                label="Player"
+                single-line
+                hide-details
+              ></v-text-field>
+            </v-flex>
 
-    <v-card>
-      <!--  <v-card-title>
-        Players
-        <v-spacer></v-spacer>
-        <v-autocomplete
-          v-model="country"
-          :items="countries"
-          label="Country"
-          autocomplete="noautocomplete"
-          clearable
-        />
+            <v-flex xs3 px-2>
+              <v-autocomplete
+                v-model="country"
+                :items="countries"
+                label="Country"
+                autocomplete="noautocomplete"
+                clearable
+              />
+            </v-flex>
+            <v-flex xs3 px-2  v-if="states.length > 0">
+              <v-autocomplete
+               
+                v-model="state"
+                :items="states"
+                label="State"
+                autocomplete="noautocomplete"
+                clearable
+              />
+            </v-flex>
+            <v-flex xs3 pl-2 v-if="cities.length > 0">
+              <v-autocomplete
+                
+                v-model="city"
+                :items="cities"
+                label="City"
+                autocomplete="noautocomplete"
+                clearable
+              />
+            </v-flex>
+          </v-layout>
+        </v-card-title>
+        <v-data-table
+          dense
+          :headers="playersHeaders"
+          :items="players"
+          :search="playersSearch"
+          :loading="loading"
+          :options.sync="options"
+          loading-text="Fetching data..."
+          class="elevation-0"
+        >
+          <template v-slot:item.rank="{ item }">{{ ranks.indexOf(item.elo) + 1 }}</template>
 
-        <v-autocomplete
-          v-if="states.length > 0"
-          v-model="state"
-          :items="states"
-          label="State"
-          autocomplete="noautocomplete"
-          clearable
-        />
-
-        <v-autocomplete
-          v-if="cities.length > 0"
-          v-model="city"
-          :items="cities"
-          label="City"
-          autocomplete="noautocomplete"
-          clearable
-        />
-
-        <v-text-field
-          v-model="playersSearch"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-        ></v-text-field>
-      </v-card-title>-->
-      <v-data-table
-        dense
-        :headers="playersHeaders"
-        :items="players"
-        :search="playersSearch"
-        :loading="loading"
-        :options.sync="options"
-        loading-text="Loading players list..."
-        class="elevation-1 pa-5"
-      >
-        <template v-slot:item.rank="{ item }">{{ ranks.indexOf(item.elo) + 1 }}</template>
-
-        <template v-slot:item.name="{ item }">
-          <v-chip
-            class="ma-2"
-            color="grey"
-            text-color="white"
-            :to="{ name: 'player', params: { id: item.id } }"
-          >
-            <v-avatar left v-if="item && item.profile_picture_url">
-              <v-img :src="item.profile_picture_url" />
-            </v-avatar>
-            {{ item.name }}
-          </v-chip>
-        </template>
-
-        <template v-slot:item.ranks="{ item }">
-          <v-flex v-for="(res,i) in item.results" :key="i">
+          <template v-slot:item.name="{ item }">
             <v-chip
               class="ma-2"
               color="grey"
               text-color="white"
-              :to="{ name: 'tournament', params: { id: res.tournament.id } }"
+              :to="{ name: 'player', params: { id: item.id } }"
             >
-              <v-avatar left :class="medalColor(res.rank)">{{ res.rank }}</v-avatar>
-              {{ res.tournament.name }}
+              <v-avatar left v-if="item && item.profile_picture_url">
+                <v-img :src="item.profile_picture_url" />
+              </v-avatar>
+              {{ item.name }}
             </v-chip>
-          </v-flex>
-        </template>
-      </v-data-table>
-    </v-card>
+          </template>
+
+          <template v-slot:item.ranks="{ item }">
+            <v-flex v-for="(res,i) in item.results" :key="i">
+              <v-chip
+                class="ma-2"
+                color="grey"
+                text-color="white"
+                :to="{ name: 'tournament', params: { id: res.tournament.id } }"
+              >
+                <v-avatar left :class="medalColor(res.rank)">{{ res.rank }}</v-avatar>
+                {{ res.tournament.name }}
+              </v-chip>
+            </v-flex>
+          </template>
+        </v-data-table>
+      </v-card>
+    </v-container>
   </div>
 </template>
 
