@@ -30,9 +30,8 @@
                 clearable
               />
             </v-flex>
-            <v-flex xs3 px-2  v-if="states.length > 0">
+            <v-flex xs3 px-2 v-if="states.length > 0">
               <v-autocomplete
-               
                 v-model="state"
                 :items="states"
                 label="State"
@@ -42,7 +41,6 @@
             </v-flex>
             <v-flex xs3 pl-2 v-if="cities.length > 0">
               <v-autocomplete
-                
                 v-model="city"
                 :items="cities"
                 label="City"
@@ -60,21 +58,40 @@
           :loading="loading"
           :options.sync="options"
           loading-text="Fetching data..."
+          :footer-props="{'items-per-page-options':[20, 50, 100, 250, 500, -1]}"
           class="elevation-0"
         >
           <template v-slot:item.rank="{ item }">{{ ranks.indexOf(item.elo) + 1 }}</template>
+          <template
+            v-slot:item.current_mpgr_ranking="{ item }"
+          >{{ item.current_mpgr_ranking == 9999999999 ? "---" : item.current_mpgr_ranking }}</template>
 
           <template v-slot:item.name="{ item }">
+
+            <v-list-item class="pl-0" dense :to="{ name: 'player', params: { id: item.id } }">
+              <v-list-item-avatar>
+                <v-img :src="item.profile_picture_url ? item.profile_picture_url : '/no_avatar.png'"></v-img>
+              </v-list-item-avatar>
+
+ 
+              <v-list-item-content>
+                <v-list-item-title>{{item.name}}</v-list-item-title>
+                <v-list-item-subtitle>Pôle Amande Anus</v-list-item-subtitle>
+              </v-list-item-content>
+
+              
+            </v-list-item>
+          </template>
+
+          <template v-slot:item.elo="{ item }">
             <v-chip
               class="ma-2"
-              color="grey"
+              color="#141414"
               text-color="white"
+              small
               :to="{ name: 'player', params: { id: item.id } }"
             >
-              <v-avatar left v-if="item && item.profile_picture_url">
-                <v-img :src="item.profile_picture_url" />
-              </v-avatar>
-              {{ item.name }}
+              <span>{{ item.elo }}</span>
             </v-chip>
           </template>
 
@@ -110,20 +127,18 @@ export default {
     options: {
       itemsPerPage: 20
     },
-    charHeaders: [
-      {
-        text: "PLAYER",
-        align: "left",
-        sortable: true,
-        value: "name"
-      }
-    ],
     playersHeaders: [
       {
         text: "RANK",
         align: "left",
         sortable: true,
         value: "rank"
+      },
+      {
+        text: "MPGR",
+        align: "left",
+        sortable: true,
+        value: "current_mpgr_ranking"
       },
       {
         text: "PLAYER",
@@ -261,10 +276,14 @@ export default {
 
       this.$apollo
         .query({
-          query: gql`{ players(order_by: "elo desc", per_page: 10000, page: 1${filter}) { id name score profile_picture_url elo } }`
+          query: gql`{ players(order_by: "elo desc", per_page: 10000, page: 1${filter}) { id current_mpgr_ranking name score profile_picture_url elo } }`
         })
         .then(data => {
           this.players = data.data.players;
+          this.players.forEach(player => {
+            if (!player.current_mpgr_ranking)
+              player.current_mpgr_ranking = 9999999999;
+          });
           this.ranks = this.players.map(p => p.elo);
           this.loading = false;
         });
