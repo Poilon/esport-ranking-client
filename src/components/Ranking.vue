@@ -73,13 +73,13 @@
                 <v-img :src="item.profile_picture_url ? item.profile_picture_url : '/no_avatar.png'"></v-img>
               </v-list-item-avatar>
 
- 
+
               <v-list-item-content>
                 <v-list-item-title>{{item.name}}</v-list-item-title>
                 <v-list-item-subtitle>Pôle Amande Anus</v-list-item-subtitle>
               </v-list-item-content>
 
-              
+
             </v-list-item>
           </template>
 
@@ -287,7 +287,7 @@ export default {
         filter += `"`
 
       this.$apollo.query({
-        query: gql`{ players(order_by: "elo desc", per_page: 2000, page: 1${filter}) { id name score profile_picture_url elo } }`
+        query: gql`{ players(order_by: "elo desc", per_page: 2000, page: 1${filter}) { id name score profile_picture_url current_mpgr_ranking elo } }`
       }).then(data => {
         this.players = data.data.players
         this.ranks = this.players.map(p => p.elo)
