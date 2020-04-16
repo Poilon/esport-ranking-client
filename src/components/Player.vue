@@ -80,7 +80,7 @@
           <v-card-text style="height:127px" class="pb-1 px-0" >
             <v-container fill-height class="px-0">
               <v-layout align-center>
-               
+
                 <v-flex xs5 class="d-flex justify-center align-center">
                   <v-progress-circular
                     rotate="270"
@@ -96,12 +96,12 @@
 
                   <br>
                   <label v-if="player.winning_matches" >
-                    {{player.winning_matches.length}} wins / 
+                    {{player.winning_matches.length}} wins /
                     {{player.matches_count - player.winning_matches.length}} losses
                   </label>
 
                   </span>
-                  
+
                 </v-flex>
                 <v-divider vertical></v-divider>
                 <v-flex xs7 text-xs-center>
@@ -155,7 +155,7 @@
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title v-html="data.item.name"></v-list-item-title>
-              <v-list-item-subtitle>Prenom Nom</v-list-item-subtitle>
+              <v-list-item-subtitle></v-list-item-subtitle>
             </v-list-item-content>
           </template>
         </template>
@@ -171,7 +171,7 @@
                 <v-list-item-title>
                   <strong>{{player.name}}</strong>
                 </v-list-item-title>
-                <v-list-item-subtitle>Prenom Nom</v-list-item-subtitle>
+                <v-list-item-subtitle></v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -186,7 +186,7 @@
                 <v-list-item-title>
                   <strong class="primary--text">{{ compareTo.name }}</strong>
                 </v-list-item-title>
-                <v-list-item-subtitle>Prenom Nom</v-list-item-subtitle>
+                <v-list-item-subtitle></v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </v-list>
