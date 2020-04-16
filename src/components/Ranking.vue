@@ -290,6 +290,10 @@ export default {
         query: gql`{ players(order_by: "elo desc", per_page: 2000, page: 1${filter}) { id name profile_picture_url current_mpgr_ranking elo } }`
       }).then(data => {
         this.players = data.data.players
+        this.players.forEach(player => {
+          if (!player.current_mpgr_ranking)
+            player.current_mpgr_ranking = 9999999999;
+        });
         this.ranks = this.players.map(p => p.elo)
         this.loading = false
       })
