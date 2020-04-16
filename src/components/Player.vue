@@ -115,7 +115,7 @@
 
                     <v-list-item v-if="player.worst_lose">
                       <v-list-item-content>
-                        <v-list-item-title>Worst Lose</v-list-item-title>
+                        <v-list-item-title>Worst Loss</v-list-item-title>
                         <v-list-item-subtitle>Against {{ player.worst_lose.winner.name }} at {{ player.worst_lose.tournament.name }}</v-list-item-subtitle>
                       </v-list-item-content>
                     </v-list-item>
@@ -395,7 +395,7 @@ export default {
         arr.push({
           text: this.player.country,
           link: true,
-          to: "/"
+          to: `/?country=${this.player.country}`
         });
       }
 
@@ -403,15 +403,18 @@ export default {
         arr.push({
           text: this.player.state,
           link: true,
-          to: "/"
+          to: `/?country=${this.player.country}&state=${this.player.state}`
         });
       }
 
       if (this.player.city) {
+        let stateParam = ""
+        if (this.player.state)
+          stateParam = `&state=${this.player.state}`
         arr.push({
           text: this.player.city,
           link: true,
-          to: "/"
+          to: `/?country=${this.player.country}${stateParam}&city=${this.player.city}`
         });
       }
       return arr;

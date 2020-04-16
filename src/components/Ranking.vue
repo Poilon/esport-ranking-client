@@ -168,6 +168,9 @@ export default {
     this.queryCharacters();
     this.queryCountries();
     this.queryPlayers();
+    this.country = this.$route.query.country
+    this.state = this.$route.query.state
+    this.city = this.$route.query.city
   },
 
   watch: {
@@ -175,15 +178,20 @@ export default {
       this.queryPlayers(country);
       this.queryStates(country);
       this.queryCities(country);
-      this.city = "";
-      this.state = "";
+
+      if (!this.state || this.state != this.$route.query.state)
+        this.state = "";
+
+      if (!this.city || this.city != this.$route.query.city)
+        this.city = "";
 
       return country;
     },
     state: function(state) {
       this.queryPlayers(this.country, state);
       this.queryCities(this.country, state);
-      this.city = "";
+      if (!this.city || this.city != this.$route.query.city)
+        this.city = "";
 
       return state;
     },
