@@ -58,7 +58,7 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td class="simple-table-td text-center">XX</td>
+                      <td class="simple-table-td text-center">{{ player.rank }}</td>
                       <td
                         class="simple-table-td text-center"
                       >{{ player.current_mpgr_ranking ? player.current_mpgr_ranking : '--' }}</td>
@@ -302,6 +302,7 @@ export default {
               profile_picture_url
               current_mpgr_ranking
               elo
+              rank
               teams {
                 id
                 prefix
