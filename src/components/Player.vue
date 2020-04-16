@@ -1,71 +1,206 @@
 <template>
-  <v-container>
-    <v-chip
-      class="ma-2"
-      color="grey"
-      text-color="white"
-      to="/"
-    >
-      back
-    </v-chip>
+  <v-container style="max-width:1024px; padding:24px;">
+    <v-toolbar color="transparent" flat class="mt-2 ml-0">
+      <v-layout row align-center>
+        <v-chip
+          v-if="player.teams && player.teams.name"
+          class="mr-4"
+          color="primary"
+          label
+          text-color="white"
+        >{{player.teams.name}}</v-chip>
 
-    <div style="width: 120px;" v-if="player.profile_picture_url">
-      <a :href="player.profile_picture_url" target="_blank">
-        <v-img :src="player.profile_picture_url" width="120"/>
-      </a>
-    </div>
+        <strong class="headline font-weight-black">{{ player.name && player.name.toUpperCase() }}</strong>
 
-    {{ player.name }}
+        <a v-if="player.twitch" :href="player.twitch" target="_blank" class="px-4">
+          <v-img src="../assets/twitch.png" width="20" />
+        </a>
 
-    <v-autocomplete
-      v-model="otherPlayer"
-      :items="players"
-      item-text="name"
-      item-value="id"
-      label="Compare to"
-      autocomplete="noautocomplete"
-      clearable
-      @change="fetchOtherPlayerElo($event)"
-    />
+        <a v-if="player.mixer" :href="player.mixer" target="_blank" class="px-4">
+          <v-img src="../assets/mixer.png" width="20" />
+        </a>
 
-    <PlayerEloMap
-      v-if="player.elo_map != '{}'"
-      :compareTo="compareTo"
-      :eloMap="JSON.parse(player.elo_map)"
-      :key="compareTo.id"
-    />
+        <a v-if="player.twitter" :href="player.twitter" target="_blank" class="px-4">
+          <v-img src="../assets/twitter.png" width="20" />
+        </a>
+        <v-spacer></v-spacer>
+        <v-breadcrumbs class="pl-0" :items="localisationBreadcrumbs">
+          <template v-slot:divider>
+            <v-icon>mdi-chevron-right</v-icon>
+          </template>
+        </v-breadcrumbs>
+      </v-layout>
+    </v-toolbar>
 
-    <v-layout row wrap style="padding-left: 10px;">
-      <div style="width: 20px;" v-if="player.twitch">
-        <a :href="player.twitch" target="_blank"> <v-img src="../assets/twitch.png" width="20"/> </a>
-      </div>
+    <v-layout row style="height:200px">
+      <v-flex xs3 px-4>
+        <v-card height="200" flat class="justify-center">
+          <v-img
+            :src="player.profile_picture_url ? player.profile_picture_url : '/no_avatar.png'"
+            height="100%"
+            width="100%"
+          />
+        </v-card>
+      </v-flex>
 
-      <div style="width: 20px;" v-if="player.mixer">
-        <a :href="player.mixer" target="_blank"> <v-img src="../assets/mixer.png" width="20"/> </a>
-      </div>
+      <v-flex xs9>
+        <v-card height="200" flat card>
+          <v-card-title class="pa-0">
+            <v-flex xs12>
+              <v-simple-table dense>
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-center">Rank</th>
+                      <th class="text-center">MPGR</th>
+                      <th class="text-center">ELO</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="simple-table-td text-center">XX</td>
+                      <td
+                        class="simple-table-td text-center"
+                      >{{ player.current_mpgr_ranking ? player.current_mpgr_ranking : '--' }}</td>
+                      <td class="simple-table-td text-center">
+                        <template v-if="player.elo">
+                          <v-chip class="ml-0 my-2" color="#141414" text-color="white" small>
+                            <span>{{ player.elo }}</span>
+                          </v-chip>
+                        </template>
+                        <template v-else>--</template>
+                      </td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-flex>
+          </v-card-title>
 
-      <div style="width: 20px;" v-if="player.twitter">
-        <a :href="player.twitter" target="_blank"> <v-img src="../assets/twitter.png" width="20"/> </a>
-      </div>
+          <v-card-text style="height:127px" class="pb-1 px-0" >
+            <v-container fill-height class="px-0">
+              <v-layout align-center>
+               
+                <v-flex xs5 class="d-flex justify-center align-center">
+                  <v-progress-circular
+                    rotate="270"
+                    size="48"
+                    :value="playerWinrate"
+                    width="4"
+                    color="light-blue"
+                  >{{ playerWinrate }}%</v-progress-circular>
 
+                  <span class="pl-4">
+                    WIN RATE /
+                    <strong>{{player.matches_count}}</strong> GAMES
+
+                  <br>
+                  <label v-if="player.winning_matches" >
+                    {{player.winning_matches.length}} wins / 
+                    {{player.matches_count - player.winning_matches.length}} losses
+                  </label>
+
+                  </span>
+                  
+                </v-flex>
+                <v-divider vertical></v-divider>
+                <v-flex xs7 text-xs-center>
+                  <v-list dense color="transparent">
+                    <v-list-item v-if="player.best_win">
+                      <v-list-item-content>
+                        <v-list-item-title>Best Win</v-list-item-title>
+                        <v-list-item-subtitle>{{ player.best_win.loser.name }} at {{ player.best_win.tournament.name }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+
+                    <v-list-item v-if="player.worst_lose">
+                      <v-list-item-content>
+                        <v-list-item-title>Worst Loss</v-list-item-title>
+                        <v-list-item-subtitle>Against {{ player.worst_lose.winner.name }} at {{ player.worst_lose.tournament.name }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+        </v-card>
+      </v-flex>
     </v-layout>
 
-    <div v-if="player.best_win">
-      Best win => {{ player.best_win.loser.name }} ({{ player.best_win.tournament.name }})
-    </div>
-    <div v-if="player.worst_lose">
-      Worst lose => {{ player.worst_lose.winner.name }} ({{ player.worst_lose.tournament.name }})
-    </div>
-
-    <div>
-      2020 matches count => {{ player.matches_count }}
-    </div>
-    <div v-if="player.current_mpgr_ranking">
-      MPGR Ranking : {{ player.current_mpgr_ranking }}
-    </div>
-    <div v-if="player.elo">
-      Elo : {{ player.elo }}
-    </div>
+    <v-layout row justify-center pa-4 pb-0 class="mt-5">
+      <strong class="pl-2">Elo over time</strong>
+      <v-spacer></v-spacer>
+      <v-autocomplete
+        v-model="otherPlayer"
+        :items="players"
+        item-text="name"
+        item-value="id"
+        label="Compare to"
+        autocomplete="noautocomplete"
+        clearable
+        dense
+        chip
+        @change="fetchOtherPlayerElo($event)"
+      >
+        <template v-slot:item="data">
+          <template v-if="typeof data.item !== 'object'">
+            <v-list-item-content v-text="data.item"></v-list-item-content>
+          </template>
+          <template v-else>
+            <v-list-item-avatar>
+              <img
+                :src="data.item.profile_picture_url ? data.item.profile_picture_url : '/no_avatar.png'"
+              />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title v-html="data.item.name"></v-list-item-title>
+              <v-list-item-subtitle>Prenom Nom</v-list-item-subtitle>
+            </v-list-item-content>
+          </template>
+        </template>
+      </v-autocomplete>
+    </v-layout>
+    <v-card flat>
+      <!-- Selected player vs Player To Compare to -->
+      <v-layout row justify-center align-center v-if="otherPlayer" class="pa-4 pb-0">
+        <v-flex xs5>
+          <v-list two-lines>
+            <v-list-item>
+              <v-list-item-content class="text-right align-self-start">
+                <v-list-item-title>
+                  <strong>{{player.name}}</strong>
+                </v-list-item-title>
+                <v-list-item-subtitle>Prenom Nom</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-flex>
+        <v-flex xs2 class="text-center">
+          <strong class="display-1 grey--text">VS</strong>
+        </v-flex>
+        <v-flex xs5>
+          <v-list two-lines>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>
+                  <strong class="primary--text">{{ compareTo.name }}</strong>
+                </v-list-item-title>
+                <v-list-item-subtitle>Prenom Nom</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-flex>
+      </v-layout>
+      <v-card-text class="pt-0">
+        <PlayerEloMap
+          v-if="player.elo_map != '{}'"
+          :compareTo="compareTo"
+          :eloMap="JSON.parse(player.elo_map)"
+          :key="compareTo.id"
+        />
+      </v-card-text>
+    </v-card>
 
     <v-card-title>
       Results
@@ -85,20 +220,17 @@
       :items-per-page="15"
       :search="search"
       :loading="loading"
-      loading-text="Waiting for players..."
+      loading-text="Loading data..."
       dense
       class="elevation-1"
     >
-
       <template v-slot:item.tournament.name="{ item }">
         <v-chip
           class="ma-2"
           color="grey"
           text-color="white"
           :to="{ name: 'tournament', params: { id: item.tournament.id } }"
-        >
-          {{item.tournament.name}}
-        </v-chip>
+        >{{item.tournament.name}}</v-chip>
       </template>
 
       <template v-slot:item.tournament.date="{ item }">
@@ -110,9 +242,8 @@
 </template>
 
 <script>
-
 import gql from "graphql-tag";
-import PlayerEloMap from "./PlayerEloMap"
+import PlayerEloMap from "./PlayerEloMap";
 
 export default {
   components: {
@@ -124,6 +255,7 @@ export default {
     },
     results: [],
     otherPlayer: "",
+    playerWinrate: 0,
     compareTo: {},
     compareToLoaded: false,
     players: [],
@@ -141,77 +273,157 @@ export default {
         align: "left",
         sortable: true,
         value: "tournament.name"
-      },
-      {
-        text: "Tournament Date",
-        align: "left",
-        sortable: true,
-        value: "tournament.date"
       }
-    ],
+    ]
   }),
   mounted() {
-    this.$apollo.query({
-      query: gql`{
-        players(order_by: "elo desc", per_page: 1000, page: 1) {
-          id
-          name
+    this.$apollo
+      .query({
+        query: gql`
+          {
+            players(order_by: "elo desc", per_page: 1000, page: 1) {
+              id
+              name
+              profile_picture_url
+            }
+          }
+        `
+      })
+      .then(data => {
+        this.players = data.data.players;
+      });
+    this.$apollo
+      .query({
+        query: gql`
+          query FetchPlayer($id: String!) {
+            player(id: $id) {
+              id
+              name
+              profile_picture_url
+              current_mpgr_ranking
+              elo
+              teams {
+                id
+                prefix
+              }
+              elo_map
+              country
+              state
+              city
+              twitch
+              twitter
+              mixer
+              winning_matches {
+                id
+              }
+              matches_count
+              best_win {
+                loser {
+                  name
+                }
+                tournament {
+                  name
+                }
+                full_round_text
+              }
+              worst_lose {
+                winner {
+                  name
+                }
+                tournament {
+                  name
+                }
+                full_round_text
+              }
+              teams {
+                id
+                name
+                prefix
+              }
+              results {
+                rank
+                tournament {
+                  id
+                  name
+                }
+              }
+            }
+          }
+        `,
+        variables: {
+          id: this.$route.params.id
         }
-      }`
-    }).then(data => {
-      this.players = data.data.players
-    })
-    this.$apollo.query({
-      query: gql`
-      query FetchPlayer($id: String!) {
-        player(id: $id) {
-          id
-          name
-          profile_picture_url
-          current_mpgr_ranking
-          elo
-          elo_map
-          twitch
-          twitter
-          mixer
-          matches_count
-          best_win { loser { name } tournament { name } full_round_text }
-          worst_lose { winner { name } tournament { name } full_round_text }
-          results { rank tournament { id name date } }
-        }
-      }`,
-      variables: {
-        id: this.$route.params.id
-      }
-    }).then(data => {
-      this.player = data.data.player
-      this.results = this.player.results
-      this.loading = false
-    })
+      })
+      .then(data => {
+        this.player = data.data.player;
+        console.log(this.player);
+        if (this.player.matches_count)
+          this.playerWinrate = Math.round(
+            (this.player.winning_matches.length / this.player.matches_count) *
+              100
+          );
+        this.results = this.player.results;
+        this.loading = false;
+      });
   },
   methods: {
     fetchOtherPlayerElo(id) {
       if (id)
-        this.$apollo.query({
-          query: gql`
-            query EloMapOfPlayer($id: String!) {
-              player(id: $id) {
-                id
-                name
-                elo_map
+        this.$apollo
+          .query({
+            query: gql`
+              query EloMapOfPlayer($id: String!) {
+                player(id: $id) {
+                  id
+                  name
+                  profile_picture_url
+                  elo_map
+                }
               }
+            `,
+            variables: {
+              id: id
             }
-          `,
-          variables: {
-            id: id
-          }
-        }).then(data => {
-          this.compareTo = data.data.player
-          this.compareToLoaded = true
-        })
-      else
-        this.compareToLoaded = false
+          })
+          .then(data => {
+            this.compareTo = data.data.player;
+            this.compareToLoaded = true;
+          });
+      else this.compareToLoaded = false;
+    }
+  },
+  computed: {
+    localisationBreadcrumbs: function() {
+      let arr = [];
+
+      if (this.player.country) {
+        arr.push({
+          text: this.player.country,
+          link: true,
+          to: `/?country=${this.player.country}`
+        });
+      }
+
+      if (this.player.state) {
+        arr.push({
+          text: this.player.state,
+          link: true,
+          to: `/?country=${this.player.country}&state=${this.player.state}`
+        });
+      }
+
+      if (this.player.city) {
+        let stateParam = ""
+        if (this.player.state)
+          stateParam = `&state=${this.player.state}`
+        arr.push({
+          text: this.player.city,
+          link: true,
+          to: `/?country=${this.player.country}${stateParam}&city=${this.player.city}`
+        });
+      }
+      return arr;
     }
   }
-}
+};
 </script>
