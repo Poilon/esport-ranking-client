@@ -109,14 +109,14 @@
                     <v-list-item v-if="player.best_win">
                       <v-list-item-content>
                         <v-list-item-title>Best Win</v-list-item-title>
-                        <v-list-item-subtitle>{{ player.best_win.loser.name }} at {{ player.best_win.tournament.name }}</v-list-item-subtitle>
+                        <v-list-item-subtitle><a :href="'/#/players/'+player.best_win.loser.id">{{ player.best_win.loser.name }}</a> at <a :href="'/#/tournaments/'+player.best_win.tournament.id">{{ player.best_win.tournament.name }}</a></v-list-item-subtitle>
                       </v-list-item-content>
                     </v-list-item>
 
                     <v-list-item v-if="player.worst_lose">
                       <v-list-item-content>
                         <v-list-item-title>Worst Loss</v-list-item-title>
-                        <v-list-item-subtitle>Against {{ player.worst_lose.winner.name }} at {{ player.worst_lose.tournament.name }}</v-list-item-subtitle>
+                        <v-list-item-subtitle><a :href="'/#/players/'+player.worst_lose.winner.id">{{ player.worst_lose.winner.name }}</a>  at  <a :href="'/#/tournaments/'+player.worst_lose.tournament.id">{{ player.worst_lose.tournament.name }}</a></v-list-item-subtitle>
                       </v-list-item-content>
                     </v-list-item>
                   </v-list>
@@ -321,18 +321,22 @@ export default {
               best_win {
                 loser {
                   name
+                  id
                 }
                 tournament {
                   name
+                  id
                 }
                 full_round_text
               }
               worst_lose {
                 winner {
                   name
+                  id
                 }
                 tournament {
                   name
+                  id
                 }
                 full_round_text
               }
