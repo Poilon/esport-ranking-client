@@ -197,9 +197,22 @@
           v-if="player.elo_map != '{}'"
           :compareTo="compareTo"
           :eloMap="JSON.parse(player.elo_map)"
-          :key="compareTo.id"
+          :key="player.id + compareTo.id"
         />
       </v-card-text>
+      <div v-if="compareTo.id && player.winning_matches && player.losing_matches">
+        Heads Ups =>
+        <div>
+          Wins
+          <div v-for="m in player.winning_matches.filter(m => m.loser_player_id == compareTo.id)">
+            {{ m.display_score }} @ {{ m.tournament.name }}
+          </div>
+          Loss
+          <div v-for="m in player.losing_matches.filter(m => m.winner_player_id == compareTo.id)">
+            {{ m.display_score }} @ {{ m.tournament.name }}
+          </div>
+        </div>
+      </div>
     </v-card>
 
     <v-card-title>
@@ -259,6 +272,7 @@ export default {
     compareTo: {},
     compareToLoaded: false,
     players: [],
+    playerId: null,
     search: "",
     loading: true,
     headers: [
@@ -276,102 +290,125 @@ export default {
       }
     ]
   }),
+  beforeRouteUpdate(to, from, next) {
+    this.playerId = to.params.id
+    this.fetchCurrentPlayer()
+    next()
+  },  
   mounted() {
-    this.$apollo
-      .query({
-        query: gql`
-          {
-            players(order_by: "elo desc", per_page: 1000, page: 1) {
-              id
-              name
-              profile_picture_url
-            }
-          }
-        `
-      })
-      .then(data => {
-        this.players = data.data.players;
-      });
-    this.$apollo
-      .query({
-        query: gql`
-          query FetchPlayer($id: String!) {
-            player(id: $id) {
-              id
-              name
-              profile_picture_url
-              current_mpgr_ranking
-              elo
-              rank
-              teams {
-                id
-                prefix
-              }
-              elo_map
-              country
-              state
-              city
-              twitch
-              twitter
-              mixer
-              winning_matches {
-                id
-              }
-              matches_count
-              best_win {
-                loser {
-                  name
-                  id
-                }
-                tournament {
-                  name
-                  id
-                }
-                full_round_text
-              }
-              worst_lose {
-                winner {
-                  name
-                  id
-                }
-                tournament {
-                  name
-                  id
-                }
-                full_round_text
-              }
-              teams {
-                id
-                name
-                prefix
-              }
-              results {
-                rank
-                tournament {
-                  id
-                  name
-                }
-              }
-            }
-          }
-        `,
-        variables: {
-          id: this.$route.params.id
-        }
-      })
-      .then(data => {
-        this.player = data.data.player;
-        console.log(this.player);
-        if (this.player.matches_count)
-          this.playerWinrate = Math.round(
-            (this.player.winning_matches.length / this.player.matches_count) *
-              100
-          );
-        this.results = this.player.results;
-        this.loading = false;
-      });
+    console.log('toto')
+    this.fetchPlayers()
+    this.fetchCurrentPlayer()
   },
   methods: {
+    fetchPlayers() {
+      this.$apollo
+        .query({
+          query: gql`
+            {
+              players(order_by: "elo desc", per_page: 1000, page: 1) {
+                id
+                name
+                profile_picture_url
+              }
+            }
+          `
+        })
+        .then(data => {
+          this.players = data.data.players;
+        });
+    },
+    fetchCurrentPlayer() {
+      this.playerId = this.playerId || this.$route.params.id
+      this.$apollo
+        .query({
+          query: gql`
+            query FetchPlayer($id: String!) {
+              player(id: $id) {
+                id
+                name
+                profile_picture_url
+                current_mpgr_ranking
+                elo
+                rank
+                teams {
+                  id
+                  prefix
+                }
+                elo_map
+                country
+                state
+                city
+                twitch
+                twitter
+                mixer
+                winning_matches {
+                  id
+                  loser_player_id
+                  display_score
+                  tournament { name }
+                }
+                losing_matches {
+                  id
+                  winner_player_id
+                  display_score
+                  tournament { name }
+
+                }
+                matches_count
+                best_win {
+                  loser {
+                    name
+                    id
+                  }
+                  tournament {
+                    name
+                    id
+                  }
+                  full_round_text
+                }
+                worst_lose {
+                  winner {
+                    name
+                    id
+                  }
+                  tournament {
+                    name
+                    id
+                  }
+                  full_round_text
+                }
+                teams {
+                  id
+                  name
+                  prefix
+                }
+                results {
+                  rank
+                  tournament {
+                    id
+                    name
+                  }
+                }
+              }
+            }
+          `,
+          variables: {
+            id: this.playerId
+          }
+        })
+        .then(data => {
+          this.player = data.data.player;
+          console.log(this.player);
+          if (this.player.matches_count)
+            this.playerWinrate = Math.round(
+              (this.player.winning_matches.length / this.player.matches_count) *
+                100
+            );
+          this.results = this.player.results;
+          this.loading = false;
+        });
+    },
     fetchOtherPlayerElo(id) {
       if (id)
         this.$apollo
