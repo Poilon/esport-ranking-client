@@ -287,7 +287,7 @@ export default {
         filter += `"`
 
       this.$apollo.query({
-        query: gql`{ players(order_by: "elo desc", per_page: 2000, page: 1${filter}) { id name profile_picture_url current_mpgr_ranking elo } }`
+        query: gql`{ players(order_by: "elo desc", per_page: 10000, page: 1${filter}) { id name profile_picture_url current_mpgr_ranking elo } }`
       }).then(data => {
         this.players = data.data.players
         this.players.forEach(player => {

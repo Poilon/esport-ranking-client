@@ -200,19 +200,7 @@
           :key="player.id + compareTo.id"
         />
       </v-card-text>
-      <div v-if="compareTo.id && player.winning_matches && player.losing_matches">
-        Heads Ups =>
-        <div>
-          Wins
-          <div v-for="m in player.winning_matches.filter(m => m.loser_player_id == compareTo.id)">
-            {{ m.display_score }} @ {{ m.tournament.name }}
-          </div>
-          Loss
-          <div v-for="m in player.losing_matches.filter(m => m.winner_player_id == compareTo.id)">
-            {{ m.display_score }} @ {{ m.tournament.name }}
-          </div>
-        </div>
-      </div>
+      
     </v-card>
 
     <v-card-title>
