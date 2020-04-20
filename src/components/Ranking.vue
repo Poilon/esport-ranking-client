@@ -167,10 +167,10 @@ export default {
   mounted() {
     this.queryCharacters();
     this.queryCountries();
-    this.queryPlayers();
     this.country = this.$route.query.country
     this.state = this.$route.query.state
     this.city = this.$route.query.city
+    this.queryPlayers(this.country, this.state, this.city);
   },
 
   watch: {
