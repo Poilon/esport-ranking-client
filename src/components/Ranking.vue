@@ -11,6 +11,11 @@
       <v-card pa-4 flat color="transparent">
         <v-card-title class="py-0">
           <v-layout row>
+            <v-checkbox v-model="active" label="Active players only"/>
+          </v-layout>
+        </v-card-title>
+        <v-card-title class="py-0">
+          <v-layout row>
             <v-flex xs3 pr-4>
               <v-text-field
                 v-model="playersSearch"
@@ -161,7 +166,8 @@ export default {
     cities: [],
     country: "",
     state: "",
-    city: ""
+    city: "",
+    active: false
   }),
 
   mounted() {
@@ -170,10 +176,16 @@ export default {
     this.country = this.$route.query.country
     this.state = this.$route.query.state
     this.city = this.$route.query.city
-    this.queryPlayers(this.country, this.state, this.city);
+    this.active = this.$route.query.active
+    this.queryPlayers(this.country, this.state, this.city, this.active);
   },
 
   watch: {
+    active: function(active) {
+      this.queryPlayers(this.country, this.state, this.city, active);
+
+      return active
+    },
     country: function(country) {
       this.queryPlayers(country);
       this.queryStates(country);
@@ -275,7 +287,7 @@ export default {
         });
     },
 
-    queryPlayers(country, state, city) {
+    queryPlayers(country, state, city, active) {
       let filter = ""
       if (country)
         filter = `, filter: "country=='${country}'`
@@ -286,8 +298,12 @@ export default {
       if (country)
         filter += `"`
 
+      let activeFilter = ""
+      if (active)
+        activeFilter = ",active: true"
+
       this.$apollo.query({
-        query: gql`{ players(order_by: "elo desc", per_page: 2000, page: 1${filter}) { id name profile_picture_url current_mpgr_ranking elo } }`
+        query: gql`{ players(order_by: "elo desc"${activeFilter}, per_page: 2000, page: 1${filter}) { id name profile_picture_url current_mpgr_ranking elo } }`
       }).then(data => {
         this.players = data.data.players
         this.players.forEach(player => {
