@@ -275,6 +275,12 @@ export default {
         align: "left",
         sortable: true,
         value: "tournament.name"
+      },
+      {
+        text: "Tournament Date",
+        align: "left",
+        sortable: true,
+        value: "tournament.date"
       }
     ]
   }),
@@ -374,6 +380,7 @@ export default {
                 results {
                   rank
                   tournament {
+                    date
                     id
                     name
                   }
