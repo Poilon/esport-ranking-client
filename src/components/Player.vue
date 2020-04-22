@@ -324,6 +324,9 @@ export default {
                 current_mpgr_ranking
                 elo
                 rank
+                city_rank
+                state_rank
+                country_rank
                 teams {
                   id
                   prefix
@@ -432,9 +435,19 @@ export default {
     localisationBreadcrumbs: function() {
       let arr = [];
 
+      const nth = function(d) {
+        if (d > 3 && d < 21) return 'th';
+        switch (d % 10) {
+          case 1:  return "st";
+          case 2:  return "nd";
+          case 3:  return "rd";
+          default: return "th";
+        }
+      }
+
       if (this.player.country) {
         arr.push({
-          text: this.player.country,
+          text: `${this.player.country} (${this.player.country_rank}${nth(this.player.country_rank)})`,
           link: true,
           to: `/?country=${this.player.country}`
         });
@@ -442,7 +455,7 @@ export default {
 
       if (this.player.state) {
         arr.push({
-          text: this.player.state,
+          text: `${this.player.state} (${this.player.state_rank}${nth(this.player.state_rank)})`,
           link: true,
           to: `/?country=${this.player.country}&state=${this.player.state}`
         });
@@ -453,7 +466,7 @@ export default {
         if (this.player.state)
           stateParam = `&state=${this.player.state}`
         arr.push({
-          text: this.player.city,
+          text: `${this.player.city} (${this.player.city_rank}${nth(this.player.city_rank)})`,
           link: true,
           to: `/?country=${this.player.country}${stateParam}&city=${this.player.city}`
         });

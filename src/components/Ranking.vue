@@ -217,7 +217,10 @@ export default {
     changeCountry(country) {
       this.queryStates(country);
       this.queryCities(country);
-
+      if (!country) {
+        this.city = ""
+        this.state = ""
+      }
       this.$router.push({ path: '/', query: { country: country }})
 
       this.queryPlayers(country);
