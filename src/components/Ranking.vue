@@ -33,6 +33,7 @@
                 label="Country"
                 autocomplete="noautocomplete"
                 clearable
+                @change="changeCountry($event)"
               />
             </v-flex>
             <v-flex xs3 px-2 v-if="states.length > 0">
@@ -42,6 +43,7 @@
                 label="State"
                 autocomplete="noautocomplete"
                 clearable
+                @change="changeState($event)"
               />
             </v-flex>
             <v-flex xs3 pl-2 v-if="cities.length > 0">
@@ -51,6 +53,7 @@
                 label="City"
                 autocomplete="noautocomplete"
                 clearable
+                @change="changeCity($event)"
               />
             </v-flex>
           </v-layout>
@@ -176,6 +179,16 @@ export default {
     this.country = this.$route.query.country
     this.state = this.$route.query.state
     this.city = this.$route.query.city
+
+    if (this.country && !this.state) {
+      this.queryStates(this.country)
+      this.queryCities(this.country)
+    }
+    if (this.country && this.state) {
+      this.queryStates(this.country)
+      this.queryCities(this.country, this.state)
+    }
+
     this.active = this.$route.query.active
     this.queryPlayers(this.country, this.state, this.city, this.active);
   },
@@ -185,32 +198,6 @@ export default {
       this.queryPlayers(this.country, this.state, this.city, active);
 
       return active
-    },
-    country: function(country) {
-      this.queryPlayers(country);
-      this.queryStates(country);
-      this.queryCities(country);
-
-      if (!this.state || this.state != this.$route.query.state)
-        this.state = "";
-
-      if (!this.city || this.city != this.$route.query.city)
-        this.city = "";
-
-      return country;
-    },
-    state: function(state) {
-      this.queryPlayers(this.country, state);
-      this.queryCities(this.country, state);
-      if (!this.city || this.city != this.$route.query.city)
-        this.city = "";
-
-      return state;
-    },
-    city: function(city) {
-      this.queryPlayers(this.country, this.state, city);
-
-      return city;
     }
   },
   computed: {
@@ -227,6 +214,33 @@ export default {
     }
   },
   methods: {
+    changeCountry(country) {
+      this.queryStates(country);
+      this.queryCities(country);
+
+      this.$router.push({ path: '/', query: { country: country }})
+
+      this.queryPlayers(country);
+    },
+
+    changeState(state) {
+      this.queryCities(this.country, state);
+
+      this.$router.push({ path: '/', query: { country: this.country, state: state }})
+
+      this.queryPlayers(this.country, state);
+    },
+
+    changeCity(city) {
+      if (this.state)
+        this.$router.push({ path: '/', query: { country: this.country, state: this.state, city: city }})
+      else
+        this.$router.push({ path: '/', query: { country: this.country, city: city }})
+
+      this.queryPlayers(this.country, this.state, city);
+    },
+
+
     medalColor(rank) {
       if (rank == 1) return "yellow darken-2";
       if (rank == 2) return "grey darken-2";

@@ -200,7 +200,7 @@
           :key="player.id + compareTo.id"
         />
       </v-card-text>
-      
+
     </v-card>
 
     <v-card-title>
@@ -288,9 +288,8 @@ export default {
     this.playerId = to.params.id
     this.fetchCurrentPlayer()
     next()
-  },  
+  },
   mounted() {
-    console.log('toto')
     this.fetchPlayers()
     this.fetchCurrentPlayer()
   },
