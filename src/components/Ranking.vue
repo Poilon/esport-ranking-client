@@ -11,11 +11,6 @@
       <v-card pa-4 flat color="transparent">
         <v-card-title class="py-0">
           <v-layout row>
-            <v-checkbox v-model="active" label="Active players only"/>
-          </v-layout>
-        </v-card-title>
-        <v-card-title class="py-0">
-          <v-layout row>
             <v-flex xs3 pr-4>
               <v-text-field
                 v-model="playersSearch"
@@ -116,7 +111,14 @@
               </v-chip>
             </v-flex>
           </template>
+        
+
+           
         </v-data-table>
+  
+              
+             
+        <v-switch style="position: relative; top: -64px; left: 24px;" v-model="active" label="Active players only"/> 
       </v-card>
     </v-container>
   </div>
