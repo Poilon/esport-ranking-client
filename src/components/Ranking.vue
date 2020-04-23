@@ -111,14 +111,10 @@
               </v-chip>
             </v-flex>
           </template>
+        </v-data-table>
+         <v-switch v-model="active" class="pl-4" label="Active players only"/> 
         
 
-           
-        </v-data-table>
-  
-              
-             
-        <v-switch style="position: relative; top: -64px; left: 24px;" v-model="active" label="Active players only"/> 
       </v-card>
     </v-container>
   </div>
