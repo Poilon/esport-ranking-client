@@ -194,6 +194,7 @@
       </v-layout>
       <v-card-text class="pt-0">
         <PlayerEloMap
+          class="pt-4"
           v-if="player.elo_map != '{}'"
           :compareTo="compareTo"
           :eloMap="JSON.parse(player.elo_map)"
