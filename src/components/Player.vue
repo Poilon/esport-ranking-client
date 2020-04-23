@@ -236,6 +236,7 @@
       </template>
 
       <template v-slot:item.tournament.date="{ item }">
+        <v-icon small color="#bbbbbb" class="pr-1">mdi-calendar</v-icon>
         {{ new Date(Date.parse(item.tournament.date)).toDateString() }}
       </template>
 
