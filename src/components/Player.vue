@@ -234,6 +234,12 @@
         >{{item.tournament.name}}</v-chip>
       </template>
 
+      <template v-slot:item.tournament_diff="{ item }">
+        <div v-if="item.tournament_diff" :class="(item.tournament_diff.from - item.tournament_diff.to) < 0 ? 'green--text' : 'red--text'">
+          {{ item.tournament_diff ? item.tournament_diff.from + " -> " + item.tournament_diff.to : "" }}
+        </div>
+      </template>
+
       <template v-slot:item.tournament.date="{ item }">
         {{ new Date(Date.parse(item.tournament.date)).toDateString() }}
       </template>
@@ -269,6 +275,12 @@ export default {
         align: "left",
         sortable: true,
         value: "rank"
+      },
+      {
+        text: "Elo change",
+        align: "left",
+        sortable: true,
+        value: "tournament_diff"
       },
       {
         text: "Tournament Name",
@@ -332,6 +344,7 @@ export default {
                   prefix
                 }
                 elo_map
+                tournaments_diffs
                 country
                 state
                 city
@@ -381,6 +394,7 @@ export default {
                 }
                 results {
                   rank
+                  tournament_id
                   tournament {
                     date
                     id
@@ -402,6 +416,12 @@ export default {
               (this.player.winning_matches.length / this.player.matches_count) *
                 100
             );
+          const tournaments_diffs = JSON.parse(this.player.tournaments_diffs)
+          Object.keys(tournaments_diffs).forEach(tournament_id => {
+            if (this.player.results.find(r => r.tournament_id == tournament_id))
+              this.player.results.find(r => r.tournament_id == tournament_id).tournament_diff = tournaments_diffs[tournament_id]
+          })
+          console.log(this.player)
           this.results = this.player.results;
           this.loading = false;
         });
