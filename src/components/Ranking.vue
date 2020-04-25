@@ -134,7 +134,8 @@ export default {
     playersSearch: "",
     loading: true,
     options: {
-      itemsPerPage: 20
+      itemsPerPage: 20,
+      page: 1
     },
     playersHeaders: [
       {
@@ -223,6 +224,7 @@ export default {
     },
 
     changeCountries(countries) {
+      this.options.page = 1
       this.queryStates(countries);
       this.queryCities(countries);
       if (!countries || countries.length == 0) {
@@ -236,7 +238,7 @@ export default {
     },
 
     changeStates(states) {
-
+      this.options.page = 1
       this.$router.push({ path: '/', query: { countries: JSON.stringify(this.countries), states: JSON.stringify(states), active: this.active }})
 
       this.queryCities(this.countries, states);
@@ -244,6 +246,7 @@ export default {
     },
 
     changeCities(cities) {
+      this.options.page = 1
       if (this.states)
         this.$router.push({ path: '/', query: { countries: JSON.stringify(this.countries), state: JSON.stringify(this.states), cities: JSON.stringify(cities), active: this.active }})
       else
