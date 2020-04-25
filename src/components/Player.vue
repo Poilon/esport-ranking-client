@@ -412,7 +412,6 @@ export default {
         })
         .then(data => {
           this.player = data.data.player;
-          console.log(this.player);
           if (this.player.matches_count)
             this.playerWinrate = Math.round(
               (this.player.winning_matches.length / this.player.matches_count) *
@@ -471,7 +470,7 @@ export default {
         arr.push({
           text: `${this.player.country} (${this.player.country_rank}${nth(this.player.country_rank)})`,
           link: true,
-          to: `/?country=${this.player.country}`
+          to: `/?countries=["${this.player.country}"]`
         });
       }
 
@@ -479,18 +478,18 @@ export default {
         arr.push({
           text: `${this.player.state} (${this.player.state_rank}${nth(this.player.state_rank)})`,
           link: true,
-          to: `/?country=${this.player.country}&state=${this.player.state}`
+          to: `/?countries=["${this.player.country}"]&states=["${this.player.state}"]`
         });
       }
 
       if (this.player.city) {
         let stateParam = ""
         if (this.player.state)
-          stateParam = `&state=${this.player.state}`
+          stateParam = `&states=["${this.player.state}"]`
         arr.push({
           text: `${this.player.city} (${this.player.city_rank}${nth(this.player.city_rank)})`,
           link: true,
-          to: `/?country=${this.player.country}${stateParam}&city=${this.player.city}`
+          to: `/?countries=["${this.player.country}"]${stateParam}&cities=["${this.player.city}"]`
         });
       }
       return arr;

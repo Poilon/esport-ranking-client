@@ -23,32 +23,35 @@
 
             <v-flex xs3 px-2>
               <v-autocomplete
-                v-model="country"
-                :items="countries"
-                label="Country"
+                v-model="countries"
+                :items="countryList"
+                label="Countries"
                 autocomplete="noautocomplete"
                 clearable
-                @change="changeCountry($event)"
+                multiple
+                @change="changeCountries($event)"
               />
             </v-flex>
-            <v-flex xs3 px-2 v-if="states.length > 0">
+            <v-flex xs3 px-2 v-if="stateList.length > 0">
               <v-autocomplete
-                v-model="state"
-                :items="states"
+                v-model="states"
+                :items="stateList"
                 label="State"
                 autocomplete="noautocomplete"
                 clearable
-                @change="changeState($event)"
+                multiple
+                @change="changeStates($event)"
               />
             </v-flex>
-            <v-flex xs3 pl-2 v-if="cities.length > 0">
+            <v-flex xs3 pl-2 v-if="cityList.length > 0">
               <v-autocomplete
-                v-model="city"
-                :items="cities"
+                v-model="cities"
+                :items="cityList"
                 label="City"
                 autocomplete="noautocomplete"
                 clearable
-                @change="changeCity($event)"
+                multiple
+                @change="changeCities($event)"
               />
             </v-flex>
           </v-layout>
@@ -112,8 +115,8 @@
             </v-flex>
           </template>
         </v-data-table>
-         <v-switch v-model="active" class="pl-4" label="Active players only"/> 
-        
+         <v-switch v-model="active" class="pl-4" label="Active players only" @change="changeActive($event)"/>
+
 
       </v-card>
     </v-container>
@@ -162,83 +165,91 @@ export default {
     characters: [],
     players: [],
     ranks: [],
+    countryList: [],
+    stateList: [],
+    cityList: [],
     countries: [],
     states: [],
     cities: [],
-    country: "",
-    state: "",
-    city: "",
     active: false
   }),
 
   mounted() {
     this.queryCharacters();
     this.queryCountries();
-    this.country = this.$route.query.country
-    this.state = this.$route.query.state
-    this.city = this.$route.query.city
 
-    if (this.country && !this.state) {
-      this.queryStates(this.country)
-      this.queryCities(this.country)
+    if (this.$route.query.countries)
+      this.countries = JSON.parse(this.$route.query.countries)
+    if (this.$route.query.states)
+      this.states = JSON.parse(this.$route.query.states)
+    if (this.$route.query.cities)
+     this.cities = JSON.parse(this.$route.query.cities)
+    if (this.countries && this.countries.length > 0) {
+      this.queryStates(this.countries)
+      this.queryCities(this.countries)
     }
-    if (this.country && this.state) {
-      this.queryStates(this.country)
-      this.queryCities(this.country, this.state)
+    if (this.countries && this.countries.length > 0 && this.states && this.states.length > 0) {
+      this.queryStates(this.countries)
+      this.queryCities(this.countries, this.states)
     }
 
-    this.active = this.$route.query.active
-    this.queryPlayers(this.country, this.state, this.city, this.active);
+    this.active = this.$route.query.active == 'true'
+
+    this.queryPlayers()
   },
 
-  watch: {
-    active: function(active) {
-      this.queryPlayers(this.country, this.state, this.city, active);
-
-      return active
-    }
-  },
   computed: {
     leaderboardName: function() {
       let retName = "";
 
-      if (this.country) retName = this.country;
+      if (this.countries && this.countries.length > 0) retName = this.countries.join(', ');
 
-      if (this.state) retName = this.state;
+      if (this.states && this.states.length > 0) retName = this.states.join(', ');
 
-      if (this.city) retName = this.city;
+      if (this.cities && this.cities.length > 0) retName = this.cities.join(', ');
 
-      return (retName ? retName.toUpperCase() : "GLOBAL") + " LEADERBOARD";
+      return (retName.length ? retName.toUpperCase() : "GLOBAL") + " LEADERBOARD";
     }
   },
   methods: {
-    changeCountry(country) {
-      this.queryStates(country);
-      this.queryCities(country);
-      if (!country) {
-        this.city = ""
-        this.state = ""
+    changeActive(active) {
+      this.$router.push({ path: '/', query: {
+        countries: JSON.stringify(this.countries),
+        states: JSON.stringify(this.states),
+        cities: JSON.stringify(this.cities),
+        active: active
+      }})
+      this.queryPlayers()
+    },
+
+    changeCountries(countries) {
+      this.queryStates(countries);
+      this.queryCities(countries);
+      if (!countries || countries.length == 0) {
+        this.cities = []
+        this.states = []
       }
-      this.$router.push({ path: '/', query: { country: country }})
 
-      this.queryPlayers(country);
+      this.$router.push({ path: '/', query: { countries: JSON.stringify(countries), active: this.active }})
+
+      this.queryPlayers();
     },
 
-    changeState(state) {
-      this.queryCities(this.country, state);
+    changeStates(states) {
 
-      this.$router.push({ path: '/', query: { country: this.country, state: state }})
+      this.$router.push({ path: '/', query: { countries: JSON.stringify(this.countries), states: JSON.stringify(states), active: this.active }})
 
-      this.queryPlayers(this.country, state);
+      this.queryCities(this.countries, states);
+      this.queryPlayers();
     },
 
-    changeCity(city) {
-      if (this.state)
-        this.$router.push({ path: '/', query: { country: this.country, state: this.state, city: city }})
+    changeCities(cities) {
+      if (this.states)
+        this.$router.push({ path: '/', query: { countries: JSON.stringify(this.countries), state: JSON.stringify(this.states), cities: JSON.stringify(cities), active: this.active }})
       else
-        this.$router.push({ path: '/', query: { country: this.country, city: city }})
+        this.$router.push({ path: '/', query: { countries: JSON.stringify(this.countries), cities: JSON.stringify(cities), active: this.active }})
 
-      this.queryPlayers(this.country, this.state, city);
+      this.queryPlayers();
     },
 
 
@@ -259,27 +270,27 @@ export default {
           `
         })
         .then(data => {
-          this.countries = data.data.countries;
+          this.countryList = data.data.countries;
         });
     },
-    queryStates(country) {
+    queryStates(countries) {
       this.$apollo
         .query({
-          query: gql`{ states(country: "${country}") }`
+          query: gql`{ states(countries: "${countries}") }`
         })
         .then(data => {
-          this.states = data.data.states;
+          this.stateList = data.data.states;
         });
     },
-    queryCities(country, state) {
+    queryCities(countries, states) {
       let filter = "";
-      if (state) filter += `, state: "${state}"`;
+      if (states) filter += `, states: "${states}"`;
       this.$apollo
         .query({
-          query: gql`{ cities(country: "${country}"${filter}) }`
+          query: gql`{ cities(countries: "${countries}"${filter}) }`
         })
         .then(data => {
-          this.cities = data.data.cities;
+          this.cityList = data.data.cities;
         });
     },
 
@@ -302,23 +313,41 @@ export default {
         });
     },
 
-    queryPlayers(country, state, city, active) {
+    queryPlayers() {
+      let countryFilter = ""
+      let countries = JSON.parse(JSON.stringify(this.countries))
+
+      if (countries && countries.includes('Europe'))
+        countries = countries.concat(this.europpeanCountries())
+
+
+      if (countries && countries.length > 0)
+        countryFilter = "(" + countries.map(c => `country == '${c}'`).join(' || ') + ")"
+
+      let stateFilter = ""
+      if (this.states && this.states.length > 0 && countries && countries.length > 0)
+        stateFilter = "(" + this.states.map(c => `state == '${c}'`).join(' || ') + ")"
+
+      let cityFilter = ""
+      if (this.cities && this.cities.length > 0 && countries && countries.length > 0)
+        cityFilter = "(" + this.cities.map(c => `city == '${c}'`).join(' || ') + ")"
+
       let filter = ""
-      if (country)
-        filter = `, filter: "country=='${country}'`
-      if (country && state)
-        filter += ` && state == '${state}'`
-      if (country && city)
-        filter += ` && city == '${city}'`
-      if (country)
+      if (countryFilter.length > 0)
+        filter = `, filter: "${countryFilter}`
+      if (countryFilter.length > 0 && stateFilter.length > 0)
+        filter += ` && ${stateFilter}`
+      if (countryFilter.length > 0 && cityFilter.length > 0)
+        filter += ` && ${cityFilter}`
+      if (countryFilter.length > 0)
         filter += `"`
 
       let activeFilter = ""
-      if (active)
+      if (this.active)
         activeFilter = ",active: true"
 
       this.$apollo.query({
-        query: gql`{ players(order_by: "elo desc"${activeFilter}, per_page: 2000, page: 1${filter}) { id name profile_picture_url current_mpgr_ranking elo } }`
+        query: gql`{ players(order_by: "elo desc, name asc"${activeFilter}, per_page: 2000, page: 1${filter}) { id name profile_picture_url current_mpgr_ranking elo } }`
       }).then(data => {
         this.players = data.data.players
         this.players.forEach(player => {
@@ -329,6 +358,14 @@ export default {
         this.loading = false
       })
     },
+
+    europpeanCountries() {
+      return ['France', 'Germany', 'Switzerland', 'Andorra', 'Albania', 'Austria', 'Bosnia and Herzegovina',
+      'Belgium', 'Bulgaria', 'Czech Republic', 'Denmark', 'Estonia', 'Spain', 'Finland', 'United Kingdom',
+      'Guernsey', 'Gibraltar', 'Greece', 'Croatia', 'Hungary', 'Ireland', 'Iceland', 'Italy', 'Jersey',
+      'Liechtenstein', 'Lithuania', 'Luxembourg', 'Poland', 'Portugal', 'Romania', 'Serbia', 'Sweden',
+      'Slovenia', 'Slovakia', 'Norway', 'Ukraine']
+    }
   }
 };
 </script>
