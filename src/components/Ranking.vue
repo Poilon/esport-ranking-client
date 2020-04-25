@@ -36,7 +36,7 @@
               <v-autocomplete
                 v-model="states"
                 :items="stateList"
-                label="State"
+                label="States"
                 autocomplete="noautocomplete"
                 clearable
                 multiple
@@ -47,7 +47,7 @@
               <v-autocomplete
                 v-model="cities"
                 :items="cityList"
-                label="City"
+                label="Cities"
                 autocomplete="noautocomplete"
                 clearable
                 multiple
