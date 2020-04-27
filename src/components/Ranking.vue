@@ -23,6 +23,30 @@
 
             <v-flex xs3 px-2>
               <v-autocomplete
+                v-model="characters"
+                :items="characterList"
+                label="Characters"
+                autocomplete="noautocomplete"
+                item-text="name"
+                item-value="name"
+                clearable
+                multiple
+                @change="changeCharacters($event)"
+              >
+                <template v-slot:item="data">
+                  <v-list-item-avatar size="20" tile>
+                    <v-img width="20" :src="require('../assets/' + data.item.game.slug + '/' + data.item.slug + '.png')"/>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                    <v-list-item-subtitle></v-list-item-subtitle>
+                  </v-list-item-content>
+                </template>
+              </v-autocomplete>
+            </v-flex>
+
+            <v-flex xs3 px-2 pr-4>
+              <v-autocomplete
                 v-model="countries"
                 :items="countryList"
                 label="Countries"
@@ -32,7 +56,7 @@
                 @change="changeCountries($event)"
               />
             </v-flex>
-            <v-flex xs3 px-2 v-if="stateList.length > 0">
+            <v-flex xs3 pr-4 v-if="stateList.length > 0">
               <v-autocomplete
                 v-model="states"
                 :items="stateList"
@@ -43,7 +67,7 @@
                 @change="changeStates($event)"
               />
             </v-flex>
-            <v-flex xs3 pl-2 v-if="cityList.length > 0">
+            <v-flex xs3 v-if="cityList.length > 0">
               <v-autocomplete
                 v-model="cities"
                 :items="cityList"
@@ -101,6 +125,40 @@
             </v-chip>
           </template>
 
+          <template v-slot:item.actions="{ item }">
+            <v-layout row wrap>
+              <v-autocomplete
+                :items="characterList"
+                label="Characters"
+                autocomplete="noautocomplete"
+                item-text="name"
+                item-value="id"
+                clearable
+                multiple
+                :value="item.characters.map(c => c.id)"
+                @change="changeCharactersOfPlayer($event, item.id)"
+              >
+                <template v-slot:item="data">
+                  <v-list-item-avatar size="20" tile>
+                    <v-img width="20" :src="require('../assets/' + data.item.game.slug + '/' + data.item.slug + '.png')"/>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                    <v-list-item-subtitle></v-list-item-subtitle>
+                  </v-list-item-content>
+                </template>
+              </v-autocomplete>
+            </v-layout>
+          </template>
+
+          <template v-slot:item.characters="{ item }">
+            <v-layout row wrap>
+              <div v-for='character in item.characters' style="padding: 5px;">
+                <v-img width="20" :src="require('../assets/' + character.game.slug + '/' + character.slug + '.png')"/>
+              </div>
+            </v-layout>
+          </template>
+
           <template v-slot:item.ranks="{ item }">
             <v-flex v-for="(res,i) in item.results" :key="i">
               <v-chip
@@ -117,7 +175,7 @@
         </v-data-table>
          <v-switch v-model="active" class="pl-4" label="Active players only" @change="changeActive($event)"/>
 
-
+         <v-text-field v-model="authorizationToken" label="authorizationToken"/>
       </v-card>
     </v-container>
   </div>
@@ -130,6 +188,7 @@ export default {
   name: "Ranking",
 
   data: () => ({
+    authorizationToken: "",
     charSearch: "",
     playersSearch: "",
     loading: true,
@@ -137,32 +196,7 @@ export default {
       itemsPerPage: 20,
       page: 1
     },
-    playersHeaders: [
-      {
-        text: "RANK",
-        align: "left",
-        sortable: true,
-        value: "rank"
-      },
-      {
-        text: "MPGR",
-        align: "left",
-        sortable: true,
-        value: "current_mpgr_ranking"
-      },
-      {
-        text: "PLAYER",
-        align: "left",
-        sortable: true,
-        value: "name"
-      },
-      {
-        text: "ELO",
-        align: "left",
-        sortable: true,
-        value: "elo"
-      }
-    ],
+    characterList: [],
     characters: [],
     players: [],
     ranks: [],
@@ -185,6 +219,9 @@ export default {
       this.states = JSON.parse(this.$route.query.states)
     if (this.$route.query.cities)
      this.cities = JSON.parse(this.$route.query.cities)
+    if (this.$route.query.characters)
+     this.characters = JSON.parse(this.$route.query.characters)
+
     if (this.countries && this.countries.length > 0) {
       this.queryStates(this.countries)
       this.queryCities(this.countries)
@@ -209,16 +246,103 @@ export default {
 
       if (this.cities && this.cities.length > 0) retName = this.cities.join(', ');
 
+      if (this.characters && this.characters.length > 0 && retName.length) retName = this.characters.join(', ') + ' in ' + retName;
+
+      if (this.characters && this.characters.length > 0 && !retName.length) retName = this.characters.join(', ');
+
       return (retName.length ? retName.toUpperCase() : "GLOBAL") + " LEADERBOARD";
+    },
+    playersHeaders: function() {
+      let headers = [
+        {
+          text: "RANK",
+          align: "left",
+          sortable: true,
+          value: "rank"
+        },
+        {
+          text: "MPGR",
+          align: "left",
+          sortable: true,
+          value: "current_mpgr_ranking"
+        },
+        {
+          text: "PLAYER",
+          align: "left",
+          sortable: true,
+          value: "name"
+        },
+        {
+          text: "CHARACTERS",
+          align: "left",
+          sortable: true,
+          value: "characters"
+        },
+        {
+          text: "ELO",
+          align: "left",
+          sortable: true,
+          value: "elo"
+        }
+      ]
+      if (this.authorizationToken)
+        headers = headers.concat([{ text: "ACTIONS", align: "left", value: "actions" }])
+      return headers
     }
   },
   methods: {
+    changeCharactersOfPlayer(characterIds, playerId) {
+      this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation($character_ids: [String], $player_id: String!){
+              update_player(
+                id: $player_id
+                player: {
+                  character_ids: $character_ids
+                }
+              )
+              {
+                id
+                characters {
+                  id
+                  name
+                  slug
+                  game {
+                    id
+                    slug
+                  }
+                }
+              }
+            }
+          `,
+          variables: {
+            player_id: playerId,
+            character_ids: characterIds
+          }
+        })
+        .then(data => {
+          this.players.find(p => playerId == p.id).characters = data.data.update_player.characters;
+        });
+    },
     changeActive(active) {
       this.$router.push({ path: '/', query: {
         countries: JSON.stringify(this.countries),
         states: JSON.stringify(this.states),
         cities: JSON.stringify(this.cities),
-        active: active
+        active: active,
+        characters: JSON.stringify(this.characters)
+      }})
+      this.queryPlayers()
+    },
+    changeCharacters(characters) {
+      this.options.page = 1
+      this.$router.push({ path: '/', query: {
+        countries: JSON.stringify(this.countries),
+        states: JSON.stringify(this.states),
+        cities: JSON.stringify(this.cities),
+        active: this.active,
+        characters: JSON.stringify(this.characters)
       }})
       this.queryPlayers()
     },
@@ -232,14 +356,19 @@ export default {
         this.states = []
       }
 
-      this.$router.push({ path: '/', query: { countries: JSON.stringify(countries), active: this.active }})
+      this.$router.push({ path: '/', query: {
+        countries: JSON.stringify(countries),
+        active: this.active,
+        characters: JSON.stringify(this.characters)
+      }})
 
       this.queryPlayers();
     },
 
     changeStates(states) {
       this.options.page = 1
-      this.$router.push({ path: '/', query: { countries: JSON.stringify(this.countries), states: JSON.stringify(states), active: this.active }})
+      this.$router.push({ path: '/', query: { countries: JSON.stringify(this.countries), states: JSON.stringify(states), active: this.active,
+        characters: JSON.stringify(this.characters) }})
 
       this.queryCities(this.countries, states);
       this.queryPlayers();
@@ -248,9 +377,11 @@ export default {
     changeCities(cities) {
       this.options.page = 1
       if (this.states)
-        this.$router.push({ path: '/', query: { countries: JSON.stringify(this.countries), state: JSON.stringify(this.states), cities: JSON.stringify(cities), active: this.active }})
+        this.$router.push({ path: '/', query: { countries: JSON.stringify(this.countries), state: JSON.stringify(this.states), cities: JSON.stringify(cities), active: this.active,
+        characters: JSON.stringify(this.characters) }})
       else
-        this.$router.push({ path: '/', query: { countries: JSON.stringify(this.countries), cities: JSON.stringify(cities), active: this.active }})
+        this.$router.push({ path: '/', query: { countries: JSON.stringify(this.countries), cities: JSON.stringify(cities), active: this.active,
+        characters: JSON.stringify(this.characters) }})
 
       this.queryPlayers();
     },
@@ -303,16 +434,19 @@ export default {
           query: gql`
             {
               characters {
+                id
                 name
+                slug
                 game {
-                  name
+                  id
+                  slug
                 }
               }
             }
           `
         })
         .then(data => {
-          this.characters = data.data.characters;
+          this.characterList = data.data.characters;
         });
     },
 
@@ -326,6 +460,10 @@ export default {
 
       if (countries && countries.length > 0)
         countryFilter = "(" + countries.map(c => `country == '${c}'`).join(' || ') + ")"
+
+      let charactersFilter = ""
+      if (this.characters && this.characters.length > 0)
+        charactersFilter = `, characters: "${this.characters}"`
 
       let stateFilter = ""
       if (this.states && this.states.length > 0 && countries && countries.length > 0)
@@ -350,7 +488,24 @@ export default {
         activeFilter = ",active: true"
 
       this.$apollo.query({
-        query: gql`{ players(order_by: "elo desc, name asc"${activeFilter}, per_page: 2000, page: 1${filter}) { id name profile_picture_url current_mpgr_ranking elo } }`
+        query: gql`{
+          players(order_by: "elo desc, name asc"${activeFilter}${charactersFilter}, per_page: 2000, page: 1${filter}) {
+            id
+            name
+            profile_picture_url
+            current_mpgr_ranking
+            elo
+            characters {
+              id
+              name
+              slug
+              game {
+                id
+                slug
+              }
+            }
+          }
+        }`
       }).then(data => {
         this.players = data.data.players
         this.players.forEach(player => {

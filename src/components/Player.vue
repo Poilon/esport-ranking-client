@@ -53,6 +53,7 @@
                     <tr>
                       <th class="text-center">Rank</th>
                       <th class="text-center">MPGR</th>
+                      <th class="text-center">CHARACTERS</th>
                       <th class="text-center">ELO</th>
                     </tr>
                   </thead>
@@ -62,6 +63,15 @@
                       <td
                         class="simple-table-td text-center"
                       >{{ player.current_mpgr_ranking ? player.current_mpgr_ranking : '--' }}</td>
+                      <td class="simple-table-td text-center">
+                        <v-container>
+                          <v-row justify="center">
+                            <div v-for='character in player.characters' style="padding: 5px;">
+                              <v-img width="20" :src="require('../assets/' + character.game.slug + '/' + character.slug + '.png')"/>
+                            </div>
+                          </v-row>
+                        </v-container>
+                      </td>
                       <td class="simple-table-td text-center">
                         <template v-if="player.elo">
                           <v-chip class="ml-0 my-2" color="#141414" text-color="white" small>
@@ -304,6 +314,7 @@ export default {
     next()
   },
   mounted() {
+    this.fastFetchPlayer()
     this.fetchPlayers()
     this.fetchCurrentPlayer()
   },
@@ -324,6 +335,50 @@ export default {
         .then(data => {
           this.players = data.data.players;
         });
+    },
+    fastFetchPlayer() {
+      this.playerId = this.playerId || this.$route.params.id
+      this.$apollo.query({
+        query: gql`
+          query FetchPlayer($id: String!) {
+            player(id: $id) {
+              id
+              name
+              profile_picture_url
+              current_mpgr_ranking
+              elo
+              rank
+              city_rank
+              state_rank
+              country_rank
+              teams {
+                id
+                prefix
+              }
+              country
+              state
+              city
+              twitch
+              twitter
+              mixer
+              characters {
+                id
+                name
+                slug
+                game {
+                  id
+                  slug
+                }
+              }
+            }
+          }`,
+          variables: {
+            id: this.playerId
+          }
+        }).then(data => {
+          this.player = data.data.player;
+          this.player.elo_map = "{}"
+        })
     },
     fetchCurrentPlayer() {
       this.playerId = this.playerId || this.$route.params.id
@@ -353,6 +408,15 @@ export default {
                 twitch
                 twitter
                 mixer
+                characters {
+                  id
+                  name
+                  slug
+                  game {
+                    id
+                    slug
+                  }
+                }
                 winning_matches {
                   id
                   loser_player_id
