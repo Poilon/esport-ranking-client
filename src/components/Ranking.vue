@@ -23,8 +23,8 @@
 
             <v-flex xs3 px-2>
               <v-autocomplete
-                v-model="characters"
                 :items="characterList"
+                v-model="characters"
                 label="Characters"
                 autocomplete="noautocomplete"
                 item-text="name"
@@ -102,14 +102,10 @@
               <v-list-item-avatar>
                 <v-img :src="item.profile_picture_url ? item.profile_picture_url : '/no_avatar.png'"></v-img>
               </v-list-item-avatar>
-
-
               <v-list-item-content>
                 <v-list-item-title>{{item.name}}</v-list-item-title>
                 <v-list-item-subtitle></v-list-item-subtitle>
               </v-list-item-content>
-
-
             </v-list-item>
           </template>
 
@@ -126,28 +122,29 @@
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-layout row wrap>
-              <v-autocomplete
-                :items="characterList"
-                label="Characters"
-                autocomplete="noautocomplete"
-                item-text="name"
-                item-value="id"
-                clearable
-                multiple
-                :value="item.characters.map(c => c.id)"
-                @change="changeCharactersOfPlayer($event, item.id)"
+            <v-layout row wrap justify-center align-center>
+              <v-flex pr-4 xs6>
+                <v-autocomplete
+                  :items="characterList"
+                  v-model="tmpChars[item.id]"
+                  label="Characters"
+                  autocomplete="noautocomplete"
+                  item-text="name"
+                  item-value="id"
+                  clearable
+                  multiple
+                  :value="item.characters.map(c => c.id)"
+                >
+                </v-autocomplete>
+              </v-flex>
+              <v-btn
+                color="green"
+                :loading="btnLoading[item.id]"
+                @click="changeCharactersOfPlayer(tmpChars[item.id], item.id)"
               >
-                <template v-slot:item="data">
-                  <v-list-item-avatar size="20" tile>
-                    <v-img width="20" :src="require('../assets/' + data.item.game.slug + '/' + data.item.slug + '.png')"/>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title v-html="data.item.name"></v-list-item-title>
-                    <v-list-item-subtitle></v-list-item-subtitle>
-                  </v-list-item-content>
-                </template>
-              </v-autocomplete>
+                Apply
+              </v-btn>
+
             </v-layout>
           </template>
 
@@ -175,9 +172,25 @@
         </v-data-table>
          <v-switch v-model="active" class="pl-4" label="Active players only" @change="changeActive($event)"/>
 
-         <v-text-field v-model="authorizationToken" label="authorizationToken"/>
+         <v-text-field v-model="authorizationToken" label="token" width="50"/>
       </v-card>
     </v-container>
+
+    <div class="text-center ma-2">
+      <v-snackbar
+        v-model="snackbar"
+      >
+
+        {{ snackbarText }}
+        <v-btn
+          color="white"
+          text
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </v-snackbar>
+    </div>
   </div>
 </template>
 
@@ -188,6 +201,8 @@ export default {
   name: "Ranking",
 
   data: () => ({
+    snackbar: false,
+    snackbarText: "",
     authorizationToken: "",
     charSearch: "",
     playersSearch: "",
@@ -206,7 +221,9 @@ export default {
     countries: [],
     states: [],
     cities: [],
-    active: false
+    active: false,
+    tmpChars: {},
+    btnLoading: {}
   }),
 
   mounted() {
@@ -292,12 +309,15 @@ export default {
   },
   methods: {
     changeCharactersOfPlayer(characterIds, playerId) {
+      this.btnLoading[playerId] = true
+      this.snackbarText = ""
       this.$apollo
         .mutate({
           mutation: gql`
-            mutation($character_ids: [String], $player_id: String!){
+            mutation($character_ids: [String], $player_id: String!, $security_token: String!){
               update_player(
                 id: $player_id
+                security_token: $security_token
                 player: {
                   character_ids: $character_ids
                 }
@@ -318,24 +338,24 @@ export default {
           `,
           variables: {
             player_id: playerId,
-            character_ids: characterIds
+            character_ids: characterIds,
+            security_token: this.authorizationToken
           }
         })
         .then(data => {
-          this.players.find(p => playerId == p.id).characters = data.data.update_player.characters;
+          this.btnLoading[playerId] = false
+          let p = this.players.find(p => playerId == p.id)
+          p.characters = data.data.update_player.characters;
+          this.snackbarText = `${p.name} characters update successful !`
+          this.snackbar = true
+        })
+        .catch(err => {
+          this.btnLoading[playerId] = false
+          this.snackbarText = "Authentication Failed"
+          this.snackbar = true
         });
     },
-    changeActive(active) {
-      this.$router.push({ path: '/', query: {
-        countries: JSON.stringify(this.countries),
-        states: JSON.stringify(this.states),
-        cities: JSON.stringify(this.cities),
-        active: active,
-        characters: JSON.stringify(this.characters)
-      }})
-      this.queryPlayers()
-    },
-    changeCharacters(characters) {
+    update() {
       this.options.page = 1
       this.$router.push({ path: '/', query: {
         countries: JSON.stringify(this.countries),
@@ -345,6 +365,12 @@ export default {
         characters: JSON.stringify(this.characters)
       }})
       this.queryPlayers()
+    },
+    changeActive(active) {
+      this.update()
+    },
+    changeCharacters(characters) {
+      this.update()
     },
 
     changeCountries(countries) {
