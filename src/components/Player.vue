@@ -253,7 +253,7 @@
 
       <template v-slot:item.tournament.date="{ item }">
         <v-icon small color="#bbbbbb" class="pr-1">mdi-calendar</v-icon>
-        {{ new Date(Date.parse(item.tournament.date)).toDateString() }}
+        {{ transformDate(item.tournament.date) }}
       </template>
 
     </v-data-table>
@@ -319,6 +319,9 @@ export default {
     this.fetchCurrentPlayer()
   },
   methods: {
+    transformDate(date) {
+      return new Date(Date.parse(date.split(' ')[0])).toDateString()
+    },
     fetchPlayers() {
       this.$apollo
         .query({
