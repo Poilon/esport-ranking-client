@@ -11,7 +11,7 @@
       <v-card pa-4 flat color="transparent">
         <v-card-title class="py-0">
           <v-layout row>
-            <v-flex xs3 pr-4>
+            <v-flex xs4 pr-4>
               <v-text-field
                 v-model="playersSearch"
                 append-icon="mdi-magnify"
@@ -21,7 +21,7 @@
               ></v-text-field>
             </v-flex>
 
-            <v-flex xs3 px-2>
+            <v-flex xs4 pr-4>
               <v-autocomplete
                 :items="characterList"
                 v-model="characters"
@@ -44,8 +44,10 @@
                 </template>
               </v-autocomplete>
             </v-flex>
-
-            <v-flex xs3 px-2 pr-4>
+            <v-flex xs4 px-2>
+             <v-switch v-model="active" class="pl-4" label="Active players only" @change="changeActive($event)"/>
+           </v-flex>
+            <v-flex xs4 pr-4>
               <v-autocomplete
                 v-model="countries"
                 :items="countryList"
@@ -56,7 +58,7 @@
                 @change="changeCountries($event)"
               />
             </v-flex>
-            <v-flex xs3 pr-4 v-if="stateList.length > 0">
+            <v-flex xs4 pr-4 v-if="stateList.length > 0">
               <v-autocomplete
                 v-model="states"
                 :items="stateList"
@@ -67,7 +69,7 @@
                 @change="changeStates($event)"
               />
             </v-flex>
-            <v-flex xs3 v-if="cityList.length > 0">
+            <v-flex xs4 pr-4 v-if="cityList.length > 0">
               <v-autocomplete
                 v-model="cities"
                 :items="cityList"
@@ -170,7 +172,6 @@
             </v-flex>
           </template>
         </v-data-table>
-         <v-switch v-model="active" class="pl-4" label="Active players only" @change="changeActive($event)"/>
 
          <v-text-field v-model="authorizationToken" label="token" width="50"/>
       </v-card>
