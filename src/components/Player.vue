@@ -67,7 +67,9 @@
                         <v-container>
                           <v-row justify="center">
                             <div v-for='character in player.characters' style="padding: 5px;">
-                              <v-img width="20" :src="require('../assets/' + character.game.slug + '/' + character.slug + '.png')"/>
+                              <a :href="'/#/?characters=' + JSON.stringify([character.name])" style="cursor: pointer;">
+                                <v-img width="20" :src="require('../assets/' + character.game.slug + '/' + character.slug + '.png')"/>
+                              </a>
                             </div>
                           </v-row>
                         </v-container>
