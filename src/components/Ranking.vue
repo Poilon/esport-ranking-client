@@ -153,7 +153,9 @@
           <template v-slot:item.characters="{ item }">
             <v-layout row wrap>
               <div v-for='character in item.characters' style="padding: 5px;">
-                <v-img width="20" :src="require('../assets/' + character.game.slug + '/' + character.slug + '.png')"/>
+                <div @click="clickOnCharacter(character)" style="cursor: pointer;">
+                  <v-img width="20" :src="require('../assets/' + character.game.slug + '/' + character.slug + '.png')"/>
+                </div>
               </div>
             </v-layout>
           </template>
@@ -368,6 +370,10 @@ export default {
       this.queryPlayers()
     },
     changeActive(active) {
+      this.update()
+    },
+    clickOnCharacter(character) {
+      this.characters = [character.name]
       this.update()
     },
     changeCharacters(characters) {
