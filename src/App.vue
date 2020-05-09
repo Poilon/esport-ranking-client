@@ -7,6 +7,7 @@
       </a>
       <div class="d-flex align-center">Melee Ranking</div>
       <v-spacer></v-spacer>
+      <v-chip class="ma-2" color="transparent" text-color="white" to="/quizz/">Quizz Game</v-chip>
       <v-chip class="ma-2" color="transparent" text-color="white" to="/">Global Leaderboard</v-chip>
     </v-app-bar>
     <v-content>
