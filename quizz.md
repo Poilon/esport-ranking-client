@@ -28,7 +28,7 @@ poilon@gmail.com
 
 ## Roadmap 
 
-### STEP 1 
+### STEP 1 - 80% done
 
 * Make a single player Quizz game 
 	* Click on the Quizz link at the top 
@@ -38,6 +38,24 @@ poilon@gmail.com
 		* Questions are generated ; some types :
 			* Who won X ?
 	* General score at the end 
+
+Next :
+	* Shuffle answers 
+	* Randomize tournament questions
 	
 ### STEP 2 
+
+* Stylize the Quizz
+	* Name + Score is always visible 
+	* Question is the most visible, Answers all take equal space
+	* Timer is extremely visible, turning red to alert when it goes under 3 seconds
+* Generate more diverse questions
+
+### STEP 3
+
+* Multiplayer 
+	* Who is playing
+	* TBA
+	* TBA 
+	* TBA
 	
