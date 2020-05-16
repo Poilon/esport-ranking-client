@@ -1,0 +1,149 @@
+<template>
+    <v-container style="max-width:1024px; padding:24px;">   
+        <div class="text-center">
+            <!-- Login form -->
+            <v-row
+                v-if="!registering"
+                align="center"
+                justify="center"
+            >
+                <v-col
+                    cols="12"
+                    sm="8"
+                >
+                    <v-card class="elevation-12">
+                        <v-toolbar
+                            color="#141414"
+                            dark
+                            flat
+                        >
+                            <v-toolbar-title >Login</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                        </v-toolbar>
+                        <v-card-text>
+                            <v-form>
+                                <v-text-field
+                                    label="Login"
+                                    name="login"
+                                    type="text"
+                                ></v-text-field>
+
+                                <v-text-field
+                                    label="Password"
+                                    name="password"
+                                    type="password"
+                                ></v-text-field>
+                            </v-form>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-btn color="#141414" @click="registering = !registering"><span style="color: white">No account yet?</span></v-btn>
+                            <v-spacer></v-spacer>
+                            <v-btn color="#141414" @click="doLogin"><span style="color: white">Login</span></v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-col>
+            </v-row>
+
+            <!-- Register form -->
+            <v-row
+                v-if="registering"
+                align="center"
+                justify="center"
+            >
+                <v-col
+                    cols="12"
+                    sm="8"
+                >
+                    <v-card class="elevation-12">
+                        <v-toolbar
+                            color="#141414"
+                            dark
+                            flat
+                        >
+                            <v-toolbar-title >Register</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                        </v-toolbar>
+                        <v-card-text>
+                            <v-form>
+                                <v-text-field
+                                    label="Login"
+                                    name="login"
+                                    v-model="login"
+                                    type="text"
+                                    :rules="[rules.required]"
+                                ></v-text-field>
+
+                                <v-text-field
+                                    label="E-Mail address"
+                                    name="email"
+                                    v-model="email"
+                                    :rules="[rules.required, rules.email]"
+                                    type="text"
+                                ></v-text-field>
+
+                                <v-text-field
+                                    label="Enter your password"
+                                    name="password"
+                                    v-model="password1"
+                                    type="password"
+                                    :rules="[rules.required]"
+                                    hint="At least 6 characters"
+                                ></v-text-field>
+
+                                <v-text-field
+                                    label="Confirm your password"
+                                    name="password"
+                                    v-model="password2"
+                                    type="password"
+                                    :rules="[rules.required]"
+                                ></v-text-field>
+                            </v-form>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-btn color="#141414" @click="registering = !registering"><span style="color: white">Already have an account?</span></v-btn>
+                            <v-spacer></v-spacer>
+                            <v-btn color="#141414" @click="register"><span style="color: white">Register</span></v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-col>
+            </v-row>
+        </div>
+    </v-container>
+</template>
+
+<script>
+import VueRouter from 'vue-router'
+
+export default {
+    data: () => ({
+            registering: false,
+            login: '',
+            email: '',
+            password1: '',
+            password2: '',
+            rules: {
+                required: value => !!value || 'Required.',
+                email:  v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-Mail must be valid',
+            }
+        }),
+        mounted() {
+            
+        },
+        methods: {
+            doLogin() {
+                // login logic here
+
+                this.$router.push('Quizz')
+            },
+            register() {
+                if (!this.matchPwd()) {
+                    console.log("no match")
+                }
+                // register logic here
+            },
+            matchPwd(){
+                return this.password2 == this.password1 ? true : false
+            },
+        },
+}
+</script>

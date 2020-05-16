@@ -54,7 +54,7 @@ Next :
 ### STEP 3
 
 * Multiplayer 
-	* Who is playing
+	* Who is playing + Scores
 	* TBA
 	* TBA 
 	* TBA

@@ -128,7 +128,12 @@
                     </v-card-actions>
                 </v-card>
             </v-dialog>
-        </div>
+
+            <!-- 
+
+                C H A T
+
+            -->
 
     </v-container>
 </template>
@@ -136,11 +141,14 @@
 <script>
 import gql from "graphql-tag";
 
+
+
 export default {
     data: () => ({
         currentQuestion: "",
         currentScore: 0,
         currentTournament: {},
+        random_tournament: {},
         results: [],
         dialog: false,
         dialogResult: false,
@@ -159,24 +167,25 @@ export default {
     mounted() {
         this.generateTournament();
     },
+    apollo: {
+        random_tournament: {
+            query: gql`{
+                random_tournament {
+                    name
+                    results { rank player { name profile_picture_url }}
+                }
+            }`,
+            result (data) {
+                this.currentTournament = data.data.random_tournament
+                this.loading = false
+            },
+        }
+    },
     methods: {
         // Query to look for tournaments data
         generateTournament() {
             this.loading = true
-            this.$apollo
-                .query({
-                    query: gql`{
-                        random_tournament {
-                            name
-                            results { rank player { name profile_picture_url }}
-                        }
-                    }`
-                })
-                .then(data => {
-                    this.currentTournament = data.data.random_tournament;
-                    console.log(this.currentTournament.name)
-                    this.loading = false
-                });
+            this.$apollo.queries.random_tournament.refetch()
         },
         // Launching the game (currently )
         // "answers" is a map containing 1 correct answer & 3 wrong answers
@@ -184,6 +193,9 @@ export default {
         // (player, false) means player didn't win the tournament, wrong answer
         // note: (player, false) is currently taken from 2nd trough 4th place
         quizz() {
+            if (this.currentTournament.results.length == 0) {
+                this.generateTournament();
+            }
             this.launched = true;
             this.dialog = false;
             this.generateQuestion();
@@ -208,6 +220,7 @@ export default {
             }
         },
         checkAnswer(answer){
+            this.generateTournament();
             clearTimeout(this.interval)
             // this.launched = false;
             if (this.answers.get(answer) == true) {
@@ -219,7 +232,6 @@ export default {
                 this.result = "Wrong answer... You earned no point."
             }
             this.dialogResult = true;
-            this.generateTournament();
         },
         countdown() {
             // timer runs out, answer is false = lost
@@ -251,7 +263,7 @@ export default {
             } else {
                 quizz()
             }
-        },
-    }
+        }
+    },
 }
 </script>

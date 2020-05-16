@@ -25,6 +25,16 @@ export const router = new VueRouter({
       path: '/quizz/',
       name: 'quizz',
       component: () => import("./components/Quizz")
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import("./components/Login")
+    },
+    {
+      path: '/waiting',
+      name: 'waiting',
+      component: () => import("./components/Waiting")
     }
 
   ]
