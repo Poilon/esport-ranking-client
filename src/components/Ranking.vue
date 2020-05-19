@@ -13,7 +13,7 @@
           <v-layout row>
             <v-flex xs4 pr-4>
               <v-text-field
-                v-model="playersSearch"
+                v-model="playerSearch"
                 append-icon="mdi-magnify"
                 label="Player"
                 single-line
@@ -86,14 +86,14 @@
           dense
           :headers="playersHeaders"
           :items="players"
-          :search="playersSearch"
+          :server-items-length="totalPlayers"
           :loading="loading"
           :options.sync="options"
           loading-text="Fetching data..."
-          :footer-props="{'items-per-page-options':[20, 50, 100, 250, 500, -1]}"
+          :footer-props="{'items-per-page-options':[20, 50, 100, 250, 500]}"
           class="elevation-0"
         >
-          <template v-slot:item.rank="{ item }">{{ ranks.indexOf(item.elo) + 1 }}</template>
+          <template v-slot:item.rank="{ item }">{{ ((options.page - 1) * options.itemsPerPage) + ranks.indexOf(item.elo) + 1 }}</template>
           <template
             v-slot:item.current_mpgr_ranking="{ item }"
           >{{ item.current_mpgr_ranking == 9999999999 ? "---" : item.current_mpgr_ranking }}</template>
@@ -160,19 +160,7 @@
             </v-layout>
           </template>
 
-          <template v-slot:item.ranks="{ item }">
-            <v-flex v-for="(res,i) in item.results" :key="i">
-              <v-chip
-                class="ma-2"
-                color="grey"
-                text-color="white"
-                :to="{ name: 'tournament', params: { id: res.tournament.id } }"
-              >
-                <v-avatar left :class="medalColor(res.rank)">{{ res.rank }}</v-avatar>
-                {{ res.tournament.name }}
-              </v-chip>
-            </v-flex>
-          </template>
+
         </v-data-table>
 
          <v-text-field v-model="authorizationToken" label="token" width="50"/>
@@ -208,12 +196,10 @@ export default {
     snackbarText: "",
     authorizationToken: "",
     charSearch: "",
-    playersSearch: "",
+    playerSearch: "",
     loading: true,
-    options: {
-      itemsPerPage: 20,
-      page: 1
-    },
+    totalPlayers: 0,
+    options: {},
     characterList: [],
     characters: [],
     players: [],
@@ -226,8 +212,20 @@ export default {
     cities: [],
     active: false,
     tmpChars: {},
-    btnLoading: {}
+    btnLoading: {},
   }),
+
+  watch: {
+    options: {
+      handler() {
+        this.queryPlayers()
+      }
+    },
+    playerSearch: function(p) {
+      this.options.page = 1
+      this.queryPlayers()
+    }
+  },
 
   mounted() {
     this.queryCharacters();
@@ -277,7 +275,7 @@ export default {
         {
           text: "RANK",
           align: "left",
-          sortable: true,
+          sortable: false,
           value: "rank"
         },
         {
@@ -295,7 +293,7 @@ export default {
         {
           text: "CHARACTERS",
           align: "left",
-          sortable: true,
+          sortable: false,
           value: "characters"
         },
         {
@@ -484,6 +482,9 @@ export default {
     },
 
     queryPlayers() {
+
+      const { sortBy, sortDesc, page, itemsPerPage } = this.options
+
       let countryFilter = ""
       let countries = JSON.parse(JSON.stringify(this.countries))
 
@@ -507,6 +508,8 @@ export default {
         cityFilter = "(" + this.cities.map(c => `city == '${c}'`).join(' || ') + ")"
 
       let filter = ""
+      if (this.playerSearch.length > 0)
+        filter = `, filter: "players.name | '%${this.playerSearch}%'"`
       if (countryFilter.length > 0)
         filter = `, filter: "${countryFilter}`
       if (countryFilter.length > 0 && stateFilter.length > 0)
@@ -520,27 +523,37 @@ export default {
       if (this.active)
         activeFilter = ",active: true"
 
+      let orderByFilter = `, order_by: "elo desc, name asc"`
+      console.log(sortBy == "rank")
+
+      if (sortBy && sortBy.length > 0 && sortBy != "rank")
+        orderByFilter = `, order_by: "${sortBy.join(',')} ${sortDesc[0] ? 'desc' : 'asc'}"`
+
       this.$apollo.query({
         query: gql`{
-          players(order_by: "elo desc, name asc"${activeFilter}${charactersFilter}, per_page: 2000, page: 1${filter}) {
-            id
-            name
-            profile_picture_url
-            current_mpgr_ranking
-            elo
-            characters {
+          paginated_players(per_page: ${itemsPerPage}${orderByFilter}, page: ${page}${activeFilter}${charactersFilter}${filter}) {
+            total_count
+            data {
               id
               name
-              slug
-              game {
+              profile_picture_url
+              current_mpgr_ranking
+              elo
+              characters {
                 id
+                name
                 slug
+                game {
+                  id
+                  slug
+                }
               }
             }
           }
         }`
       }).then(data => {
-        this.players = data.data.players
+        this.totalPlayers = data.data.paginated_players.total_count
+        this.players = data.data.paginated_players.data
         this.players.forEach(player => {
           if (!player.current_mpgr_ranking)
             player.current_mpgr_ranking = 9999999999;
