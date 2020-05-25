@@ -172,10 +172,11 @@ export default {
             query: gql`{
                 random_tournament {
                     name
-                    results { rank player { name profile_picture_url }}
+                    results { rank player { name }}
                 }
             }`,
             result (data) {
+                console.log(data)
                 this.currentTournament = data.data.random_tournament
                 this.loading = false
             },
@@ -201,7 +202,7 @@ export default {
             this.generateQuestion();
             for (var i = 0 ; i < 4 ; i++) {
                 this.answersToDisplay[i] = this.currentTournament.results[i].player.name;
-                this.answers.set(this.currentTournament.results[i].player.name, i === 0 ? true : false);
+                this.answers.set(this.currentTournament.results[i].player.name, this.currentTournament.results[i].rank === 1 ? true : false);
             }
             this.shuffleAnswers()
             this.TIMER = 10
