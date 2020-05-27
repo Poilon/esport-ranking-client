@@ -1,12 +1,13 @@
 <template>
   <v-app>
-
     <v-app-bar app color="#141414" dark flat>
       <a href="/">
         <v-img class="mx-2 mr-4" src="/logo.png" max-height="28" max-width="28" contain></v-img>
       </a>
       <div class="d-flex align-center">Melee Ranking</div>
       <v-spacer></v-spacer>
+      {{ me && me.email }}
+
       <v-chip class="ma-2" color="transparent" text-color="white" to="/quizz/">Quizz Game</v-chip>
       <v-chip class="ma-2" color="transparent" text-color="white" to="/">Global Leaderboard</v-chip>
       <v-chip class="ma-2" color="transparent" text-color="white" to="/login">Login</v-chip>
@@ -23,7 +24,24 @@ import gql from "graphql-tag";
 export default {
   name: "App",
 
-  data: () => ({})
+  data: () => ({
+  }),
+
+  apollo: {
+    me: {
+      query: gql`{
+        me {
+          email
+        }
+      }`,
+      context: {
+        headers: {
+          SESSIONID: localStorage.getItem('MELEERANKING-SESSION-TOKEN')
+        }
+      }
+    }
+  },
+
 };
 </script>
 

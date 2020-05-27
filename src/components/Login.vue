@@ -1,5 +1,5 @@
 <template>
-    <v-container style="max-width:1024px; padding:24px;">   
+    <v-container style="max-width:1024px; padding:24px;">
         <div class="text-center">
             <!-- Login form -->
             <v-row
@@ -23,12 +23,14 @@
                         <v-card-text>
                             <v-form>
                                 <v-text-field
-                                    label="Login"
-                                    name="login"
+                                    v-model="email"
+                                    label="Email"
+                                    name="email"
                                     type="text"
                                 ></v-text-field>
 
                                 <v-text-field
+                                    v-model="password"
                                     label="Password"
                                     name="password"
                                     type="password"
@@ -66,15 +68,7 @@
                         <v-card-text>
                             <v-form>
                                 <v-text-field
-                                    label="Login"
-                                    name="login"
-                                    v-model="login"
-                                    type="text"
-                                    :rules="[rules.required]"
-                                ></v-text-field>
-
-                                <v-text-field
-                                    label="E-Mail address"
+                                    label="Email"
                                     name="email"
                                     v-model="email"
                                     :rules="[rules.required, rules.email]"
@@ -113,12 +107,15 @@
 
 <script>
 import VueRouter from 'vue-router'
+import { onLogin, onLogout } from "../vue-apollo.js"
+import gql from "graphql-tag";
 
 export default {
     data: () => ({
             registering: false,
             login: '',
             email: '',
+            password: '',
             password1: '',
             password2: '',
             rules: {
@@ -127,18 +124,50 @@ export default {
             }
         }),
         mounted() {
-            
+
         },
         methods: {
             doLogin() {
-                // login logic here
+                this.$apollo.mutate({
+                    mutation: gql`
+                      mutation($email: String!, $password: String!) {
+                        login_user(email: $email, password: $password)
+                      }
+                    `,
+                    variables: {
+                      email: this.email,
+                      password: this.password
+                    }
+                }).then(data => {
+                    onLogin(this.$apollo.provider.defaultClient, data.data.login_user)
+                    this.authToken = data.data.login_user
+                })
 
                 this.$router.push('Quizz')
             },
             register() {
                 if (!this.matchPwd()) {
                     console.log("no match")
+                    return
                 }
+
+                this.$apollo.mutate({
+                    mutation: gql`
+                      mutation($email: String!, $password: String!) {
+                        create_user(user: { email: $email, password: $password }) {
+                            id
+                            email
+                        }
+                      }
+                    `,
+                    variables: {
+                      email: this.email,
+                      password: this.password1
+                    }
+                }).then(() => {
+                    this.registering = false
+                })
+
                 // register logic here
             },
             matchPwd(){
