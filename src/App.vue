@@ -10,7 +10,8 @@
 
       <v-chip class="ma-2" color="transparent" text-color="white" to="/quizz/">Quizz Game</v-chip>
       <v-chip class="ma-2" color="transparent" text-color="white" to="/">Global Leaderboard</v-chip>
-      <v-chip class="ma-2" color="transparent" text-color="white" to="/login">Login</v-chip>
+      <v-chip v-if="!me" class="ma-2" color="transparent" text-color="white" to="/login">Login</v-chip>
+      <v-chip v-if="me" class="ma-2" color="transparent" text-color="white" @click="doLogout">Logout</v-chip>
     </v-app-bar>
     <v-content>
       <router-view />
@@ -20,13 +21,14 @@
 
 <script>
 import gql from "graphql-tag";
+import { onLogin, onLogout } from "./vue-apollo.js"
 
 export default {
   name: "App",
 
   data: () => ({
   }),
-
+  
   apollo: {
     me: {
       query: gql`{
@@ -41,6 +43,12 @@ export default {
       }
     }
   },
+  methods: {
+    doLogout() {
+      onLogout(this.$apollo.provider.defaultClient)
+      window.location.reload()
+    }
+  }
 
 };
 </script>

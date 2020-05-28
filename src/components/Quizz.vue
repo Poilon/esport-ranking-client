@@ -176,7 +176,6 @@ export default {
                 }
             }`,
             result (data) {
-                console.log(data)
                 this.currentTournament = data.data.random_tournament
                 this.loading = false
             },

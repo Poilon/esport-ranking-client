@@ -141,13 +141,13 @@ export default {
                 }).then(data => {
                     onLogin(this.$apollo.provider.defaultClient, data.data.login_user)
                     this.authToken = data.data.login_user
+                    window.location.reload()
                 })
-
+                
                 this.$router.push('Quizz')
             },
             register() {
                 if (!this.matchPwd()) {
-                    console.log("no match")
                     return
                 }
 
@@ -167,8 +167,6 @@ export default {
                 }).then(() => {
                     this.registering = false
                 })
-
-                // register logic here
             },
             matchPwd(){
                 return this.password2 == this.password1 ? true : false
