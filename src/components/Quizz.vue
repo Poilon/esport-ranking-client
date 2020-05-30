@@ -5,34 +5,9 @@
 
             <!-- Quizz Starting - Temporal modal to enter your name
             Once name is entered, the game starts -->
-            <v-btn rounded dark v-if="!launched && !loading" @click="dialog = true">
+            <v-btn rounded dark v-if="!launched && !loading" @click="loopGame(true)">
                 Start a quizz
             </v-btn>
-            <v-dialog v-model="dialog" persistent width="500">
-                <v-card>
-                    <v-card-title class="headline" primary-title>
-                        Enter your name
-                    </v-card-title>
-
-                    <v-spacer></v-spacer>
-
-                    <v-card-text>
-                        <v-text-field
-                            v-model="playerName"
-                            label="Enter your name here"
-                        ></v-text-field>
-                    </v-card-text>
-
-                    <v-divider></v-divider>
-
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="primary" text @click="loopGame(true)">
-                            O.K.
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
 
             <!-- CORE GAME  -->
             <v-card
@@ -43,7 +18,7 @@
                 <v-list-item>
                     <v-list-item-content>
                         <v-list-item-title class="headline mb-1">{{playerName}}: {{currentScore}} points</v-list-item-title>
-                        <v-list-item-subtitle>{{currentQuestion}}</v-list-item-subtitle>
+                        <v-list-item-subtitle>N°{{currentQuestionIndex + 1}}/{{MAX_QUESTIONS}} - {{currentQuestion}}</v-list-item-subtitle>
                         <v-card-text>
                             <v-row>
                                     <v-col 
@@ -129,19 +104,12 @@
                 </v-card>
             </v-dialog>
 
-            <!-- 
-
-                C H A T
-
-            -->
-
     </v-container>
 </template>
 
 <script>
 import gql from "graphql-tag";
-
-
+import VueRouter from 'vue-router'
 
 export default {
     data: () => ({
@@ -149,59 +117,82 @@ export default {
         currentScore: 0,
         currentTournament: {},
         random_tournament: {},
+        quizz: {},
         results: [],
-        dialog: false,
         dialogResult: false,
         dialogFinalResult: false,
         loading: true,
         launched: false,
-        playerName: "Anonymous666",
+        playerName: "",
         answersToDisplay: [],
-        answers: new Map(),
+        goodAndwer: '',
         result: "",
         MAX_ANSWERS: 4,
-        MAX_TOURNAMENTS: 10,
+        MAX_QUESTIONS: 10,
         TIMER: '',
         interval: '',
     }),
     mounted() {
-        this.generateTournament();
+        if (!localStorage.getItem('MELEERANKING-SESSION-TOKEN')){
+            this.$router.push('/login')
+            return
+        }
+        this.generateQuizz();
     },
     apollo: {
-        random_tournament: {
+        random_quizz: {
             query: gql`{
-                random_tournament {
-                    name
-                    results { rank player { name }}
-                }
+                random_quizz {
+                    quizz_questions { 
+                        question { 
+                            name 
+                            answers { 
+                                name 
+                            } 
+                            answer {
+                                name
+                            }
+                        } 
+                    } 
+                } 
             }`,
             result (data) {
-                this.currentTournament = data.data.random_tournament
+                this.quizz = data.data.random_quizz 
+                console.log(this.quizz)
                 this.loading = false
-            },
-        }
+            }
+        },
+        me: {
+            query: gql`{
+                me {
+                    email
+                }
+            }`,
+            context: {
+                headers: {
+                    SESSIONID: localStorage.getItem('MELEERANKING-SESSION-TOKEN')
+                }
+            }
+    }
     },
     methods: {
-        // Query to look for tournaments data
-        generateTournament() {
+        // Query to get a quizz with 10 questions
+        generateQuizz() {
             this.loading = true
-            this.$apollo.queries.random_tournament.refetch()
+            this.$apollo.queries.random_quizz.refetch()
         },
         // Launching the game (currently )
         // "answers" is a map containing 1 correct answer & 3 wrong answers
         // (player, true) means player won the tournament, correct answer
         // (player, false) means player didn't win the tournament, wrong answer
         // note: (player, false) is currently taken from 2nd trough 4th place
-        quizz() {
-            if (this.currentTournament.results.length == 0) {
-                this.generateTournament();
-            }
+        quizzGame() {
             this.launched = true;
             this.dialog = false;
             this.generateQuestion();
             for (var i = 0 ; i < 4 ; i++) {
-                this.answersToDisplay[i] = this.currentTournament.results[i].player.name;
-                this.answers.set(this.currentTournament.results[i].player.name, this.currentTournament.results[i].rank === 1 ? true : false);
+                this.answersToDisplay[i] = this.quizz.quizz_questions[this.currentQuestionIndex].question.answers[i].name;
+                this.goodAnswer = this.quizz.quizz_questions[this.currentQuestionIndex].question.answer.name;
             }
             this.shuffleAnswers()
             this.TIMER = 10
@@ -209,7 +200,7 @@ export default {
             this.interval = setInterval(this.countdown, 1000)
         },
         generateQuestion() {
-            this.currentQuestion = "Who won " + this.currentTournament.name + "?";
+            this.currentQuestion = this.quizz.quizz_questions[this.currentQuestionIndex].question.name
         },
         shuffleAnswers() {
             for (var l = this.answersToDisplay.length - 1 ; l >= 0 ; l--) {
@@ -220,10 +211,10 @@ export default {
             }
         },
         checkAnswer(answer){
-            this.generateTournament();
+            this.generateQuestion();
             clearTimeout(this.interval)
             // this.launched = false;
-            if (this.answers.get(answer) == true) {
+            if (answer == this.goodAnswer) {
                 this.result = "Correct answer! You earned 1 point."
                 this.currentScore++
             } else if (answer == 2) {
@@ -246,22 +237,24 @@ export default {
             this.dialogResult = false;
             if (first) {
                 this.currentScore = 0
-                this.currentTournamentIndex = 0
+                this.currentQuestionIndex = 0
+                this.playerName = this.me.email
+                this.playerName = this.playerName.substring(0, this.playerName.indexOf('@'))
             } else {
-                this.currentTournamentIndex++
-                if (this.currentTournamentIndex == this.MAX_TOURNAMENTS) {
+                this.currentQuestionIndex++
+                if (this.currentQuestionIndex == this.MAX_QUESTIONS) {
                     this.endGame(true)
                     return;
                 }
             }
-            this.quizz()
+            this.quizzGame()
         },
         endGame(end) {
             if (end) {
                 this.launched = false;
                 this.dialogFinalResult = true;
             } else {
-                quizz()
+                this.quizzGame()
             }
         }
     },
