@@ -26,7 +26,7 @@
                                         outlined
                                         :key="n"
                                         cols="6"
-                                        @click="checkAnswer(answersToDisplay[n-1])">
+                                        @click="setChosenAnswer(answersToDisplay[n-1])">
                                         <v-hover
                                             v-slot:default="{ hover }"
                                         >
@@ -41,45 +41,22 @@
                                             </v-card>
                                         </v-hover>
                                     </v-col>
-                                    <!--
-                                    <v-responsive
-                                    v-if="n === 2"
-                                    :key="`width-${n}`"
-                                    width="100%"
-                                    ></v-responsive> -->
                                 </v-row>
-                            {{TIMER}} <span v-if="TIMER <= 1">second</span><span v-if="TIMER > 1">seconds</span> left...
+                            <div v-if="TIMER_QUESTION != 0">
+                                {{TIMER_QUESTION}} <span v-if="TIMER_QUESTION <= 1">second</span><span v-if="TIMER_QUESTION > 1">seconds</span> left...
+                            </div>
+                            <div v-if="TIMER_QUESTION == 0">
+                                {{TIMER_NEXT}} <span v-if="TIMER_NEXT <= 1">second</span><span v-if="TIMER_NEXT > 1">seconds</span> before the next question...
+                            </div>
                         </v-card-text>
+                        <v-list-item-title v-if="chosenAnswer">You answered "{{chosenAnswer}}".</v-list-item-title>
+                        <v-list-item-title v-if="result">{{result}}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
             </v-card>
         </div>
 
             <!-- DIALOGS -->
-
-            <!-- Won or Lost -->
-            <v-dialog v-model="dialogResult" persistent width="500">
-                <v-card>
-                    <v-card-title class="headline" primary-title>
-                        Result
-                    </v-card-title>
-
-                    <v-spacer></v-spacer>
-
-                    <v-card-text>
-                        {{result}}
-                    </v-card-text>
-
-                    <v-divider></v-divider>
-
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="primary" text @click="loopGame(false)">
-                            O.K.
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
 
             <v-dialog v-model="dialogFinalResult" persistent width="500">
                 <v-card>
@@ -116,20 +93,22 @@ export default {
         currentQuestion: "",
         currentScore: 0,
         currentTournament: {},
-        random_tournament: {},
         quizz: {},
         results: [],
         dialogResult: false,
         dialogFinalResult: false,
+        quizzDate: '',
         loading: true,
         launched: false,
         playerName: "",
         answersToDisplay: [],
+        chosenAnswer: '',
         goodAndwer: '',
         result: "",
         MAX_ANSWERS: 4,
         MAX_QUESTIONS: 10,
-        TIMER: '',
+        TIMER_QUESTION: 10,
+        TIMER_NEXT: 5,
         interval: '',
     }),
     mounted() {
@@ -140,9 +119,10 @@ export default {
         this.generateQuizz();
     },
     apollo: {
-        random_quizz: {
+        next_quizz: {
             query: gql`{
-                random_quizz {
+                next_quizz {
+                    starts_at
                     quizz_questions { 
                         question { 
                             name 
@@ -154,11 +134,11 @@ export default {
                             }
                         } 
                     } 
-                } 
+                }
             }`,
             result (data) {
-                this.quizz = data.data.random_quizz 
-                console.log(this.quizz)
+                this.quizzDate = new Date(data.data.next_quizz.starts_at)
+                this.quizz = data.data.next_quizz
                 this.loading = false
             }
         },
@@ -179,7 +159,7 @@ export default {
         // Query to get a quizz with 10 questions
         generateQuizz() {
             this.loading = true
-            this.$apollo.queries.random_quizz.refetch()
+            this.$apollo.queries.next_quizz.refetch()
         },
         // Launching the game (currently )
         // "answers" is a map containing 1 correct answer & 3 wrong answers
@@ -195,7 +175,7 @@ export default {
                 this.goodAnswer = this.quizz.quizz_questions[this.currentQuestionIndex].question.answer.name;
             }
             this.shuffleAnswers()
-            this.TIMER = 10
+            this.TIMER_QUESTION = 10
 
             this.interval = setInterval(this.countdown, 1000)
         },
@@ -210,27 +190,42 @@ export default {
                 this.answersToDisplay[index] = tmp
             }
         },
-        checkAnswer(answer){
+        setChosenAnswer(answer){
+            this.chosenAnswer = answer
+        },
+        checkAnswer(time_out){
             this.generateQuestion();
             clearTimeout(this.interval)
-            // this.launched = false;
-            if (answer == this.goodAnswer) {
+            if (this.chosenAnswer == this.goodAnswer) {
                 this.result = "Correct answer! You earned 1 point."
                 this.currentScore++
-            } else if (answer == 2) {
+            } else if (time_out) {
                 this.result = "Timer ran out! You earned no points."
             } else {
                 this.result = "Wrong answer... You earned no point."
             }
-            this.dialogResult = true;
+            this.TIMER_NEXT = 5
+            this.interval = setInterval(this.countdownNextQuestion, 1000)
         },
         countdown() {
             // timer runs out, answer is false = lost
-            if (this.TIMER == 0) {
+            this.TIMER_QUESTION--
+            if (this.TIMER_QUESTION == 0 && this.chosenAnswer == '') {
                 clearTimeout(this.interval)
-                this.checkAnswer(2)
-            } else {
-                this.TIMER--
+                this.checkAnswer(true)
+            }
+            if (this.TIMER_QUESTION == 0) {
+                clearTimeout(this.interval)
+                this.checkAnswer()
+            }
+        },
+        countdownNextQuestion(){
+            this.TIMER_NEXT--
+            if (this.TIMER_NEXT == 0) {
+                clearTimeout(this.interval)
+                this.chosenAnswer = ''
+                this.result = ''
+                this.loopGame(false)
             }
         },
         loopGame(first) {
