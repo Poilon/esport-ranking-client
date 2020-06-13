@@ -3,11 +3,26 @@
 
         <div class="text-center">
 
-            <!-- Quizz Starting - Temporal modal to enter your name
-            Once name is entered, the game starts -->
-            <v-btn rounded dark v-if="!launched && !loading" @click="loopGame(true)">
+            <!--<v-btn rounded dark v-if="!launched && !loading" @click="loopGame(true)">
                 Start a quizz
-            </v-btn>
+            </v-btn>-->
+
+            <v-card
+                v-if="!launched && !loading"
+                class="mx-auto"
+                max-width="344"
+                loading
+            >
+                <v-card-text>
+                    <div>Loading...</div>
+                    <p class="display-1 text--primary">
+                        Next quizz in {{timeLeft}}
+                    </p>
+                    <div class="text--primary">
+                        Next quizz at {{quizzDate.getHours()}}:{{quizzDate.getMinutes()}}
+                    </div>
+                </v-card-text>
+            </v-card>
 
             <!-- CORE GAME  -->
             <v-card
@@ -35,21 +50,25 @@
                                                 class="pa-2"
                                                 v-ripple="{ center: true }"
                                                 outlined
-                                                tile
+                                                title=""
                                             >
                                                 {{answersToDisplay[n-1]}}
                                             </v-card>
                                         </v-hover>
                                     </v-col>
                                 </v-row>
+                            <div v-if="TIMER_QUESTION != 0" class="overline mb-4">Points given : {{scoreMultiplier}}</div>
                             <div v-if="TIMER_QUESTION != 0">
                                 {{TIMER_QUESTION}} <span v-if="TIMER_QUESTION <= 1">second</span><span v-if="TIMER_QUESTION > 1">seconds</span> left...
                             </div>
-                            <div v-if="TIMER_QUESTION == 0">
+                            <div v-if="TIMER_QUESTION == 0 && currentQuestionIndex +1 != 10">
                                 {{TIMER_NEXT}} <span v-if="TIMER_NEXT <= 1">second</span><span v-if="TIMER_NEXT > 1">seconds</span> before the next question...
                             </div>
+                            <div v-if="TIMER_QUESTION == 0 && currentQuestionIndex +1 == 10">
+                                {{TIMER_NEXT}} <span v-if="TIMER_NEXT <= 1">second</span><span v-if="TIMER_NEXT > 1">seconds</span> before the results...
+                            </div>
                         </v-card-text>
-                        <v-list-item-title v-if="chosenAnswer">You answered "{{chosenAnswer}}".</v-list-item-title>
+                        <v-list-item-title v-if="chosenAnswer">You answered "{{chosenAnswer}}" for {{scoreMultiplierChosen}} points.</v-list-item-title>
                         <v-list-item-title v-if="result">{{result}}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
@@ -110,6 +129,11 @@ export default {
         TIMER_QUESTION: 10,
         TIMER_NEXT: 5,
         interval: '',
+        timeLeft: '',
+        timer: {},
+        nowButLater: '',
+        scoreMultiplier: 100,
+        scoreMultiplierChosen: ''
     }),
     mounted() {
         if (!localStorage.getItem('MELEERANKING-SESSION-TOKEN')){
@@ -117,6 +141,15 @@ export default {
             return
         }
         this.generateQuizz();
+        this.nowButLater = new Date();
+        this.nowButLater.setSeconds(this.nowButLater.getSeconds() + 5)
+        this.timer = setInterval(this.nextQuizzCountdown, 1000)
+
+        // test TODO 
+        this.sendUserScore()
+    },
+    beforeDestroy() {
+        clearInterval(this.timer)
     },
     apollo: {
         next_quizz: {
@@ -137,7 +170,7 @@ export default {
                 }
             }`,
             result (data) {
-                this.quizzDate = new Date(data.data.next_quizz.starts_at)
+                this.quizzDate = new Date(data.data.next_quizz.starts_at * 1000)
                 this.quizz = data.data.next_quizz
                 this.loading = false
             }
@@ -145,6 +178,7 @@ export default {
         me: {
             query: gql`{
                 me {
+                    id
                     email
                 }
             }`,
@@ -172,8 +206,8 @@ export default {
             this.generateQuestion();
             for (var i = 0 ; i < 4 ; i++) {
                 this.answersToDisplay[i] = this.quizz.quizz_questions[this.currentQuestionIndex].question.answers[i].name;
-                this.goodAnswer = this.quizz.quizz_questions[this.currentQuestionIndex].question.answer.name;
             }
+            this.goodAnswer = this.quizz.quizz_questions[this.currentQuestionIndex].question.answer.name;
             this.shuffleAnswers()
             this.TIMER_QUESTION = 10
 
@@ -191,28 +225,33 @@ export default {
             }
         },
         setChosenAnswer(answer){
-            this.chosenAnswer = answer
+            if (this.TIMER_QUESTION != 0) {
+                this.chosenAnswer = answer
+                this.scoreMultiplierChosen = this.TIMER_QUESTION * 10
+            }
         },
         checkAnswer(time_out){
             this.generateQuestion();
             clearTimeout(this.interval)
             if (this.chosenAnswer == this.goodAnswer) {
-                this.result = "Correct answer! You earned 1 point."
-                this.currentScore++
-            } else if (time_out) {
-                this.result = "Timer ran out! You earned no points."
+                this.currentScore += this.scoreMultiplierChosen;
+                this.result = "Correct answer! You earned " + this.scoreMultiplierChosen +" points."
+            } else if (time_out == 2) {
+                this.result = "Timer ran out! You earned no points. (Correct answer: " + this.goodAnswer + ")"
             } else {
-                this.result = "Wrong answer... You earned no point."
+                this.result = "Wrong answer... You earned no point. (Correct answer: " + this.goodAnswer + ")"
             }
             this.TIMER_NEXT = 5
             this.interval = setInterval(this.countdownNextQuestion, 1000)
+            
         },
         countdown() {
             // timer runs out, answer is false = lost
             this.TIMER_QUESTION--
+            this.scoreMultiplier = this.TIMER_QUESTION * 10
             if (this.TIMER_QUESTION == 0 && this.chosenAnswer == '') {
                 clearTimeout(this.interval)
-                this.checkAnswer(true)
+                this.checkAnswer(2)
             }
             if (this.TIMER_QUESTION == 0) {
                 clearTimeout(this.interval)
@@ -225,10 +264,12 @@ export default {
                 clearTimeout(this.interval)
                 this.chosenAnswer = ''
                 this.result = ''
+                this.scoreMultiplier = 100
                 this.loopGame(false)
             }
         },
         loopGame(first) {
+            clearInterval(this.timer)
             this.dialogResult = false;
             if (first) {
                 this.currentScore = 0
@@ -240,7 +281,7 @@ export default {
                 if (this.currentQuestionIndex == this.MAX_QUESTIONS) {
                     this.endGame(true)
                     return;
-                }
+                } 
             }
             this.quizzGame()
         },
@@ -248,9 +289,58 @@ export default {
             if (end) {
                 this.launched = false;
                 this.dialogFinalResult = true;
+                this.generateQuizz()
+                this.nowButLater = new Date()
+                this.nowButLater.setSeconds(this.nowButLater.getSeconds() + 5)
+                this.timer = setInterval(this.nextQuizzCountdown, 1000)
             } else {
                 this.quizzGame()
             }
+        },
+        nextQuizzCountdown() {
+            let now = new Date().getTime();
+            // let t = this.quizz.starts_at * 1000 - now;
+            // next is to test timer to quizz
+            let t = this.nowButLater.getTime() - now
+            
+            if (t >= 0) {
+            
+                let days = Math.floor(t / (1000 * 60 * 60 * 24));
+                let hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let mins = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+                let secs = Math.floor((t % (1000 * 60)) / 1000);
+                
+                this.timeLeft = ("0"+mins).slice(-2) + ":" + ("0"+secs).slice(-2)
+            } else {
+                this.loopGame(true)
+            }
+        },
+        sendUserScore() {
+            this.$apollo.mutate({
+            mutation: gql`
+                mutation($player_id: String!, $score: int!){
+                add_score(
+                    id: $player_id
+                    score: $score
+                )
+                {
+                    id
+                    global_quizz_score
+                }
+                }
+            `,
+            variables: {
+                player_id: "35da70e8-f875-49f7-ab9b-822b59bb98a0",
+                score: 10
+            }
+            }).then(data => {
+                console.log(data)
+            }).catch(err => {
+
+            })
+        },
+        updateLeaderboard() {
+
         }
     },
 }
