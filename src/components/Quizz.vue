@@ -187,6 +187,12 @@ export default {
       result(data) {
         this.quizzDate = new Date(data.data.next_quizz[0].starts_at * 1000);
         this.quizz = data.data.next_quizz[0];
+        for (var l = this.quizz.quizz_questions.length - 1; l >= 0; l--) {
+          var index = Math.floor(Math.random() * l);
+          var tmp = this.quizz.quizz_questions[l];
+          this.quizz.quizz_questions[l] = this.quizz.quizz_questions[index];
+          this.quizz.quizz_questions[index] = tmp;
+        }
         this.loading = false;
       }
     },
