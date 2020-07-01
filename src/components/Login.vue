@@ -68,6 +68,14 @@
                         <v-card-text>
                             <v-form>
                                 <v-text-field
+                                    label="Name"
+                                    name="name"
+                                    v-model="name"
+                                    :rules="[rules.required]"
+                                    type="text"
+                                ></v-text-field>
+
+                                <v-text-field
                                     label="Email"
                                     name="email"
                                     v-model="email"
@@ -115,6 +123,7 @@ export default {
             registering: false,
             login: '',
             email: '',
+            name: '',
             password: '',
             password1: '',
             password2: '',
@@ -153,16 +162,18 @@ export default {
 
                 this.$apollo.mutate({
                     mutation: gql`
-                      mutation($email: String!, $password: String!) {
-                        create_user(user: { email: $email, password: $password }) {
+                      mutation($email: String!, $password: String!, $name: String!) {
+                        create_user(user: { email: $email, password: $password, name: $name }) {
                             id
+                            name
                             email
                         }
                       }
                     `,
                     variables: {
                       email: this.email,
-                      password: this.password1
+                      password: this.password1,
+                      name: this.name
                     }
                 }).then(() => {
                     this.registering = false

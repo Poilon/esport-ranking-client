@@ -81,9 +81,6 @@
             :items-per-page="20"
             class="elevation-1"
           >
-            <template v-slot:item.email="{ item }">
-              <span>{{ item.email.substring(0, item.email.indexOf('@')) }}</span>
-            </template>
           </v-data-table>
         </v-card>
       </template>
@@ -145,7 +142,7 @@ export default {
     scoreMultiplierChosen: "",
     users: [],
     headers: [
-      { text: 'Name', value: 'email' },
+      { text: 'Name', value: 'name' },
       { text: 'Score', value: 'global_quizz_score' },
     ],
   }),
@@ -187,12 +184,14 @@ export default {
       result(data) {
         this.quizzDate = new Date(data.data.next_quizz[0].starts_at * 1000);
         this.quizz = data.data.next_quizz[0];
-        for (var l = this.quizz.quizz_questions.length - 1; l >= 0; l--) {
+        console.log(this.quizz)
+        /*
+        for (var l = 0; l >= this.quizz.quizz_questions.length; l++) {
           var index = Math.floor(Math.random() * l);
           var tmp = this.quizz.quizz_questions[l];
           this.quizz.quizz_questions[l] = this.quizz.quizz_questions[index];
           this.quizz.quizz_questions[index] = tmp;
-        }
+        }*/
         this.loading = false;
       }
     },
@@ -201,6 +200,7 @@ export default {
         {
           me {
             id
+            name
             email
           }
         }
@@ -215,7 +215,7 @@ export default {
       query: gql`
         {
           leaderboard {
-            email
+            name
             global_quizz_score
           }
         }
@@ -324,11 +324,7 @@ export default {
       if (first) {
         this.currentScore = 0;
         this.currentQuestionIndex = 0;
-        this.playerName = this.me.email;
-        this.playerName = this.playerName.substring(
-          0,
-          this.playerName.indexOf("@")
-        );
+        this.playerName = this.me.name;
       } else {
         this.currentQuestionIndex++;
         if (this.currentQuestionIndex == this.MAX_QUESTIONS) {
