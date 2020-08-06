@@ -152,8 +152,6 @@ export default {
                     this.authToken = data.data.login_user
                     window.location.reload()
                 })
-                
-                this.$router.push('Quizz')
             },
             register() {
                 if (!this.matchPwd()) {
