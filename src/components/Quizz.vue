@@ -184,7 +184,6 @@ export default {
       result(data) {
         this.quizzDate = new Date(data.data.next_quizz[0].starts_at * 1000);
         this.quizz = data.data.next_quizz[0];
-        console.log(this.quizz)
         /*
         for (var l = 0; l >= this.quizz.quizz_questions.length; l++) {
           var index = Math.floor(Math.random() * l);
@@ -383,7 +382,6 @@ export default {
           }
         })
         .then(data => {
-          console.log(data);
         })
         .catch(err => {});
     },
