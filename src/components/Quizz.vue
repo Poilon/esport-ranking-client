@@ -11,7 +11,7 @@
           <p class="display-1 text--primary">Next quizz in {{timeLeft}}</p>
           <div
             class="text--primary"
-          >Next quizz at {{quizzDate.getHours()}}:{{quizzDate.getMinutes()}}</div>
+          >Next quizz at <span v-if="quizzDate.getHours().length < 10">0</span> {{quizzDate.getHours()}}:<span v-if="quizzDate.getMinutes() < 10">0</span>{{quizzDate.getMinutes()}}</div>
         </v-card-text>
       </v-card>
 
@@ -40,15 +40,18 @@
                     >{{answersToDisplay[n-1]}}</v-card>
                   </v-hover>
                 </v-col>
+                <!--<span v-if="answersToDisplay[MAX_ANSWERS]">-->
+                  <v-img :src="'https://thumbs.gfycat.com/' + answersToDisplay[MAX_ANSWERS] + '-size_restricted.gif'" aspect-ratio="0.5"></v-img>
+                <!--</span>-->
               </v-row>
               <div
                 v-if="TIMER_QUESTION != 0"
                 class="overline mb-4"
               >Points given : {{scoreMultiplier}}</div>
               <div v-if="TIMER_QUESTION != 0">
-                {{TIMER_QUESTION}}
-                <span v-if="TIMER_QUESTION <= 1">second</span>
-                <span v-if="TIMER_QUESTION > 1">seconds</span> left...
+                {{TIMER_QUESTION/10}}
+                <span v-if="TIMER_QUESTION <= 1.0">second</span>
+                <span v-if="TIMER_QUESTION > 1.0">seconds</span> left...
               </div>
               <div v-if="TIMER_QUESTION == 0 && currentQuestionIndex +1 != 10">
                 {{TIMER_NEXT}}
@@ -131,7 +134,7 @@ export default {
     result: "",
     MAX_ANSWERS: 4,
     MAX_QUESTIONS: 10,
-    TIMER_QUESTION: 10,
+    TIMER_QUESTION: 100,
     TIMER_NEXT: 5,
     interval: "",
     timeLeft: "",
@@ -239,18 +242,24 @@ export default {
       this.launched = true;
       this.dialog = false;
       this.generateQuestion();
-      for (var i = 0; i < 4; i++) {
+      for (var i = 0; i < this.MAX_ANSWERS; i++) {
         this.answersToDisplay[i] = this.quizz.quizz_questions[
           this.currentQuestionIndex
         ].question.answers[i].name;
+        if (this.quizz.quizz_questions[this.currentQuestionIndex].question.answers[i + 1]) {
+          this.answersToDisplay[i + 1] = this.quizz.quizz_questions[this.currentQuestionIndex].question.answers[i + 1].name;
+        }
       }
       this.goodAnswer = this.quizz.quizz_questions[
         this.currentQuestionIndex
       ].question.answer.name;
-      this.shuffleAnswers();
-      this.TIMER_QUESTION = 10;
+      console.log(this.answersToDisplay)
+      if (this.currentQuestionIndex != 9) {
+        this.shuffleAnswers();  
+      }
+      this.TIMER_QUESTION = 100;
 
-      this.interval = setInterval(this.countdown, 1000);
+      this.interval = setInterval(this.countdown, 100);
     },
     generateQuestion() {
       this.currentQuestion = this.quizz.quizz_questions[
@@ -268,7 +277,7 @@ export default {
     setChosenAnswer(answer) {
       if (this.TIMER_QUESTION != 0) {
         this.chosenAnswer = answer;
-        this.scoreMultiplierChosen = this.TIMER_QUESTION * 10;
+        this.scoreMultiplierChosen = this.TIMER_QUESTION;
       }
     },
     checkAnswer(time_out) {
@@ -297,7 +306,7 @@ export default {
     countdown() {
       // timer runs out, answer is false = lost
       this.TIMER_QUESTION--;
-      this.scoreMultiplier = this.TIMER_QUESTION * 10;
+      this.scoreMultiplier = this.TIMER_QUESTION;
       if (this.TIMER_QUESTION == 0 && this.chosenAnswer == "") {
         clearTimeout(this.interval);
         this.checkAnswer(2);
@@ -350,10 +359,10 @@ export default {
     },
     nextQuizzCountdown() {
       let now = new Date().getTime();
-      let t = this.quizz.starts_at * 1000 - now;
+      //let t = this.quizz.starts_at * 1000 - now;
       // next is to test timer of quizz
-      // let t = this.nowButLater.getTime() - now;
-
+      //let t = this.nowButLater.getTime() - now;
+      let t = -1
       if (t >= 0) {
         let days = Math.floor(t / (1000 * 60 * 60 * 24));
         let hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
