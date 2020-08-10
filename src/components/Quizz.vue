@@ -22,7 +22,7 @@
             <v-list-item-title class="headline mb-1">{{playerName}}: {{currentScore}} points</v-list-item-title>
             <v-list-item-subtitle>N°{{currentQuestionIndex + 1}}/{{MAX_QUESTIONS}} - {{currentQuestion}}</v-list-item-subtitle>
             <v-card-text>
-              <v-row>
+              <v-row align="center" justify="center">
                 <v-col
                   v-for="n in MAX_ANSWERS"
                   outlined
@@ -40,14 +40,23 @@
                     >{{answersToDisplay[n-1]}}</v-card>
                   </v-hover>
                 </v-col>
-                <!--<span v-if="answersToDisplay[MAX_ANSWERS]">-->
-                  <v-img :src="'https://thumbs.gfycat.com/' + answersToDisplay[MAX_ANSWERS] + '-size_restricted.gif'" aspect-ratio="0.5"></v-img>
-                <!--</span>-->
+
               </v-row>
+              
+              <!-- TODO margin-left: temporary solution // need to find a way to center the image properly -->
+              <div outlined style="margin-left: 20%" class="pa-4">
+                <v-img
+                  v-if="gifUrl"
+                  width="75%"
+                  :src="'https://thumbs.gfycat.com/' + gifUrl + '-size_restricted.gif'"
+                ></v-img>
+              </div>
+
               <div
                 v-if="TIMER_QUESTION != 0"
                 class="overline mb-4"
               >Points given : {{scoreMultiplier}}</div>
+
               <div v-if="TIMER_QUESTION != 0">
                 {{TIMER_QUESTION/10}}
                 <span v-if="TIMER_QUESTION <= 1.0">second</span>
@@ -117,6 +126,7 @@ import VueRouter from "vue-router";
 export default {
   data: () => ({
     currentQuestion: "",
+    currentQuestionIndex: 0,
     currentScore: 0,
     currentTournament: {},
     quizz: {},
@@ -139,6 +149,7 @@ export default {
     interval: "",
     timeLeft: "",
     timer: {},
+    gifUrl: "",
     // next is to test timer of quizz
     // nowButLater: "",
     scoreMultiplier: 100,
@@ -179,6 +190,7 @@ export default {
                 answer {
                   name
                 }
+                gif_url
               }
             }
           }
@@ -187,13 +199,7 @@ export default {
       result(data) {
         this.quizzDate = new Date(data.data.next_quizz[0].starts_at * 1000);
         this.quizz = data.data.next_quizz[0];
-        /*
-        for (var l = 0; l >= this.quizz.quizz_questions.length; l++) {
-          var index = Math.floor(Math.random() * l);
-          var tmp = this.quizz.quizz_questions[l];
-          this.quizz.quizz_questions[l] = this.quizz.quizz_questions[index];
-          this.quizz.quizz_questions[index] = tmp;
-        }*/
+        this.shuffleQuestions();
         this.loading = false;
       }
     },
@@ -246,17 +252,11 @@ export default {
         this.answersToDisplay[i] = this.quizz.quizz_questions[
           this.currentQuestionIndex
         ].question.answers[i].name;
-        if (this.quizz.quizz_questions[this.currentQuestionIndex].question.answers[i + 1]) {
-          this.answersToDisplay[i + 1] = this.quizz.quizz_questions[this.currentQuestionIndex].question.answers[i + 1].name;
-        }
       }
       this.goodAnswer = this.quizz.quizz_questions[
         this.currentQuestionIndex
       ].question.answer.name;
-      console.log(this.answersToDisplay)
-      if (this.currentQuestionIndex != 9) {
-        this.shuffleAnswers();  
-      }
+      this.shuffleAnswers();  
       this.TIMER_QUESTION = 100;
 
       this.interval = setInterval(this.countdown, 100);
@@ -265,14 +265,22 @@ export default {
       this.currentQuestion = this.quizz.quizz_questions[
         this.currentQuestionIndex
       ].question.name;
+      if (this.quizz.quizz_questions[this.currentQuestionIndex].question.gif_url) {
+        this.gifUrl = this.quizz.quizz_questions[this.currentQuestionIndex].question.gif_url;
+      }
+    },
+    shuffleQuestions() {
+      this.quizz.quizz_questions.sort(() => Math.random() * 2 - 1);
+      /*
+      for (var b = this.quizz.quizz_questions.length ; b >= 0 ; b--) {
+        var index = Math.floor(Math.random() * b--);
+        var tmp = this.quizz.quizz_questions[b];
+        this.quizz.quizz_questions[b] = this.quizz.quizz_questions[index];
+        this.quizz.quizz_questions[index] = tmp;
+      } */
     },
     shuffleAnswers() {
-      for (var l = this.answersToDisplay.length - 1; l >= 0; l--) {
-        var index = Math.floor(Math.random() * l);
-        var tmp = this.answersToDisplay[l];
-        this.answersToDisplay[l] = this.answersToDisplay[index];
-        this.answersToDisplay[index] = tmp;
-      }
+      this.answersToDisplay.sort(() => Math.random() * 2 - 1);
     },
     setChosenAnswer(answer) {
       if (this.TIMER_QUESTION != 0) {
@@ -281,7 +289,6 @@ export default {
       }
     },
     checkAnswer(time_out) {
-      this.generateQuestion();
       clearTimeout(this.interval);
       if (this.chosenAnswer == this.goodAnswer) {
         this.currentScore += this.scoreMultiplierChosen;
@@ -322,6 +329,7 @@ export default {
         clearTimeout(this.interval);
         this.chosenAnswer = "";
         this.result = "";
+        this.gifUrl = "";
         this.scoreMultiplier = 100;
         this.loopGame(false);
       }
@@ -360,8 +368,6 @@ export default {
     nextQuizzCountdown() {
       let now = new Date().getTime();
       //let t = this.quizz.starts_at * 1000 - now;
-      // next is to test timer of quizz
-      //let t = this.nowButLater.getTime() - now;
       let t = -1
       if (t >= 0) {
         let days = Math.floor(t / (1000 * 60 * 60 * 24));
