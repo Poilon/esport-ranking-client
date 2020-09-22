@@ -153,7 +153,7 @@ export default {
     // next is to test timer of quizz
     // nowButLater: "",
     scoreMultiplier: 100,
-    scoreMultiplierChosen: "",
+    scoreMultiplierChosen: 0,
     users: [],
     headers: [
       { text: 'Name', value: 'name' },
@@ -259,7 +259,7 @@ export default {
       this.shuffleAnswers();  
       this.TIMER_QUESTION = 100;
 
-      this.interval = setInterval(this.countdown, 100);
+      this.interval = setInterval(this.countdown, 100); // reality : 100, test : 10
     },
     generateQuestion() {
       this.currentQuestion = this.quizz.quizz_questions[
@@ -308,7 +308,7 @@ export default {
           ")";
       }
       this.TIMER_NEXT = 5;
-      this.interval = setInterval(this.countdownNextQuestion, 1000);
+      this.interval = setInterval(this.countdownNextQuestion, 1000); //reality 1000, test 100
     },
     countdown() {
       // timer runs out, answer is false = lost
@@ -367,8 +367,8 @@ export default {
     },
     nextQuizzCountdown() {
       let now = new Date().getTime();
-      //let t = this.quizz.starts_at * 1000 - now;
-      let t = -1
+      let t = this.quizz.starts_at * 1000 - now;
+      //let t = -1 // uncomment to don't wait for quizz to start and comment the line above
       if (t >= 0) {
         let days = Math.floor(t / (1000 * 60 * 60 * 24));
         let hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
