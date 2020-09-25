@@ -125,6 +125,7 @@ import VueRouter from "vue-router";
 
 export default {
   data: () => ({
+    // this is a horrible mess please read the methods comments
     currentQuestion: "",
     currentQuestionIndex: 0,
     currentScore: 0,
@@ -150,8 +151,6 @@ export default {
     timeLeft: "",
     timer: {},
     gifUrl: "",
-    // next is to test timer of quizz
-    // nowButLater: "",
     scoreMultiplier: 100,
     scoreMultiplierChosen: 0,
     users: [],
@@ -161,15 +160,15 @@ export default {
     ],
   }),
   mounted() {
+    // if not logged in, please log in
     if (!localStorage.getItem("MELEERANKING-SESSION-TOKEN")) {
       this.$router.push("/login");
       return;
     }
+    // getting leaderboard, generating quizz
     this.$apollo.queries.leaderboard.refetch().then(data => { this.loadingLeaderboard = false});
     this.generateQuizz();
-    // next is to test timer of quizz
-    // this.nowButLater = new Date();
-    // this.nowButLater.setSeconds(this.nowButLater.getSeconds() + 5);
+    // setting up timer of next quizz when loading the page
     this.timer = setInterval(this.nextQuizzCountdown, 1000);
   },
   beforeDestroy() {
@@ -197,6 +196,7 @@ export default {
         }
       `,
       result(data) {
+        // getting the date, getting the quizz, shuffling questions, not loading anymore
         this.quizzDate = new Date(data.data.next_quizz[0].starts_at * 1000);
         this.quizz = data.data.next_quizz[0];
         this.shuffleQuestions();
@@ -239,28 +239,29 @@ export default {
       this.loading = true;
       this.$apollo.queries.next_quizz.refetch();
     },
-    // Launching the game (currently )
-    // "answers" is a map containing 1 correct answer & 3 wrong answers
-    // (player, true) means player won the tournament, correct answer
-    // (player, false) means player didn't win the tournament, wrong answer
-    // note: (player, false) is currently taken from 2nd trough 4th place
+    // Quizz game main method
     quizzGame() {
+      // next line to specify the game is launched, making the game appear and disabling the counter
       this.launched = true;
-      this.dialog = false;
-      this.generateQuestion();
+      this.dialog = false; // disabling end game dialog that displays results
+      this.generateQuestion(); 
+      // filling answers to display array
       for (var i = 0; i < this.MAX_ANSWERS; i++) {
         this.answersToDisplay[i] = this.quizz.quizz_questions[
           this.currentQuestionIndex
         ].question.answers[i].name;
       }
+      // getting the good answer
       this.goodAnswer = this.quizz.quizz_questions[
         this.currentQuestionIndex
       ].question.answer.name;
       this.shuffleAnswers();  
+      // timer of question
       this.TIMER_QUESTION = 100;
 
       this.interval = setInterval(this.countdown, 100); // reality : 100, test : 10
     },
+    // generating questions based on the request and getting the gif url if there's one
     generateQuestion() {
       this.currentQuestion = this.quizz.quizz_questions[
         this.currentQuestionIndex
@@ -272,6 +273,10 @@ export default {
     shuffleQuestions() {
       this.quizz.quizz_questions.sort(() => Math.random() * 2 - 1);
       /*
+      // TODO shuffle algorithm 
+      // next is a variation of a shuffle algorithm that needs comparison with the line above
+      // the line above is very simple but only shuffles an entry around its place
+      // exemple: entry 6 of an array is most likely to end up between entry 4 and 8, and less likely in other entries
       for (var b = this.quizz.quizz_questions.length ; b >= 0 ; b--) {
         var index = Math.floor(Math.random() * b--);
         var tmp = this.quizz.quizz_questions[b];
@@ -282,101 +287,116 @@ export default {
     shuffleAnswers() {
       this.answersToDisplay.sort(() => Math.random() * 2 - 1);
     },
-    setChosenAnswer(answer) {
-      if (this.TIMER_QUESTION != 0) {
-        this.chosenAnswer = answer;
-        this.scoreMultiplierChosen = this.TIMER_QUESTION;
+    // checking every 0.1 seconds what's happening
+    countdown() {
+      // timer is ticking down
+      this.TIMER_QUESTION--;
+      this.scoreMultiplier = this.TIMER_QUESTION; // score is going down
+      // timer runs out, answer is empty
+      if (this.TIMER_QUESTION == 0 && this.chosenAnswer == "") {
+        clearTimeout(this.interval);
+        this.checkAnswer(2);
+      }
+      // timer runs out
+      if (this.TIMER_QUESTION == 0) {
+        clearTimeout(this.interval);
+        this.checkAnswer();
       }
     },
     checkAnswer(time_out) {
       clearTimeout(this.interval);
+      // good answer, increasing current score
       if (this.chosenAnswer == this.goodAnswer) {
         this.currentScore += this.scoreMultiplierChosen;
-        this.result =
+        this.result = // result displayed after the timer runs out
           "Correct answer! You earned " +
           this.scoreMultiplierChosen +
           " points.";
+      // time out
       } else if (time_out == 2) {
         this.result =
           "Timer ran out! You earned no points. (Correct answer: " +
           this.goodAnswer +
           ")";
+      // wrong answer
       } else {
         this.result =
           "Wrong answer... You earned no point. (Correct answer: " +
           this.goodAnswer +
           ")";
       }
+      // next question timer
       this.TIMER_NEXT = 5;
       this.interval = setInterval(this.countdownNextQuestion, 1000); //reality 1000, test 100
     },
-    countdown() {
-      // timer runs out, answer is false = lost
-      this.TIMER_QUESTION--;
-      this.scoreMultiplier = this.TIMER_QUESTION;
-      if (this.TIMER_QUESTION == 0 && this.chosenAnswer == "") {
-        clearTimeout(this.interval);
-        this.checkAnswer(2);
-      }
-      if (this.TIMER_QUESTION == 0) {
-        clearTimeout(this.interval);
-        this.checkAnswer();
-      }
-    },
+    // next question timer
     countdownNextQuestion() {
       this.TIMER_NEXT--;
       if (this.TIMER_NEXT == 0) {
         clearTimeout(this.interval);
-        this.chosenAnswer = "";
-        this.result = "";
-        this.gifUrl = "";
-        this.scoreMultiplier = 100;
+        this.chosenAnswer = ""; // resetting chosen answer
+        this.result = ""; // resetting result
+        this.gifUrl = ""; // resetting gif URL
+        this.scoreMultiplier = 100; // resetting score
         this.loopGame(false);
       }
     },
+    // handling one iteration of a question 
+    // if it's the end, handles the end
     loopGame(first) {
       clearInterval(this.timer);
       this.dialogResult = false;
+      // first question?
       if (first) {
-        this.currentScore = 0;
-        this.currentQuestionIndex = 0;
-        this.playerName = this.me.name;
+        this.currentScore = 0; // resetting score
+        this.currentQuestionIndex = 0; // resetting question index
+        this.playerName = this.me.name; // getting the player name
       } else {
-        this.currentQuestionIndex++;
+        this.currentQuestionIndex++; // next question, index increased
+        // was it the last question ? ending the game if so and quitting this method
         if (this.currentQuestionIndex == this.MAX_QUESTIONS) {
           this.endGame(true);
           return;
         }
       }
+      // let's play now
       this.quizzGame();
     },
+    // end game
     endGame(end) {
-      if (end) {
-        this.sendUserScore();
-        this.$apollo.queries.leaderboard.refetch();
-        this.launched = false;
-        this.dialogFinalResult = true;
-        this.generateQuizz();
-        // next is to test timer of quizz
-        // this.nowButLater = new Date();
-        //this.nowButLater.setSeconds(this.nowButLater.getSeconds() + 5);
-        this.timer = setInterval(this.nextQuizzCountdown, 1000);
-      } else {
-        this.quizzGame();
+      // is it the end?
+      if (end) { // yes
+        this.sendUserScore(); // sending the score to the back
+        this.$apollo.queries.leaderboard.refetch(); // refreshing leaderboard
+        this.launched = false; // game is finished
+        this.dialogFinalResult = true; // dialog for the results is on
+        this.generateQuizz(); // generating next quizz
+        this.timer = setInterval(this.nextQuizzCountdown, 1000); // launching timer of the next quizz
+      } else { // no
+        this.quizzGame(); // let's play then
+      }
+    },
+    // setting correct chosen answer and preventing user to select an answer while waiting for the next question
+    setChosenAnswer(answer) {
+      if (this.TIMER_QUESTION != 0) {
+        this.chosenAnswer = answer;
+        this.scoreMultiplierChosen = this.TIMER_QUESTION;
       }
     },
     nextQuizzCountdown() {
       let now = new Date().getTime();
-      let t = this.quizz.starts_at * 1000 - now;
-      //let t = -1 // uncomment to don't wait for quizz to start and comment the line above
+      //let t = this.quizz.starts_at * 1000 - now; // t is the time left between the supposed starting time of the quizz and now
+      let t = -1 // uncomment if you don't want to wait for quizz to start and comment the line above
+      // if the time left is positive, we're putting the time left on the screen
       if (t >= 0) {
         let days = Math.floor(t / (1000 * 60 * 60 * 24));
         let hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         let mins = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
         let secs = Math.floor((t % (1000 * 60)) / 1000);
-
+  
         this.timeLeft = ("0" + mins).slice(-2) + ":" + ("0" + secs).slice(-2);
       } else {
+        // no time left ? let's play now
         this.loopGame(true);
       }
     },
@@ -396,8 +416,7 @@ export default {
             score: this.currentScore
           }
         })
-        .then(data => {
-        })
+        .then(data => {})
         .catch(err => {});
     },
     updateLeaderboard() {}
