@@ -230,6 +230,7 @@ export default {
       `,
       result(data) {
         this.users = data.data.leaderboard;
+        this.loadingLeaderboard = false;
       }
     }
   },
@@ -271,21 +272,22 @@ export default {
       }
     },
     shuffleQuestions() {
-      this.quizz.quizz_questions.sort(() => Math.random() * 2 - 1);
-      /*
-      // TODO shuffle algorithm 
-      // next is a variation of a shuffle algorithm that needs comparison with the line above
-      // the line above is very simple but only shuffles an entry around its place
-      // exemple: entry 6 of an array is most likely to end up between entry 4 and 8, and less likely in other entries
-      for (var b = this.quizz.quizz_questions.length ; b >= 0 ; b--) {
-        var index = Math.floor(Math.random() * b--);
+      // this.quizz.quizz_questions.sort(() => Math.random() * 2 - 1);
+      for (var b = 0 ; b < this.quizz.quizz_questions.length ; b++) {
+        var index = Math.floor(Math.random() * this.quizz.quizz_questions.length);
         var tmp = this.quizz.quizz_questions[b];
         this.quizz.quizz_questions[b] = this.quizz.quizz_questions[index];
         this.quizz.quizz_questions[index] = tmp;
-      } */
+      }
     },
     shuffleAnswers() {
-      this.answersToDisplay.sort(() => Math.random() * 2 - 1);
+      // this.answersToDisplay.sort(() => Math.random() * 2 - 1);
+      for (var u = 0 ; u < this.answersToDisplay.length ; u++) {
+        var index = Math.floor(Math.random() * this.answersToDisplay.length);
+        var tmp = this.answersToDisplay[u];
+        this.answersToDisplay[u] = this.answersToDisplay[index]
+        this.answersToDisplay[index] = tmp;
+      }
     },
     // checking every 0.1 seconds what's happening
     countdown() {
@@ -367,6 +369,7 @@ export default {
       // is it the end?
       if (end) { // yes
         this.sendUserScore(); // sending the score to the back
+        this.loadingLeaderboard = true;
         this.$apollo.queries.leaderboard.refetch(); // refreshing leaderboard
         this.launched = false; // game is finished
         this.dialogFinalResult = true; // dialog for the results is on
