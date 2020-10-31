@@ -54,7 +54,7 @@
                       <th class="text-center">Rank</th>
                       <th class="text-center">MPGR</th>
                       <th class="text-center">CHARACTERS</th>
-                      <th class="text-center">ELO</th>
+                      <th class="text-center">SCORE</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -75,9 +75,9 @@
                         </v-container>
                       </td>
                       <td class="simple-table-td text-center">
-                        <template v-if="player.elo">
+                        <template v-if="player.score">
                           <v-chip class="ml-0 my-2" color="#141414" text-color="white" small>
-                            <span>{{ player.elo }}</span>
+                            <span>{{ player.score }}</span>
                           </v-chip>
                         </template>
                         <template v-else>--</template>
@@ -140,81 +140,6 @@
       </v-flex>
     </v-layout>
 
-    <v-layout row justify-center pa-4 pb-0 class="mt-5">
-      <strong class="pl-2">Elo over time</strong>
-      <v-spacer></v-spacer>
-      <v-autocomplete
-        v-model="otherPlayer"
-        :items="players"
-        item-text="name"
-        item-value="id"
-        label="Compare to"
-        autocomplete="noautocomplete"
-        clearable
-        dense
-        chip
-        @change="fetchOtherPlayerElo($event)"
-      >
-        <template v-slot:item="data">
-          <template v-if="typeof data.item !== 'object'">
-            <v-list-item-content v-text="data.item"></v-list-item-content>
-          </template>
-          <template v-else>
-            <v-list-item-avatar>
-              <img
-                :src="data.item.profile_picture_url ? data.item.profile_picture_url : '/no_avatar.png'"
-              />
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title v-html="data.item.name"></v-list-item-title>
-              <v-list-item-subtitle></v-list-item-subtitle>
-            </v-list-item-content>
-          </template>
-        </template>
-      </v-autocomplete>
-    </v-layout>
-    <v-card flat>
-      <!-- Selected player vs Player To Compare to -->
-      <v-layout row justify-center align-center v-if="otherPlayer" class="pa-4 pb-0">
-        <v-flex xs5>
-          <v-list two-lines>
-            <v-list-item>
-              <v-list-item-content class="text-right align-self-start">
-                <v-list-item-title>
-                  <strong>{{player.name}}</strong>
-                </v-list-item-title>
-                <v-list-item-subtitle></v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-flex>
-        <v-flex xs2 class="text-center">
-          <strong class="display-1 grey--text">VS</strong>
-        </v-flex>
-        <v-flex xs5>
-          <v-list two-lines>
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title>
-                  <strong class="primary--text">{{ compareTo.name }}</strong>
-                </v-list-item-title>
-                <v-list-item-subtitle></v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-flex>
-      </v-layout>
-      <v-card-text class="pt-0">
-        <PlayerEloMap
-          class="pt-4"
-          v-if="player.elo_map != '{}'"
-          :compareTo="compareTo"
-          :eloMap="JSON.parse(player.elo_map)"
-          :key="player.id + compareTo.id"
-        />
-      </v-card-text>
-
-    </v-card>
 
     <v-card-title>
       Results
@@ -291,12 +216,6 @@ export default {
         value: "rank"
       },
       {
-        text: "Elo change",
-        align: "left",
-        sortable: true,
-        value: "tournament_diff"
-      },
-      {
         text: "Tournament Name",
         align: "left",
         sortable: true,
@@ -329,7 +248,7 @@ export default {
         .query({
           query: gql`
             {
-              players(order_by: "elo desc", per_page: 1000, page: 1) {
+              players(order_by: "score desc", per_page: 1000, page: 1) {
                 id
                 name
                 profile_picture_url
@@ -351,7 +270,7 @@ export default {
               name
               profile_picture_url
               current_mpgr_ranking
-              elo
+              score
               rank
               city_rank
               state_rank
@@ -396,7 +315,7 @@ export default {
                 name
                 profile_picture_url
                 current_mpgr_ranking
-                elo
+                score
                 rank
                 city_rank
                 state_rank
@@ -486,12 +405,6 @@ export default {
               (this.player.winning_matches.length / this.player.matches_count) *
                 100
             );
-          const tournaments_diffs = JSON.parse(this.player.tournaments_diffs)
-          Object.keys(tournaments_diffs).forEach(tournament_id => {
-            if (this.player.results.find(r => r.tournament_id == tournament_id))
-              this.player.results.find(r => r.tournament_id == tournament_id).tournament_diff = tournaments_diffs[tournament_id]
-          })
-          console.log(this.player)
           this.results = this.player.results;
           this.loading = false;
         });

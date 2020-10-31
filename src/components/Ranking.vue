@@ -44,10 +44,8 @@
                 </template>
               </v-autocomplete>
             </v-flex>
-            <v-flex xs4 px-2>
-             <v-switch v-model="active" class="pl-4" label="Active players only" @change="changeActive($event)"/>
-           </v-flex>
-            <v-flex xs4 pr-4>
+
+            <v-flex xs4>
               <v-autocomplete
                 v-model="countries"
                 :items="countryList"
@@ -90,10 +88,10 @@
           :loading="loading"
           :options.sync="options"
           loading-text="Fetching data..."
-          :footer-props="{'items-per-page-options':[20, 50, 100, 250, 500]}"
+          :footer-props="{'items-per-page-options':[16, 50, 100, 250, 500]}"
           class="elevation-0"
         >
-          <template v-slot:item.rank="{ item }">{{ ((options.page - 1) * options.itemsPerPage) + ranks.indexOf(item.elo) + 1 }}</template>
+          <template v-slot:item.rank="{ item }">{{ ((options.page - 1) * options.itemsPerPage) + ranks.indexOf(item.score) + 1 }}</template>
           <template
             v-slot:item.current_mpgr_ranking="{ item }"
           >{{ item.current_mpgr_ranking == 9999999999 ? "---" : item.current_mpgr_ranking }}</template>
@@ -111,7 +109,7 @@
             </v-list-item>
           </template>
 
-          <template v-slot:item.elo="{ item }">
+          <template v-slot:item.score="{ item }">
             <v-chip
               class="ma-2"
               color="#141414"
@@ -119,7 +117,7 @@
               small
               :to="{ name: 'player', params: { id: item.id } }"
             >
-              <span>{{ item.elo }}</span>
+              <span>{{ item.score }}</span>
             </v-chip>
           </template>
 
@@ -279,12 +277,6 @@ export default {
           value: "rank"
         },
         {
-          text: "MPGR",
-          align: "left",
-          sortable: true,
-          value: "current_mpgr_ranking"
-        },
-        {
           text: "PLAYER",
           align: "left",
           sortable: true,
@@ -297,10 +289,10 @@ export default {
           value: "characters"
         },
         {
-          text: "ELO",
+          text: "SCORE",
           align: "left",
           sortable: true,
-          value: "elo"
+          value: "score"
         }
       ]
       if (this.authorizationToken)
@@ -523,7 +515,7 @@ export default {
       if (this.active)
         activeFilter = ",active: true"
 
-      let orderByFilter = `, order_by: "elo desc, name asc"`
+      let orderByFilter = `, order_by: "score desc, name asc"`
       console.log(sortBy == "rank")
 
       if (sortBy && sortBy.length > 0 && sortBy != "rank")
@@ -538,7 +530,7 @@ export default {
               name
               profile_picture_url
               current_mpgr_ranking
-              elo
+              score
               characters {
                 id
                 name
@@ -558,7 +550,7 @@ export default {
           if (!player.current_mpgr_ranking)
             player.current_mpgr_ranking = 9999999999;
         });
-        this.ranks = this.players.map(p => p.elo)
+        this.ranks = this.players.map(p => p.score)
         this.loading = false
       })
     },
@@ -568,7 +560,7 @@ export default {
       'Belgium', 'Bulgaria', 'Czech Republic', 'Denmark', 'Estonia', 'Spain', 'Finland', 'United Kingdom',
       'Guernsey', 'Gibraltar', 'Greece', 'Croatia', 'Hungary', 'Ireland', 'Iceland', 'Italy', 'Jersey',
       'Liechtenstein', 'Lithuania', 'Luxembourg', 'Poland', 'Portugal', 'Romania', 'Serbia', 'Sweden',
-      'Slovenia', 'Slovakia', 'Norway', 'Ukraine']
+      'Slovenia', 'Slovakia', 'Norway', 'Ukraine', 'Netherlands']
     }
   }
 };
