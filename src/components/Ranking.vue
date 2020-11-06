@@ -499,24 +499,22 @@ export default {
       if (this.cities && this.cities.length > 0 && countries && countries.length > 0)
         cityFilter = "(" + this.cities.map(c => `city == '${c}'`).join(' || ') + ")"
 
-      let filter = ""
+      let filter = ', filter: "1 == 1'
       if (this.playerSearch.length > 0)
-        filter = `, filter: "players.name | '%${this.playerSearch}%'"`
+        filter += ` && players.name | '%${this.playerSearch}%'`
       if (countryFilter.length > 0)
-        filter = `, filter: "${countryFilter}`
+        filter += ` && ${countryFilter}`
       if (countryFilter.length > 0 && stateFilter.length > 0)
         filter += ` && ${stateFilter}`
       if (countryFilter.length > 0 && cityFilter.length > 0)
         filter += ` && ${cityFilter}`
-      if (countryFilter.length > 0)
-        filter += `"`
 
+      filter += `"`
       let activeFilter = ""
       if (this.active)
         activeFilter = ",active: true"
 
       let orderByFilter = `, order_by: "score desc, name asc"`
-      console.log(sortBy == "rank")
 
       if (sortBy && sortBy.length > 0 && sortBy != "rank")
         orderByFilter = `, order_by: "${sortBy.join(',')} ${sortDesc[0] ? 'desc' : 'asc'}"`
