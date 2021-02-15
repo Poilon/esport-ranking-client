@@ -1,6 +1,6 @@
 <template>
 
-  <v-container style='background-image: url("./bg_map.png"); background-repeat: repeat; width: 100%; max-width: 100%;'>
+  <v-container style='background-image: url("./bg_map.png"); background-repeat: repeat; background-size: cover; width: 100%; max-width: 100%;'>
 
     <v-container style="max-width:1024px; padding:24px;background-color: white; opacity: 0.9; border: 5px solid black; border-radius: 20px;">
       <v-card pa-4 flat color="transparent">
