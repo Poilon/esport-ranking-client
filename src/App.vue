@@ -1,15 +1,13 @@
 <template>
   <v-app>
-
     <v-app-bar app color="#141414" dark flat>
       <a href="/">
-        <v-img class="mx-2 mr-4" src="/logo.png" max-height="28" max-width="28" contain></v-img>
+        <v-img style="transform: rotate(345deg)" class="mx-2 mr-4 mt-12" src="/black-same-logo.svg" max-height="160" max-width="160" contain></v-img>
       </a>
-      <div class="d-flex align-center">S.A.M.E Ranking</div>
+      <div class="d-flex align-center" style="font-size: 30px; font-weight: 800;">THE S.A.M.E LINEUP</div>
       <v-spacer></v-spacer>
-      <v-chip class="ma-2" color="transparent" text-color="white" to="/">Global Leaderboard</v-chip>
     </v-app-bar>
-    <v-content>
+    <v-content style='background-image: url("./bg_map.png"); background-repeat: repeat; background-size: cover; width: 100%; max-width: 100%; height: 100vh'>
       <router-view />
     </v-content>
   </v-app>

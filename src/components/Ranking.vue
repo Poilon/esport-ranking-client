@@ -1,13 +1,8 @@
 <template>
-  <div>
-    <v-parallax height="200" src="/parralax_1.jpg">
-      <p class="text-center display-1 uppercase">{{leaderboardName}}</p>
-      <!-- Petite ligne sous le titre -->
-      <div
-        style="width: 140px;  height: 4px;  background-color: white; margin: auto; margin-top:0; margin-bottom:0"
-      ></div>
-    </v-parallax>
-    <v-container style="max-width:1024px; padding:24px;">
+
+  <v-container style='background-image: url("./bg_map.png"); background-repeat: repeat; width: 100%; max-width: 100%;'>
+
+    <v-container style="max-width:1024px; padding:24px;background-color: white; opacity: 0.9; border: 5px solid black; border-radius: 20px;">
       <v-card pa-4 flat color="transparent">
         <v-card-title class="py-0">
           <v-layout row>
@@ -164,23 +159,7 @@
          <v-text-field v-model="authorizationToken" label="token" width="50"/>
       </v-card>
     </v-container>
-
-    <div class="text-center ma-2">
-      <v-snackbar
-        v-model="snackbar"
-      >
-
-        {{ snackbarText }}
-        <v-btn
-          color="white"
-          text
-          @click="snackbar = false"
-        >
-          Close
-        </v-btn>
-      </v-snackbar>
-    </div>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -190,6 +169,7 @@ export default {
   name: "Ranking",
 
   data: () => ({
+    tab: "singles",
     snackbar: false,
     snackbarText: "",
     authorizationToken: "",
@@ -521,7 +501,7 @@ export default {
 
       this.$apollo.query({
         query: gql`{
-          paginated_players(per_page: ${itemsPerPage}${orderByFilter}, page: ${page}${activeFilter}${charactersFilter}${filter}) {
+          paginated_players(per_page: ${itemsPerPage || 20}${orderByFilter}, page: ${page || 1}${activeFilter}${charactersFilter}${filter}) {
             total_count
             data {
               id

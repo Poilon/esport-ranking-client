@@ -1,0 +1,148 @@
+<template>
+  <div style='background-color: #c8ab87;'>
+    <v-parallax height="200" src="bg_map.png">
+      <div style="background-color: black; padding: 20px; opacity: 0.7;">
+        <p class="text-center display-1 uppercase" style="background-color: black;">{{title}}</p>
+        <!-- Petite ligne sous le titre -->
+        <div
+          style="width: 140px;  height: 4px;  background-color: white; margin: auto; margin-top:0; margin-bottom:0"
+        ></div>
+      </div>
+    </v-parallax>
+
+
+
+    <v-tabs
+      v-model="tab"
+      background-color="transparent"
+      color="black"
+      center-active
+      style="border: 3px solid black; border-radius: 20px; border"
+      hide-slider
+      grow
+    >
+      <v-tab
+        key="about"
+      >
+        ABOUT
+      </v-tab>
+      <v-tab
+        key="events"
+      >
+        EVENTS
+      </v-tab>
+<!--       <v-tab
+        key="prizes"
+      >
+        PRIZES
+      </v-tab> -->
+      <v-tab
+        key="singles"
+      >
+        SINGLES
+      </v-tab>
+      <v-tab
+        key="crews"
+      >
+        INTERNATIONAL CREWS
+      </v-tab>
+      <v-tab
+        key="teams"
+      >
+        TEAMS
+      </v-tab>
+    </v-tabs>
+
+    <v-tabs-items v-model="tab">
+
+      <v-tab-item
+        key="about"
+      >
+        <About/>
+      </v-tab-item>
+      <v-tab-item
+        key="events"
+      >
+        <Events/>
+      </v-tab-item>
+<!--       <v-tab-item
+        key="prizes"
+      >
+      </v-tab-item>
+ -->      <v-tab-item
+        key="singles"
+      >
+        <Ranking/>
+      </v-tab-item>
+      <v-tab-item
+        key="crews"
+      >
+        <CrewsRanking/>
+      </v-tab-item>
+      <v-tab-item
+        key="teams"
+      >
+      </v-tab-item>
+
+    </v-tabs-items>
+  </v-card>
+
+    <div class="text-center ma-2">
+      <v-snackbar
+        v-model="snackbar"
+      >
+
+        {{ snackbarText }}
+        <v-btn
+          color="white"
+          text
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </v-snackbar>
+    </div>
+  </div>
+</template>
+
+<script>
+import gql from "graphql-tag";
+import Ranking from "./Ranking"
+import Events from "./Events"
+import About from "./About"
+import CrewsRanking from "./CrewsRanking"
+
+
+export default {
+  name: "Main",
+
+  components: {
+    Ranking, Events, About, CrewsRanking
+  },
+
+  data: () => ({
+    tab: 0,
+    snackbarText: "",
+    snackbar: ""
+  }),
+
+  computed: {
+    title() {
+      console.log(this.tab)
+      if (this.tab == 0)
+        return "About"
+      if (this.tab == 1)
+        return "Events"
+      // if (this.tab == 2)
+      //   return "Prizes"
+      if (this.tab == 2)
+        return "Singles Ranking"
+      if (this.tab == 3)
+        return "International Crews Ranking"
+      if (this.tab == 4)
+        return "Doubles Ranking"
+    }
+  }
+
+};
+</script>

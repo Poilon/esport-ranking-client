@@ -9,7 +9,7 @@ export const router = new VueRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import("./components/Ranking")
+      component: () => import("./components/Main")
     },
     {
       path: '/tournaments/:id',
