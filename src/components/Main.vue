@@ -31,11 +31,13 @@
       >
         EVENTS
       </v-tab>
-<!--       <v-tab
-        key="prizes"
-      >
-        PRIZES
-      </v-tab> -->
+      <!--
+        <v-tab
+          key="prizes"
+        >
+          PRIZES
+        </v-tab>
+      -->
       <v-tab
         key="singles"
       >
@@ -65,11 +67,14 @@
       >
         <Events/>
       </v-tab-item>
-<!--       <v-tab-item
+
+<!--  <v-tab-item
         key="prizes"
       >
       </v-tab-item>
- -->      <v-tab-item
+ -->
+
+      <v-tab-item
         key="singles"
       >
         <Ranking/>
@@ -82,6 +87,7 @@
       <v-tab-item
         key="teams"
       >
+        <DoublesRanking/>
       </v-tab-item>
 
     </v-tabs-items>
@@ -111,13 +117,14 @@ import Ranking from "./Ranking"
 import Events from "./Events"
 import About from "./About"
 import CrewsRanking from "./CrewsRanking"
+import DoublesRanking from "./DoublesRanking"
 
 
 export default {
   name: "Main",
 
   components: {
-    Ranking, Events, About, CrewsRanking
+    Ranking, Events, About, CrewsRanking, DoublesRanking
   },
 
   data: () => ({

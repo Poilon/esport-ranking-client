@@ -1,24 +1,9 @@
 <template>
 
-  <v-container style='background-image: url("./bg_map.png"); background-repeat: repeat; width: 100%; max-width: 100%;'>
+  <v-container style='background-image: url("./bg_map.png"); background-repeat: repeat; width: 100%; max-width: 100%'>
 
     <v-container style="max-width:1024px; padding:24px;background-color: white; opacity: 0.9; border: 5px solid black; border-radius: 20px;">
       <v-card pa-4 flat color="transparent">
-        <v-card-title class="py-0">
-          <v-layout row>
-            <v-flex xs4 pb-4>
-              <v-text-field
-                v-model="playerSearch"
-                append-icon="mdi-magnify"
-                label="Country"
-                single-line
-                hide-details
-              ></v-text-field>
-            </v-flex>
-
-
-          </v-layout>
-        </v-card-title>
         <v-data-table
           dense
           :headers="playersHeaders"
@@ -29,13 +14,17 @@
           loading-text="Fetching data..."
           :footer-props="{'items-per-page-options':[16, 50, 100, 250, 500]}"
           class="elevation-0"
+          hide-default-header
+          hide-default-footer
         >
-          <template v-slot:item.rank="{ item }">{{ ((options.page - 1) * options.itemsPerPage) + ranks.indexOf(item.score) + 1 }}</template>
+          <template v-slot:item.score="{ item }">{{ item.score }}</template>
+
           <template v-slot:item.name="{ item }">
 
-            <v-list-item class="pl-0" dense">
+            <v-list-item class="pl-0" dense>
               <v-list-item-avatar>
-                <v-img :src="item.profile_picture_url ? item.profile_picture_url : '/no_avatar.png'"></v-img>
+                <CountryFlag :country="item.country" />
+
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>{{item.name}}</v-list-item-title>
@@ -44,15 +33,14 @@
             </v-list-item>
           </template>
 
-          <template v-slot:item.score="{ item }">
+          <template v-slot:item.stock_advantage="{ item }">
             <v-chip
               class="ma-2"
               color="#141414"
               text-color="white"
               small
-              :to="{ name: 'player', params: { id: item.id } }"
             >
-              <span>{{ item.score }}</span>
+              <span>{{ item.stock_advantage }}</span>
             </v-chip>
           </template>
 
@@ -103,9 +91,11 @@
 
 <script>
 import gql from "graphql-tag";
+import CountryFlag from 'vue-country-flag'
 
 export default {
-  name: "Ranking",
+  name: "CrewsRanking",
+  components: { CountryFlag },
 
   data: () => ({
     tab: "singles",
@@ -119,13 +109,7 @@ export default {
     options: {},
     characterList: [],
     characters: [],
-    players: [
-      {
-        name: "France", score: 20, rank: 2
-      }, {
-        name: "Sweden", score: 50, rank: 1
-      }
-    ],
+    players: [],
     ranks: [],
     countryList: [],
     stateList: [],
@@ -158,10 +142,10 @@ export default {
     playersHeaders: function() {
       let headers = [
         {
-          text: "RANK",
+          text: "SCORE",
           align: "left",
-          sortable: false,
-          value: "rank"
+          sortable: true,
+          value: "score"
         },
         {
           text: "COUNTRY",
@@ -169,6 +153,12 @@ export default {
           sortable: true,
           value: "name"
         },
+        {
+          text: "STOCK ADVANTAGE",
+          align: "left",
+          sortable: true,
+          value: "stock_advantage"
+        }
       ]
       return headers
     }
@@ -178,12 +168,33 @@ export default {
     queryPlayers() {
 
       this.players = [
-        {
-          name: "France", score: 20, rank: 1
-        }, {
-          name: "Sweden", score: 50, rank: 2
-        }
-      ]
+        { name: "Netherlands", score: 3 * 1, stock_advantage:  20-9, country: "nl"},
+        { name: "Germany", score: 3 * 1, stock_advantage:  20-9, country: "de"},
+        { name: "Spain", score: 3 * 1, stock_advantage:  20-13, country: "es"},
+        { name: "France", score: 3 * 1, stock_advantage:  20-15, country: "fr"},
+        { name: "Greece", score: 3 * 0, stock_advantage:  0-0, country: "gr"},
+        { name: "Switzerland", score: 3 * 0, stock_advantage:  15-20, country: "ch"},
+        { name: "Belgium", score: 3 * 0, stock_advantage:  13-20, country: "be"},
+        { name: "Scotland", score: 3 * 0, stock_advantage:  9-20, country: "gb-sct"},
+        { name: "Wales", score: 3 * 0, stock_advantage:  9-20, country: "gb-wls"},
+        { name: "Norway", score: 3 * 1, stock_advantage:  20-6, country: "no"},
+        { name: "England", score: 3 * 1, stock_advantage:  20-15, country: "gb-eng"},
+        { name: "Sweden", score: 3 * 1, stock_advantage:  20-17, country: "swe"},
+        { name: "Austria", score: 3 * 1, stock_advantage:  20-18, country: "at"},
+        { name: "Denmark", score: 3 * 0, stock_advantage:  0-0, country: "dk"},
+        { name: "Portugal", score: 3 * 0, stock_advantage:  18-20, country: "pt"},
+        { name: "Ireland", score: 3 * 0, stock_advantage:  17-20, country: "ie"},
+        { name: "Finland", score: 3 * 0, stock_advantage:  15-20, country: "fi"},
+        { name: "Italy", score: 3 * 0, stock_advantage:  6-20, country: "it"}
+      ].sort((a, b) => {
+        if (a.score === b.score)
+          return b.stock_advantage - a.stock_advantage
+        else
+          return b.score - a.score
+      })
+
+
+
     },
 
     europpeanCountries() {
