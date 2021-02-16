@@ -335,7 +335,8 @@ export default {
         states: JSON.stringify(this.states),
         cities: JSON.stringify(this.cities),
         active: this.active,
-        characters: JSON.stringify(this.characters)
+        characters: JSON.stringify(this.characters),
+        tab: 2
       }})
       this.queryPlayers()
     },

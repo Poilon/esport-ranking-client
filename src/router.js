@@ -20,6 +20,11 @@ export const router = new VueRouter({
       path: '/players/:id',
       name: 'player',
       component: () => import("./components/Player")
+    },
+    {
+      path: '/crews_info',
+      name: 'crews_info',
+      component: () => import("./components/CrewsMoreInfo.vue")
     }
 
   ]

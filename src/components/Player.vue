@@ -1,5 +1,5 @@
 <template>
-  <v-container style="max-width:1024px; padding:24px;">
+  <v-container style="margin-top: 40px; max-width:1024px; padding:24px;background-color: white; opacity: 0.9; border: 5px solid black; border-radius: 20px;">
     <v-toolbar color="transparent" flat class="mt-2 ml-0">
       <v-layout row align-center>
         <v-chip
@@ -51,7 +51,7 @@
                 <template v-slot:default>
                   <thead>
                     <tr>
-                      <th class="text-center">Rank</th>
+                      <th class="text-center">RANK</th>
                       <th class="text-center">MPGR</th>
                       <th class="text-center">CHARACTERS</th>
                       <th class="text-center">SCORE</th>
@@ -121,14 +121,14 @@
                     <v-list-item v-if="player.best_win">
                       <v-list-item-content>
                         <v-list-item-title>Best Win</v-list-item-title>
-                        <v-list-item-subtitle><a :href="'/#/players/'+player.best_win.loser.id">{{ player.best_win.loser.name }}</a> at <a :href="'/#/tournaments/'+player.best_win.tournament.id">{{ player.best_win.tournament.name }}</a></v-list-item-subtitle>
+                        <v-list-item-subtitle><a :href="'/#/players/'+player.best_win.loser.id">{{ player.best_win.loser.name }}</a> at {{ player.best_win.tournament.name }}</v-list-item-subtitle>
                       </v-list-item-content>
                     </v-list-item>
 
                     <v-list-item v-if="player.worst_lose">
                       <v-list-item-content>
                         <v-list-item-title>Worst Loss</v-list-item-title>
-                        <v-list-item-subtitle><a :href="'/#/players/'+player.worst_lose.winner.id">{{ player.worst_lose.winner.name }}</a>  at  <a :href="'/#/tournaments/'+player.worst_lose.tournament.id">{{ player.worst_lose.tournament.name }}</a></v-list-item-subtitle>
+                        <v-list-item-subtitle><a :href="'/#/players/'+player.worst_lose.winner.id">{{ player.worst_lose.winner.name }}</a>  at  {{ player.worst_lose.tournament.name }}</v-list-item-subtitle>
                       </v-list-item-content>
                     </v-list-item>
                   </v-list>
@@ -168,7 +168,6 @@
           class="ma-2"
           color="grey"
           text-color="white"
-          :to="{ name: 'tournament', params: { id: item.tournament.id } }"
         >{{item.tournament.name}}</v-chip>
       </template>
 
@@ -452,7 +451,7 @@ export default {
         arr.push({
           text: `${this.player.country} (${this.player.country_rank}${nth(this.player.country_rank)})`,
           link: true,
-          to: `/?countries=["${this.player.country}"]`
+          to: `/?countries=["${this.player.country}"]&tab=2`
         });
       }
 
@@ -460,7 +459,7 @@ export default {
         arr.push({
           text: `${this.player.state} (${this.player.state_rank}${nth(this.player.state_rank)})`,
           link: true,
-          to: `/?countries=["${this.player.country}"]&states=["${this.player.state}"]`
+          to: `/?countries=["${this.player.country}"]&states=["${this.player.state}"]&tab=2`
         });
       }
 
@@ -471,7 +470,7 @@ export default {
         arr.push({
           text: `${this.player.city} (${this.player.city_rank}${nth(this.player.city_rank)})`,
           link: true,
-          to: `/?countries=["${this.player.country}"]${stateParam}&cities=["${this.player.city}"]`
+          to: `/?countries=["${this.player.country}"]${stateParam}&cities=["${this.player.city}"]&tab=2`
         });
       }
       return arr;

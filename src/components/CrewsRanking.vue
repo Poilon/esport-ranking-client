@@ -1,91 +1,178 @@
 <template>
 
-  <v-container style='background-image: url("./bg_map.png"); background-repeat: repeat; background-size: cover; width: 100%; max-width: 100%;'>
+  <v-container style='background-image: url("./bg_map.png"); background-repeat: repeat; background-size: cover; width: 100%; max-width: 100%; height: 100vh;'>
 
     <v-container style="max-width:1024px; padding:24px;background-color: white; opacity: 0.9; border: 5px solid black; border-radius: 20px;">
-      <v-card pa-4 flat color="transparent">
-        <v-data-table
-          dense
-          :headers="playersHeaders"
-          :items="players"
-          :server-items-length="totalPlayers"
-          :loading="loading"
-          :options.sync="options"
-          loading-text="Fetching data..."
-          :footer-props="{'items-per-page-options':[16, 50, 100, 250, 500]}"
-          class="elevation-0"
-          hide-default-header
-          hide-default-footer
-        >
-          <template v-slot:item.score="{ item }">{{ item.score }}</template>
+      <v-row no-gutters>
+        <v-col sm6 cols12 style="justify-content: center; align-items: center; border-right: 2px solid black;">
+          <h3 style="text-align: center">POOL A</h3>
+          <v-data-table
+            dense
+            :headers="playersHeaders"
+            :items="players2"
+            :server-items-length="totalPlayers"
+            :loading="loading"
+            :options.sync="options"
+            loading-text="Fetching data..."
+            :footer-props="{'items-per-page-options':[16, 50, 100, 250, 500]}"
+            class="elevation-0"
+            hide-default-footer
+          >
+            <template v-slot:item.score="{ item }">{{ item.score }}</template>
 
-          <template v-slot:item.name="{ item }">
+            <template v-slot:item.name="{ item }">
 
-            <v-list-item class="pl-0" dense>
-              <v-list-item-avatar>
-                <CountryFlag :country="item.country" />
+              <v-list-item class="pl-0" dense>
+                <v-list-item-avatar>
+                  <CountryFlag :country="item.country" />
 
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title>{{item.name}}</v-list-item-title>
-                <v-list-item-subtitle></v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </template>
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>{{item.name}}</v-list-item-title>
+                  <v-list-item-subtitle></v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
 
-          <template v-slot:item.stock_advantage="{ item }">
-            <v-chip
-              class="ma-2"
-              color="#141414"
-              text-color="white"
-              small
-            >
-              <span>{{ item.stock_advantage }}</span>
-            </v-chip>
-          </template>
-
-          <template v-slot:item.actions="{ item }">
-            <v-layout row wrap justify-center align-center>
-              <v-flex pr-4 xs6>
-                <v-autocomplete
-                  :items="characterList"
-                  v-model="tmpChars[item.id]"
-                  label="Characters"
-                  autocomplete="noautocomplete"
-                  item-text="name"
-                  item-value="id"
-                  clearable
-                  multiple
-                  :value="item.characters.map(c => c.id)"
-                >
-                </v-autocomplete>
-              </v-flex>
-              <v-btn
-                color="green"
-                :loading="btnLoading[item.id]"
-                @click="changeCharactersOfPlayer(tmpChars[item.id], item.id)"
+            <template v-slot:item.stock_advantage="{ item }">
+              <v-chip
+                class="ma-2"
+                color="#141414"
+                text-color="white"
+                small
               >
-                Apply
-              </v-btn>
+                <span>{{ item.stock_advantage }}</span>
+              </v-chip>
+            </template>
 
-            </v-layout>
-          </template>
+            <template v-slot:item.actions="{ item }">
+              <v-layout row wrap justify-center align-center>
+                <v-flex pr-4 xs6>
+                  <v-autocomplete
+                    :items="characterList"
+                    v-model="tmpChars[item.id]"
+                    label="Characters"
+                    autocomplete="noautocomplete"
+                    item-text="name"
+                    item-value="id"
+                    clearable
+                    multiple
+                    :value="item.characters.map(c => c.id)"
+                  >
+                  </v-autocomplete>
+                </v-flex>
+                <v-btn
+                  color="green"
+                  :loading="btnLoading[item.id]"
+                  @click="changeCharactersOfPlayer(tmpChars[item.id], item.id)"
+                >
+                  Apply
+                </v-btn>
 
-          <template v-slot:item.characters="{ item }">
-            <v-layout row wrap>
-              <div v-for='character in item.characters' style="padding: 5px;">
-                <div @click="clickOnCharacter(character)" style="cursor: pointer;">
-                  <v-img width="20" :src="require('../assets/' + character.game.slug + '/' + character.slug + '.png')"/>
+              </v-layout>
+            </template>
+
+            <template v-slot:item.characters="{ item }">
+              <v-layout row wrap>
+                <div v-for='character in item.characters' style="padding: 5px;">
+                  <div @click="clickOnCharacter(character)" style="cursor: pointer;">
+                    <v-img width="20" :src="require('../assets/' + character.game.slug + '/' + character.slug + '.png')"/>
+                  </div>
                 </div>
-              </div>
-            </v-layout>
-          </template>
+              </v-layout>
+            </template>
 
 
-        </v-data-table>
+          </v-data-table>
+        </v-col>
 
-      </v-card>
+        <v-col sm6 cols12 style="justify-content: center;">
+          <h3 style="text-align: center">POOL B</h3>
+
+          <v-data-table
+            dense
+            :headers="playersHeaders"
+            :items="players1"
+            :server-items-length="totalPlayers"
+            :loading="loading"
+            :options.sync="options"
+            loading-text="Fetching data..."
+            :footer-props="{'items-per-page-options':[16, 50, 100, 250, 500]}"
+            class="elevation-0"
+            hide-default-footer
+          >
+            <template v-slot:item.score="{ item }">{{ item.score }}</template>
+
+            <template v-slot:item.name="{ item }">
+
+              <v-list-item class="pl-0" dense>
+                <v-list-item-avatar>
+                  <CountryFlag :country="item.country" />
+
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>{{item.name}}</v-list-item-title>
+                  <v-list-item-subtitle></v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+
+            <template v-slot:item.stock_advantage="{ item }">
+              <v-chip
+                class="ma-2"
+                color="#141414"
+                text-color="white"
+                small
+              >
+                <span>{{ item.stock_advantage }}</span>
+              </v-chip>
+            </template>
+
+            <template v-slot:item.actions="{ item }">
+              <v-layout row wrap justify-center align-center>
+                <v-flex pr-4 xs6>
+                  <v-autocomplete
+                    :items="characterList"
+                    v-model="tmpChars[item.id]"
+                    label="Characters"
+                    autocomplete="noautocomplete"
+                    item-text="name"
+                    item-value="id"
+                    clearable
+                    multiple
+                    :value="item.characters.map(c => c.id)"
+                  >
+                  </v-autocomplete>
+                </v-flex>
+                <v-btn
+                  color="green"
+                  :loading="btnLoading[item.id]"
+                  @click="changeCharactersOfPlayer(tmpChars[item.id], item.id)"
+                >
+                  Apply
+                </v-btn>
+
+              </v-layout>
+            </template>
+
+            <template v-slot:item.characters="{ item }">
+              <v-layout row wrap>
+                <div v-for='character in item.characters' style="padding: 5px;">
+                  <div @click="clickOnCharacter(character)" style="cursor: pointer;">
+                    <v-img width="20" :src="require('../assets/' + character.game.slug + '/' + character.slug + '.png')"/>
+                  </div>
+                </div>
+              </v-layout>
+            </template>
+
+
+          </v-data-table>
+        </v-col>
+      </v-row>
+
+      <v-btn style="margin-top: 20px;" :to="{ name: 'crews_info' }" > More info ...</v-btn>
     </v-container>
+
   </v-container>
 </template>
 
@@ -109,7 +196,8 @@ export default {
     options: {},
     characterList: [],
     characters: [],
-    players: [],
+    players1: [],
+    players2: [],
     ranks: [],
     countryList: [],
     stateList: [],
@@ -142,21 +230,27 @@ export default {
     playersHeaders: function() {
       let headers = [
         {
-          text: "SCORE",
-          align: "left",
-          sortable: true,
-          value: "score"
-        },
-        {
           text: "COUNTRY",
           align: "left",
-          sortable: true,
+          sortable: false,
           value: "name"
+        },
+        {
+          text: "WINS",
+          align: "left",
+          sortable: false,
+          value: "wins"
+        },
+        {
+          text: "LOSS",
+          align: "left",
+          sortable: false,
+          value: "loss"
         },
         {
           text: "STOCK ADVANTAGE",
           align: "left",
-          sortable: true,
+          sortable: false,
           value: "stock_advantage"
         }
       ]
@@ -167,25 +261,16 @@ export default {
 
     queryPlayers() {
 
-      this.players = [
-        { name: "Netherlands", score: 3 * 1, stock_advantage:  20-9, country: "nl"},
-        { name: "Germany", score: 3 * 1, stock_advantage:  20-9, country: "de"},
-        { name: "Spain", score: 3 * 1, stock_advantage:  20-13, country: "es"},
-        { name: "France", score: 3 * 1, stock_advantage:  20-15, country: "fr"},
-        { name: "Greece", score: 3 * 0, stock_advantage:  0-0, country: "gr"},
-        { name: "Switzerland", score: 3 * 0, stock_advantage:  15-20, country: "ch"},
-        { name: "Belgium", score: 3 * 0, stock_advantage:  13-20, country: "be"},
-        { name: "Scotland", score: 3 * 0, stock_advantage:  9-20, country: "gb-sct"},
-        { name: "Wales", score: 3 * 0, stock_advantage:  9-20, country: "gb-wls"},
-        { name: "Norway", score: 3 * 1, stock_advantage:  20-6, country: "no"},
-        { name: "England", score: 3 * 1, stock_advantage:  20-15, country: "gb-eng"},
-        { name: "Sweden", score: 3 * 1, stock_advantage:  20-17, country: "swe"},
-        { name: "Austria", score: 3 * 1, stock_advantage:  20-18, country: "at"},
-        { name: "Denmark", score: 3 * 0, stock_advantage:  0-0, country: "dk"},
-        { name: "Portugal", score: 3 * 0, stock_advantage:  18-20, country: "pt"},
-        { name: "Ireland", score: 3 * 0, stock_advantage:  17-20, country: "ie"},
-        { name: "Finland", score: 3 * 0, stock_advantage:  15-20, country: "fi"},
-        { name: "Italy", score: 3 * 0, stock_advantage:  6-20, country: "it"}
+      this.players1 = [
+        { name: "Netherlands", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-9, country: "nl"},
+        { name: "Germany", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-9, country: "de"},
+        { name: "Spain", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-13, country: "es"},
+        { name: "France", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-15, country: "fr"},
+        { name: "Greece", score: 0, wins: "0", loss: 0 - 0, stock_advantage:  0-0, country: "gr"},
+        { name: "Switzerland", score: 0, wins: "0", loss: 1 - 0, stock_advantage:  15-20, country: "ch"},
+        { name: "Belgium", score: 0, wins: "0", loss: 1 - 0, stock_advantage:  13-20, country: "be"},
+        { name: "Scotland", score: 0, wins: "0", loss: 1 - 0, stock_advantage:  9-20, country: "gb-sct"},
+        { name: "Wales", score: 0, wins: "0", loss: 1 - 0, stock_advantage:  9-20, country: "gb-wls"}
       ].sort((a, b) => {
         if (a.score === b.score)
           return b.stock_advantage - a.stock_advantage
@@ -193,6 +278,22 @@ export default {
           return b.score - a.score
       })
 
+      this.players2 = [
+        { name: "Norway", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-6, country: "no"},
+        { name: "England", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-15, country: "gb-eng"},
+        { name: "Sweden", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-17, country: "swe"},
+        { name: "Austria", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-18, country: "at"},
+        { name: "Denmark", score: 0, wins: "0", loss: 0 - 0, stock_advantage:  0-0, country: "dk"},
+        { name: "Portugal", score: 0, wins: "0", loss: 1 - 0, stock_advantage:  18-20, country: "pt"},
+        { name: "Ireland", score: 0, wins: "0", loss: 1 - 0, stock_advantage:  17-20, country: "ie"},
+        { name: "Finland", score: 0, wins: "0", loss: 1 - 0, stock_advantage:  15-20, country: "fi"},
+        { name: "Italy", score: 0, wins: "0", loss: 1 - 0, stock_advantage:  6-20, country: "it"}
+      ].sort((a, b) => {
+        if (a.score === b.score)
+          return b.stock_advantage - a.stock_advantage
+        else
+          return b.score - a.score
+      })
 
 
     },

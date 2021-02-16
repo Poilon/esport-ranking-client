@@ -90,7 +90,6 @@ export default {
       this.results = this.tournament.results
       this.loading = false
     })
-    console.log()
   }
 
 }

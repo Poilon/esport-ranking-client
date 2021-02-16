@@ -10,8 +10,6 @@
       </div>
     </v-parallax>
 
-
-
     <v-tabs
       v-model="tab"
       background-color="transparent"
@@ -46,7 +44,7 @@
       <v-tab
         key="crews"
       >
-        INTERNATIONAL CREWS
+        EUROPEAN CREWS
       </v-tab>
       <v-tab
         key="teams"
@@ -133,9 +131,14 @@ export default {
     snackbar: ""
   }),
 
+  mounted() {
+    console.log(this.$route.query.tab)
+    if (this.$route.query.tab)
+      this.tab = parseInt(this.$route.query.tab)
+  },
+
   computed: {
     title() {
-      console.log(this.tab)
       if (this.tab == 0)
         return "About"
       if (this.tab == 1)
@@ -145,9 +148,12 @@ export default {
       if (this.tab == 2)
         return "Singles Ranking"
       if (this.tab == 3)
-        return "International Crews Ranking"
+        return "European Crews Ranking"
       if (this.tab == 4)
         return "Doubles Ranking"
+    },
+    test() {
+      this.tab = 2
     }
   }
 
