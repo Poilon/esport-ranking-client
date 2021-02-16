@@ -49,7 +49,7 @@
       <v-tab
         key="teams"
       >
-        TEAMS
+        DOUBLES
       </v-tab>
     </v-tabs>
 
