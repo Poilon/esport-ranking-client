@@ -1,6 +1,6 @@
 <template>
 
-  <v-container style='background-image: url("./bg_map.png"); background-repeat: repeat; background-size: cover; width: 100%; max-width: 100%; height: 100vh;'>
+  <v-container style='background-image: url("./bg_map.png"); background-repeat: repeat; background-size: cover; width: 100%; max-width: 100%;'>
 
     <v-container style="max-width:1024px; padding:24px;background-color: white; opacity: 0.9; border: 5px solid black; border-radius: 20px;">
       <v-row no-gutters>
@@ -9,7 +9,7 @@
           <v-data-table
             dense
             :headers="playersHeaders"
-            :items="players2"
+            :items="players1"
             :server-items-length="totalPlayers"
             :loading="loading"
             :options.sync="options"
@@ -22,7 +22,7 @@
 
             <template v-slot:item.name="{ item }">
 
-              <v-list-item class="pl-0" dense>
+              <v-list-item class="p-0" dense :style="'background-color: ' + item.color">
                 <v-list-item-avatar>
                   <CountryFlag :country="item.country" />
 
@@ -34,16 +34,19 @@
               </v-list-item>
             </template>
 
+
+
             <template v-slot:item.stock_advantage="{ item }">
-              <v-chip
-                class="ma-2"
-                color="#141414"
-                text-color="white"
-                small
-              >
-                <span>{{ item.stock_advantage }}</span>
-              </v-chip>
+                <v-chip
+                  class="ma-2"
+                  color="#141414"
+                  text-color="white"
+                  small
+                >
+                  <span>{{ item.stock_advantage }}</span>
+                </v-chip>
             </template>
+
 
             <template v-slot:item.actions="{ item }">
               <v-layout row wrap justify-center align-center>
@@ -92,7 +95,7 @@
           <v-data-table
             dense
             :headers="playersHeaders"
-            :items="players1"
+            :items="players2"
             :server-items-length="totalPlayers"
             :loading="loading"
             :options.sync="options"
@@ -101,11 +104,11 @@
             class="elevation-0"
             hide-default-footer
           >
-            <template v-slot:item.score="{ item }">{{ item.score }}</template>
+            <template v-slot:item.score="{ item }">{{ item.score }}</div></template>
 
             <template v-slot:item.name="{ item }">
 
-              <v-list-item class="pl-0" dense>
+              <v-list-item class="p-0" dense :style="'background-color: ' + item.color">
                 <v-list-item-avatar>
                   <CountryFlag :country="item.country" />
 
@@ -170,9 +173,110 @@
         </v-col>
       </v-row>
 
+
+
       <v-btn style="margin-top: 20px;" :to="{ name: 'crews_info' }" > More info ...</v-btn>
     </v-container>
 
+
+    <v-container style="max-width:1024px; padding:24px;background-color: white; opacity: 0.9; border: 5px solid black; border-radius: 20px; margin-top: 40px;">
+      <h3 style="text-align: center"> Provisional Bracket </h3>
+
+      <v-row no-gutters>
+        <v-col sm3 colsl12>
+          <v-list-item class="p-0" dense>
+            <v-list-item-avatar>
+              <CountryFlag :country="players1[0].country" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{players1[0].name}}</v-list-item-title>
+              <v-list-item-subtitle></v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item class="p-0" dense>
+            <v-list-item-avatar>
+              <CountryFlag :country="players2[3].country" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{players2[3].name}}</v-list-item-title>
+              <v-list-item-subtitle></v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+
+
+          <v-list-item class="p-0" dense>
+            <v-list-item-avatar>
+              <CountryFlag :country="players1[2].country" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{players1[2].name}}</v-list-item-title>
+              <v-list-item-subtitle></v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+
+
+          <v-list-item class="p-0" dense>
+            <v-list-item-avatar>
+              <CountryFlag :country="players2[1].country" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{players2[1].name}}</v-list-item-title>
+              <v-list-item-subtitle></v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+
+
+
+          <v-list-item class="p-0" dense>
+            <v-list-item-avatar>
+              <CountryFlag :country="players2[0].country" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{players2[0].name}}</v-list-item-title>
+              <v-list-item-subtitle></v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+
+
+          <v-list-item class="p-0" dense>
+            <v-list-item-avatar>
+              <CountryFlag :country="players1[3].country" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{players1[3].name}}</v-list-item-title>
+              <v-list-item-subtitle></v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+
+
+          <v-list-item class="p-0" dense>
+            <v-list-item-avatar>
+              <CountryFlag :country="players2[2].country" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{players2[2].name}}</v-list-item-title>
+              <v-list-item-subtitle></v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+
+
+          <v-list-item class="p-0" dense>
+            <v-list-item-avatar>
+              <CountryFlag :country="players1[1].country" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{players1[1].name}}</v-list-item-title>
+              <v-list-item-subtitle></v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-col>
+        <v-col sm9 cols12>
+          <v-img src="../assets/crews/test.png" width="800" height="350"class="pt-2" style="margin-top: 50px;"></v-img>
+        </v-col>
+      </v-row>
+
+    </v-container>
   </v-container>
 </template>
 
@@ -262,10 +366,10 @@ export default {
     queryPlayers() {
 
       this.players1 = [
-        { name: "Netherlands", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-9, country: "nl"},
-        { name: "Germany", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-9, country: "de"},
-        { name: "Spain", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-13, country: "es"},
-        { name: "France", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-15, country: "fr"},
+        { name: "Netherlands", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-9, country: "nl", color: "lightgreen"},
+        { name: "Germany", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-9, country: "de", color: "lightgreen"},
+        { name: "Spain", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-13, country: "es", color: "lightgreen"},
+        { name: "France", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-15, country: "fr", color: "lightgreen"},
         { name: "Greece", score: 0, wins: "0", loss: 0 - 0, stock_advantage:  0-0, country: "gr"},
         { name: "Switzerland", score: 0, wins: "0", loss: 1 - 0, stock_advantage:  15-20, country: "ch"},
         { name: "Belgium", score: 0, wins: "0", loss: 1 - 0, stock_advantage:  13-20, country: "be"},
@@ -279,10 +383,10 @@ export default {
       })
 
       this.players2 = [
-        { name: "Norway", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-6, country: "no"},
-        { name: "England", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-15, country: "gb-eng"},
-        { name: "Sweden", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-17, country: "swe"},
-        { name: "Austria", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-18, country: "at"},
+        { name: "Norway", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-6, country: "no", color: "lightgreen"},
+        { name: "England", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-15, country: "gb-eng", color: "lightgreen"},
+        { name: "Sweden", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-17, country: "swe", color: "lightgreen"},
+        { name: "Austria", score: 1, wins: "1", loss: 1 - 1, stock_advantage:  20-18, country: "at", color: "lightgreen"},
         { name: "Denmark", score: 0, wins: "0", loss: 0 - 0, stock_advantage:  0-0, country: "dk"},
         { name: "Portugal", score: 0, wins: "0", loss: 1 - 0, stock_advantage:  18-20, country: "pt"},
         { name: "Ireland", score: 0, wins: "0", loss: 1 - 0, stock_advantage:  17-20, country: "ie"},
@@ -308,3 +412,6 @@ export default {
   }
 };
 </script>
+<style scope>
+  tr.green { background-color: green }
+</style>
