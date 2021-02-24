@@ -1,7 +1,7 @@
 <template>
-  <div style='background-color: #c8ab87;'>
+  <div :style='background'>
     <v-parallax height="200" src="bg_map.png">
-      <div style="background-color: black; padding: 20px; opacity: 0.7;">
+      <div style="background-color: black; padding: 20px; opacity: 0.8;">
         <p class="text-center display-1 uppercase" style="background-color: black;">{{title}}</p>
         <!-- Petite ligne sous le titre -->
         <div
@@ -12,10 +12,9 @@
 
     <v-tabs
       v-model="tab"
-      background-color="transparent"
-      color="black"
+      background-color="grey"
+      color="white"
       center-active
-      style="border: 3px solid black; border-radius: 20px; border"
       hide-slider
       grow
     >
@@ -58,12 +57,12 @@
       <v-tab-item
         key="about"
       >
-        <About/>
+        <About :background='background'/>
       </v-tab-item>
       <v-tab-item
         key="events"
       >
-        <Events/>
+        <Events :background='background'/>
       </v-tab-item>
 
 <!--  <v-tab-item
@@ -75,17 +74,17 @@
       <v-tab-item
         key="singles"
       >
-        <Ranking/>
+        <Ranking :background='background'/>
       </v-tab-item>
       <v-tab-item
         key="crews"
       >
-        <CrewsRanking/>
+        <CrewsRanking :background='background'/>
       </v-tab-item>
       <v-tab-item
         key="teams"
       >
-        <DoublesRanking/>
+        <DoublesRanking :background='background'/>
       </v-tab-item>
 
     </v-tabs-items>
@@ -125,6 +124,12 @@ export default {
     Ranking, Events, About, CrewsRanking, DoublesRanking
   },
 
+  props: {
+    background: {
+      type: String
+    }
+  },
+
   data: () => ({
     tab: 0,
     snackbarText: "",
@@ -132,7 +137,6 @@ export default {
   }),
 
   mounted() {
-    console.log(this.$route.query.tab)
     if (this.$route.query.tab)
       this.tab = parseInt(this.$route.query.tab)
   },

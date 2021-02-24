@@ -1,5 +1,5 @@
 <template>
-  <v-container style="margin-top: 40px; max-width:1024px; padding:24px;background-color: white; opacity: 0.9; border: 5px solid black; border-radius: 20px;">
+  <v-container style="margin-top: 40px; max-width:1024px; padding:24px;background-color: white; opacity: 0.8;">
     <v-toolbar color="transparent" flat class="mt-2 ml-0">
       <v-layout row align-center>
         <v-chip

@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-parallax height="200" src="bg_map.png">
-      <div style="background-color: black; padding: 20px; opacity: 0.7;">
+      <div style="background-color: black; padding: 20px; opacity: 0.8;">
         <p class="text-center display-1 uppercase" style="background-color: black;">Crews Information</p>
         <!-- Petite ligne sous le titre -->
         <div
@@ -9,8 +9,6 @@
         ></div>
       </div>
     </v-parallax>
-
-
 
     <v-container style='background-color: #cfb289; background-repeat: repeat; background-size: cover; width: 100%; max-width: 100%'>
 
@@ -21,7 +19,6 @@
       <v-container style='background-color: white; border: 5px solid black; border-radius: 20px; margin-top: 50px;'>
         <a href="/#/?tab=3"> <v-img src="../assets/crews/2.png"> </v-img> </a>
       </v-container>
-
 
       <v-container style='background-color: white; border: 5px solid black; border-radius: 20px; margin-top: 50px;'>
         <a href="/#/?tab=3"> <v-img src="../assets/crews/3.png"> </v-img> </a>
@@ -35,11 +32,9 @@
         <a href="/#/?tab=3"> <v-img src="../assets/crews/5.png"> </v-img> </a>
       </v-container>
 
-
       <v-container style='background-color: white; border: 5px solid black; border-radius: 20px; margin-top: 50px;'>
         <a href="/#/?tab=3"> <v-img src="../assets/crews/6.png"> </v-img> </a>
       </v-container>
-
 
     </v-container>
   </div>

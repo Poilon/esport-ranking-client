@@ -1,8 +1,8 @@
 <template>
 
-  <v-container style='background-image: url("./bg_map.png"); background-repeat: repeat; background-size: cover; width: 100%; max-width: 100%;'>
+  <v-container :style='background + "width: 100%; max-width: 100%;"'>
 
-    <v-container style="max-width:1024px; padding:24px;background-color: white; opacity: 0.9; border: 5px solid black; border-radius: 20px;">
+    <v-container style="max-width:1024px; padding:24px; background-color: white; opacity: 0.8;">
       <v-card pa-4 flat color="transparent">
         <v-card-title class="py-0">
           <v-layout row>
@@ -192,7 +192,11 @@ export default {
     tmpChars: {},
     btnLoading: {},
   }),
-
+  props: {
+    background: {
+      type: String
+    }
+  },
   watch: {
     options: {
       handler() {
@@ -273,6 +277,12 @@ export default {
           align: "left",
           sortable: true,
           value: "score"
+        },
+        {
+          text: "ELO",
+          align: "left",
+          sortable: true,
+          value: "elo"
         }
       ]
       if (this.authorizationToken)
@@ -510,6 +520,7 @@ export default {
               profile_picture_url
               current_mpgr_ranking
               score
+              elo
               characters {
                 id
                 name

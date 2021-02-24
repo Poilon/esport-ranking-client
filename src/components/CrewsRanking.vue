@@ -1,8 +1,8 @@
 <template>
 
-  <v-container style='background-image: url("./bg_map.png"); background-repeat: repeat; background-size: cover; width: 100%; max-width: 100%;'>
+  <v-container :style='background + "width: 100%; max-width: 100%;"'>
 
-    <v-container style="max-width:1024px; padding:24px;background-color: white; opacity: 0.9; border: 5px solid black; border-radius: 20px;">
+    <v-container style="max-width:1024px; padding:24px;background-color: white; opacity: 0.8">
       <v-row no-gutters>
         <v-col sm6 cols12 style="justify-content: center; align-items: center; border-right: 2px solid black;">
           <h3 style="text-align: center">POOL A</h3>
@@ -24,7 +24,7 @@
 
               <v-list-item class="p-0" dense :style="'background-color: ' + item.color">
                 <v-list-item-avatar>
-                  <CountryFlag :country="item.country" />
+                  <CountryFlag :country="item && item.country" />
 
                 </v-list-item-avatar>
                 <v-list-item-content>
@@ -110,7 +110,7 @@
 
               <v-list-item class="p-0" dense :style="'background-color: ' + item.color">
                 <v-list-item-avatar>
-                  <CountryFlag :country="item.country" />
+                  <CountryFlag :country="item && item.country" />
 
                 </v-list-item-avatar>
                 <v-list-item-content>
@@ -179,12 +179,13 @@
     </v-container>
 
 
-    <v-container style="max-width:1024px; padding:24px;background-color: white; opacity: 0.9; border: 5px solid black; border-radius: 20px; margin-top: 40px;">
+    <v-container style="max-width:1024px; padding:24px;background-color: white; opacity: 0.8; margin-top: 40px;">
       <h3 style="text-align: center"> Provisional Bracket </h3>
 
       <v-row no-gutters>
         <v-col sm3 colsl12>
           <v-list-item class="p-0" dense>
+            <div style="width: 100px; font-weight: 600;"> Pool A 1st: </div>
             <v-list-item-avatar>
               <CountryFlag :country="players1[0].country" />
             </v-list-item-avatar>
@@ -195,6 +196,7 @@
           </v-list-item>
 
           <v-list-item class="p-0" dense>
+            <div style="width: 100px; font-weight: 600;"> Pool B 4th: </div>
             <v-list-item-avatar>
               <CountryFlag :country="players2[3].country" />
             </v-list-item-avatar>
@@ -206,6 +208,7 @@
 
 
           <v-list-item class="p-0" dense>
+            <div style="width: 100px; font-weight: 600;"> Pool A 3rd: </div>
             <v-list-item-avatar>
               <CountryFlag :country="players1[2].country" />
             </v-list-item-avatar>
@@ -217,6 +220,7 @@
 
 
           <v-list-item class="p-0" dense>
+            <div style="width: 100px; font-weight: 600;"> Pool B 2nd: </div>
             <v-list-item-avatar>
               <CountryFlag :country="players2[1].country" />
             </v-list-item-avatar>
@@ -229,6 +233,7 @@
 
 
           <v-list-item class="p-0" dense>
+            <div style="width: 100px; font-weight: 600;"> Pool B 1st: </div>
             <v-list-item-avatar>
               <CountryFlag :country="players2[0].country" />
             </v-list-item-avatar>
@@ -240,6 +245,7 @@
 
 
           <v-list-item class="p-0" dense>
+            <div style="width: 100px; font-weight: 600;"> Pool A 4th: </div>
             <v-list-item-avatar>
               <CountryFlag :country="players1[3].country" />
             </v-list-item-avatar>
@@ -251,6 +257,7 @@
 
 
           <v-list-item class="p-0" dense>
+            <div style="width: 100px; font-weight: 600;"> Pool B 3rd: </div>
             <v-list-item-avatar>
               <CountryFlag :country="players2[2].country" />
             </v-list-item-avatar>
@@ -262,6 +269,7 @@
 
 
           <v-list-item class="p-0" dense>
+            <div style="width: 100px; font-weight: 600;"> Pool A 2nd: </div>
             <v-list-item-avatar>
               <CountryFlag :country="players1[1].country" />
             </v-list-item-avatar>
@@ -272,7 +280,7 @@
           </v-list-item>
         </v-col>
         <v-col sm9 cols12>
-          <v-img src="../assets/crews/test.png" width="800" height="350"class="pt-2" style="margin-top: 50px;"></v-img>
+          <v-img src="../assets/crews/sameBracket.png" class="pt-2" style="min-width: 625px; width: 600px; margin-top: -58px; margin-left: -290px; height: 500px"></v-img>
         </v-col>
       </v-row>
 
@@ -287,7 +295,11 @@ import CountryFlag from 'vue-country-flag'
 export default {
   name: "CrewsRanking",
   components: { CountryFlag },
-
+  props: {
+    background: {
+      type: String
+    }
+  },
   data: () => ({
     tab: "singles",
     snackbar: false,

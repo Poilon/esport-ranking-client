@@ -1,6 +1,6 @@
 <template>
-  <v-container style='background-image: url("./bg_map.png"); background-repeat: repeat; background-size: cover; width: 100%; max-width: 100%; height: 100vh'>
-    <v-container style='background-color: white; opacity: 0.8; border: 5px solid black; border-radius: 20px;'>
+  <v-container :style='background + "width: 100%; max-width: 100%; height: 100vh"'>
+    <v-container style='background-color: white; opacity: 0.8;'>
 
       <p>Times have changed but we’re Still. Arranging. Melee. Events. (or S.A.M.E for short).</p>
 
@@ -19,6 +19,11 @@
 import gql from 'graphql-tag'
 
 export default {
+  props: {
+    background: {
+      type: String
+    }
+  },
   data: () => ({
 
   }),

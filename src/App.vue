@@ -6,12 +6,31 @@
       </a>
       <div class="d-flex align-center" style="font-size: 30px; font-weight: 800;">THE S.A.M.E LINEUP</div>
       <v-spacer></v-spacer>
+
+      <v-radio-group
+        v-model="radioGroup"
+        hide-details
+        @change="changeBackground($event)"
+        row
+      >
+        <v-radio
+          label="Day"
+        ></v-radio>
+        <v-radio
+          label="Night"
+        ></v-radio>
+        <v-radio
+          label="Map"
+        ></v-radio>
+      </v-radio-group>
     </v-app-bar>
-    <v-content style='background-image: url("./bg_map.png"); background-repeat: repeat; background-size: cover; width: 100%; max-width: 100%; height: 100vh'>
-      <router-view />
+    <v-content :style='backgroundColor() + "width: 100%; max-width: 100%; height: 100vh"'>
+      <router-view :background='backgroundColor()'/>
     </v-content>
   </v-app>
 </template>
+
+
 
 <script>
 import gql from "graphql-tag";
@@ -19,7 +38,33 @@ import gql from "graphql-tag";
 export default {
   name: "App",
 
-  data: () => ({})
+  data () {
+    return {
+      radioGroup: parseInt(localStorage.getItem('radioGroupBackground')) || 0,
+    }
+  },
+
+  mounted() {
+    console.log(localStorage.getItem('radioGroupBackground'))
+    this.radioGroup = parseInt(localStorage.getItem('radioGroupBackground')) || 0
+  },
+
+  methods: {
+    changeBackground(radio) {
+      localStorage.setItem('radioGroupBackground', radio);
+    },
+
+    backgroundColor() {
+      if (this.radioGroup == 0)
+        return "background-color: #f7f7f7;"
+      else if (this.radioGroup == 1)
+        return "background-color: black;"
+      else
+        return `background-image: url("./bg_map.png"); background-repeat: repeat; background-size: cover;`
+
+    }
+  }
+
 };
 </script>
 

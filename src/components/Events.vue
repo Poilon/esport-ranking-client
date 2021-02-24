@@ -1,6 +1,6 @@
 <template>
-  <v-container style='background-image: url("./bg_map.png"); background-repeat: repeat; background-size: cover; width: 100%; max-width: 100%;'>
-    <v-container style='background-color: white; opacity: 0.8; border: 5px solid black; border-radius: 20px;'>
+  <v-container :style='background + "width: 100%; max-width: 100%"'>
+    <v-container style='background-color: white; opacity: 0.8;'>
       <v-row no-gutters>
           <v-col sm4 cols12 style="justify-content: center;">
             <a href="https://smash.gg/tournament/valhalla-online" target="_blank">
@@ -103,6 +103,11 @@
 import gql from 'graphql-tag'
 
 export default {
+  props: {
+    background: {
+      type: String
+    }
+  },
   data: () => ({
 
   }),
