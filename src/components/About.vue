@@ -7,9 +7,13 @@
 
       <p>A collective of 11 premier European TO teams have joined forces under the S.A.M.E Circuit to give you a taste of some the best that European Melee can still offer (under the current circumstances).</p>
 
-      <p>Tune in this weekend to the next S.A.M.E event The uPSet - 27-28 of February!</p>
+      <b><p>Registration is live for the next S.A.M.E events Phoenix Blue Online!
+      </p>
 
-      <p>Find the Brackets at <a href="https://smash.gg/theuPSet" target="_blank">smash.gg/theuPSet</a></p>
+      <p>Register at <a href="https://smash.gg/pxbo" target="_blank">smash.gg/pxbo</a></p></b>
+
+      <p>More information will be added to this website soon but for now this website only houses the leaderboards.
+      For more information about the circuit see <a href="https://smash.gg/SAMEcircuit" target="_blank">smash.gg/SAMEcircuit</a></p>
 
     </v-container>
   </v-container>
