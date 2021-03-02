@@ -490,7 +490,7 @@ export default {
       if (this.cities && this.cities.length > 0 && countries && countries.length > 0)
         cityFilter = "(" + this.cities.map(c => `city == '${c}'`).join(' || ') + ")"
 
-      let filter = ', filter: "1 == 1'
+      let filter = ', filter: "team == false'
       if (this.playerSearch.length > 0)
         filter += ` && players.name | '%${this.playerSearch}%'`
       if (countryFilter.length > 0)

@@ -1,6 +1,6 @@
 <template>
 
-  <v-container :style='background + "width: 100%; max-width: 100%; height: 100vh"'>
+  <v-container :style='background + "width: 100%; max-width: 100%;"'>
 
     <v-container style="max-width:1024px; padding:24px;background-color: white; opacity: 0.8;">
       <v-card pa-4 flat color="transparent">
@@ -484,7 +484,7 @@ export default {
       if (this.cities && this.cities.length > 0 && countries && countries.length > 0)
         cityFilter = "(" + this.cities.map(c => `city == '${c}'`).join(' || ') + ")"
 
-      let filter = ', filter: "1 == 1'
+      let filter = ', filter: "team == true'
       if (this.playerSearch.length > 0)
         filter += ` && players.name | '%${this.playerSearch}%'`
       if (countryFilter.length > 0)
@@ -528,7 +528,7 @@ export default {
         }`
       }).then(data => {
         this.totalPlayers = data.data.paginated_players.total_count
-        this.players = [] // data.data.paginated_players.data
+        this.players = data.data.paginated_players.data
         this.players.forEach(player => {
           if (!player.current_mpgr_ranking)
             player.current_mpgr_ranking = 9999999999;
