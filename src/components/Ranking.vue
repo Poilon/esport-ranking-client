@@ -155,8 +155,6 @@
 
 
         </v-data-table>
-
-         <v-text-field v-model="authorizationToken" label="token" width="50"/>
       </v-card>
     </v-container>
   </v-container>
