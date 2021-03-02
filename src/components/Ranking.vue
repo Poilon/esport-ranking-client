@@ -505,7 +505,7 @@ export default {
       if (this.active)
         activeFilter = ",active: true"
 
-      let orderByFilter = `, order_by: "score desc, name desc"`
+      let orderByFilter = `, order_by: "score desc, elo desc"`
 
       if (sortBy && sortBy.length > 0 && sortBy != "rank")
         orderByFilter = `, order_by: "${sortBy.join(',')} ${sortDesc[0] ? 'desc' : 'asc'}"`

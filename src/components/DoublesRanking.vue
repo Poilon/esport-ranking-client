@@ -2,77 +2,21 @@
 
   <v-container :style='background + "width: 100%; max-width: 100%;"'>
 
-    <v-container style="max-width:1024px; padding:24px;background-color: white; opacity: 0.8;">
+    <v-container style="max-width:1024px; padding:24px; background-color: white; opacity: 0.8;">
       <v-card pa-4 flat color="transparent">
         <v-card-title class="py-0">
           <v-layout row>
-            <v-flex xs4 pr-4>
+            <v-flex xs4 pr-4 pb-4>
               <v-text-field
                 v-model="playerSearch"
                 append-icon="mdi-magnify"
-                label="Player"
+                label="Team Name"
                 single-line
                 hide-details
               ></v-text-field>
             </v-flex>
 
-            <v-flex xs4 pr-4>
-              <v-autocomplete
-                :items="characterList"
-                v-model="characters"
-                label="Characters"
-                autocomplete="noautocomplete"
-                item-text="name"
-                item-value="name"
-                clearable
-                multiple
-                @change="changeCharacters($event)"
-              >
-                <template v-slot:item="data">
-                  <v-list-item-avatar size="20" tile>
-                    <v-img width="20" :src="require('../assets/' + data.item.game.slug + '/' + data.item.slug + '.png')"/>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title v-html="data.item.name"></v-list-item-title>
-                    <v-list-item-subtitle></v-list-item-subtitle>
-                  </v-list-item-content>
-                </template>
-              </v-autocomplete>
-            </v-flex>
 
-            <v-flex xs4>
-              <v-autocomplete
-                v-model="countries"
-                :items="countryList"
-                label="Countries"
-                autocomplete="noautocomplete"
-                clearable
-                multiple
-                @change="changeCountries($event)"
-              />
-            </v-flex>
-            <v-flex xs4 pr-4 v-if="stateList.length > 0">
-              <v-autocomplete
-                v-model="states"
-                :items="stateList"
-                label="States"
-                autocomplete="noautocomplete"
-                clearable
-                multiple
-                @change="changeStates($event)"
-              />
-            </v-flex>
-            <v-flex xs4 pr-4 v-if="cityList.length > 0">
-              <v-autocomplete
-                v-model="cities"
-                :items="cityList"
-                label="Cities"
-                autocomplete="noautocomplete"
-                clearable
-                multiple
-                @change="changeCities($event)"
-              />
-            </v-flex>
           </v-layout>
         </v-card-title>
         <v-data-table
@@ -156,6 +100,7 @@
 
         </v-data-table>
 
+         <v-text-field v-model="authorizationToken" label="token" width="50"/>
       </v-card>
     </v-container>
   </v-container>
@@ -166,12 +111,6 @@ import gql from "graphql-tag";
 
 export default {
   name: "Ranking",
-
-  props: {
-    background: {
-      type: String
-    }
-  },
 
   data: () => ({
     tab: "singles",
@@ -197,7 +136,11 @@ export default {
     tmpChars: {},
     btnLoading: {},
   }),
-
+  props: {
+    background: {
+      type: String
+    }
+  },
   watch: {
     options: {
       handler() {
@@ -268,16 +211,16 @@ export default {
           value: "name"
         },
         {
-          text: "CHARACTERS",
-          align: "left",
-          sortable: false,
-          value: "characters"
-        },
-        {
           text: "SCORE",
           align: "left",
           sortable: true,
           value: "score"
+        },
+        {
+          text: "ELO",
+          align: "left",
+          sortable: true,
+          value: "elo"
         }
       ]
       if (this.authorizationToken)
@@ -340,7 +283,8 @@ export default {
         states: JSON.stringify(this.states),
         cities: JSON.stringify(this.cities),
         active: this.active,
-        characters: JSON.stringify(this.characters)
+        characters: JSON.stringify(this.characters),
+        tab: 2
       }})
       this.queryPlayers()
     },
@@ -499,7 +443,7 @@ export default {
       if (this.active)
         activeFilter = ",active: true"
 
-      let orderByFilter = `, order_by: "score desc, name desc"`
+      let orderByFilter = `, order_by: "score desc, elo desc"`
 
       if (sortBy && sortBy.length > 0 && sortBy != "rank")
         orderByFilter = `, order_by: "${sortBy.join(',')} ${sortDesc[0] ? 'desc' : 'asc'}"`
@@ -514,6 +458,7 @@ export default {
               profile_picture_url
               current_mpgr_ranking
               score
+              elo
               characters {
                 id
                 name
