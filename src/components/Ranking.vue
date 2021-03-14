@@ -519,6 +519,7 @@ export default {
               current_mpgr_ranking
               score
               elo
+              gender_pronoun
               characters {
                 id
                 name

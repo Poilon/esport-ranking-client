@@ -1,5 +1,5 @@
 <template>
-  <v-container style="margin-top: 40px; max-width:1024px; padding:24px;background-color: white; opacity: 0.8;">
+  <v-container style="margin-top: 60px; max-width:1024px; padding:24px;background-color: white; opacity: 1;">
     <v-toolbar color="transparent" flat class="mt-2 ml-0">
       <v-layout row align-center>
         <v-chip
@@ -11,6 +11,14 @@
         >{{player.teams.name}}</v-chip>
 
         <strong class="headline font-weight-black">{{ player.name && player.name.toUpperCase() }}</strong>
+
+        <v-chip
+          v-if="player.gender_pronoun"
+          class="mr-4 ml-4"
+          color="grey"
+          label
+          text-color="white"
+        >{{player.gender_pronoun}}</v-chip>
 
         <a v-if="player.twitch" :href="player.twitch" target="_blank" class="px-4">
           <v-img src="../assets/twitch.png" width="20" />
@@ -67,7 +75,7 @@
                         <v-container>
                           <v-row justify="center">
                             <div v-for='character in player.characters' style="padding: 5px;">
-                              <a :href="'/#/?characters=' + JSON.stringify([character.name])" style="cursor: pointer;">
+                              <a :href="'/#/?tab=2&characters=' + JSON.stringify([character.name])" style="cursor: pointer;">
                                 <v-img width="20" :src="require('../assets/' + character.game.slug + '/' + character.slug + '.png')"/>
                               </a>
                             </div>
@@ -312,6 +320,7 @@ export default {
               player(id: $id) {
                 id
                 name
+                gender_pronoun
                 profile_picture_url
                 current_mpgr_ranking
                 score
