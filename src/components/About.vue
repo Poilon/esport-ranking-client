@@ -11,12 +11,12 @@
       <p> <a target="_blank" href="https://www.twitch.tv/btssmash">twitch.tv/btssmash</a> & <a target="blank" href="https://www.twitch.tv/btssmash2">twitch.tv/btssmash2</a>! 
       </p>
 
-      <b><p>Registration is live for the next S.A.M.E event Regen Online!</b> 
-      <br>The UK's first online Smash major & charity event in 2021 hosted on <b>April 23rd-25th</b>! Consider to donate to their <a target="_blank" href="https://www.specialeffect.org.uk/">SpecialEffect</a> Fundraiser at the link below!
+      <b><p>Registration is live for the next S.A.M.E event Regen Online!</b></p> 
+      <p>The UK's first online Smash major & charity event in 2021 hosted on <b>April 23rd-25th</b>! Consider to donate to their <a target="_blank" href="https://www.specialeffect.org.uk/">SpecialEffect</a> Fundraiser at the link below!
 <a target="blank" href="https://www.justgiving.com/RegenOnline">justgiving.com/RegenOnline</a>
       </p>
 
-      <p>Register at <a target="_blank" href="https://smash.gg/regen" target="_blank">smash.gg/regen</a></p></b>
+      <p>Register at <a target="_blank" href="https://smash.gg/regen" target="_blank">smash.gg/regen</a></b></p>
 
       <p>More information will be added to this website soon but for now this website only houses the leaderboards.
       For more information about the circuit see <a href="https://smash.gg/SAMEcircuit" target="_blank">smash.gg/SAMEcircuit</a></p>
