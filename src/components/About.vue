@@ -8,7 +8,7 @@
       <p>A collective of 11 premier European TO teams have joined forces under the S.A.M.E Circuit to give you a taste of some the best that European Melee can still offer (under the current circumstances).</p>
       
       <b><p>Tune in all weekend to the third S.A.M.E major, Phoenix Blue Online on</b> </p>
-      <p> <a target="_blank" href="https://www.twitch.tv/btssmash">twitch.tv/btssmash> & <a target="blank" href="https://www.twitch.tv/btssmash2">twitch.tv/btssmash2</a>! 
+      <p> <a target="_blank" href="https://www.twitch.tv/btssmash">twitch.tv/btssmash</a> & <a target="blank" href="https://www.twitch.tv/btssmash2">twitch.tv/btssmash2</a>! 
       </p>
 
       <b><p>Registration is live for the next S.A.M.E event Regen Online!</b></p> 
