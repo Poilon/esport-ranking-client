@@ -12,7 +12,7 @@
       </p>
 
       <b><p>Registration is live for the next S.A.M.E event Regen Online!</b></p> 
-      <br>The UK's first online Smash major & charity event in 2021 hosted on <b>April 23rd-25th</b>!Consider to donate to their <a target="_blank" href="https://www.specialeffect.org.uk/">SpecialEffect</a> Fundraiser at the link below!
+      <br>The UK's first online Smash major & charity event in 2021 hosted on <b>April 23rd-25th</b>! Consider to donate to their <a target="_blank" href="https://www.specialeffect.org.uk/">SpecialEffect</a> Fundraiser at the link below!
 <a target="blank" href="https://www.justgiving.com/RegenOnline">justgiving.com/RegenOnline</a>
       </p>
 
