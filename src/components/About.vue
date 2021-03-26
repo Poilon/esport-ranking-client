@@ -3,7 +3,7 @@
     <v-container style='background-color: white; opacity: 0.8;'>
 
 
-      <p>Times have changed but we’re Still. Arranging. Melee. Events. (or S.A.M.E for short).</p>
+      <p>Times have changed but we’re <b>S</b>till. <b>A</b>rranging. <b>M</b>elee. <b>E</b>vents. (or S.A.M.E for short).</p>
 
       <p>A collective of 11 premier European TO teams have joined forces under the S.A.M.E Circuit to give you a taste of some the best that European Melee can still offer (under the current circumstances).</p>
       
