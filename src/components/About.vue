@@ -12,7 +12,7 @@
 <a target="blank" href="https://www.justgiving.com/RegenOnline">justgiving.com/RegenOnline</a>
       </p>
 
-      <p>Register at <a target="_blank" href="https://smash.gg/regen" target="_blank">smash.gg/regen</a></b></p>
+      <p><b>Register at</b> <a target="_blank" href="https://smash.gg/regen" target="_blank">smash.gg/regen</a></b></p>
 
       <p>More information will be added to this website soon but for now this website only houses the leaderboards.
       For more information about the circuit see <a href="https://smash.gg/SAMEcircuit" target="_blank">smash.gg/SAMEcircuit</a></p>
