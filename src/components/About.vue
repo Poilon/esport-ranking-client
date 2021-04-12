@@ -3,17 +3,21 @@
     <v-container style='background-color: white; opacity: 0.8;'>
 
 
-      <p>Times have changed but we’re Still. Arranging. Melee. Events. (or S.A.M.E for short).</p>
+      <p>Times have changed but we’re <b>S</b>till. <b>A</b>rranging. <b>M</b>elee. <b>E</b>vents. (or S.A.M.E for short).</p>
 
       <p>A collective of 11 premier European TO teams have joined forces under the S.A.M.E Circuit to give you a taste of some the best that European Melee can still offer (under the current circumstances).</p>
 
-      <b><p>Registration is live for the next S.A.M.E events Phoenix Blue Online!
+      <b><p>Registration is live for the next S.A.M.E event Regen Online!</b></p> 
+      <p>The UK's first online Smash major & charity event in 2021 hosted on <b>April 23rd-25th</b>! Consider to donate to their <a target="_blank" href="https://www.specialeffect.org.uk/">SpecialEffect</a> Fundraiser at the link below!
+<a target="blank" href="https://www.justgiving.com/RegenOnline">justgiving.com/RegenOnline</a>
       </p>
 
-      <p>Register at <a href="https://smash.gg/pxbo" target="_blank">smash.gg/pxbo</a></p></b>
+      <p><b>Register at</b> <a target="_blank" href="https://smash.gg/regen" target="_blank">smash.gg/regen</a></b></p>
 
       <p>More information will be added to this website soon but for now this website only houses the leaderboards.
       For more information about the circuit see <a href="https://smash.gg/SAMEcircuit" target="_blank">smash.gg/SAMEcircuit</a></p>
+
+      <p>When registering for an event please make sure to read the <b><a target="blank" href="https://docs.google.com/document/d/1vlzR5-27qDeAmpWxqbQb7133jSQ-7gaZr3wTz5fR_Vg/edit?usp=sharing">S.A.M.E ruleset document</a></b></p>
 
     </v-container>
   </v-container>
