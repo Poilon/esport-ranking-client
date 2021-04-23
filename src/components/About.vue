@@ -14,7 +14,7 @@
       <b><p>Registration is live for the next S.A.M.E event, Smash Sauna Online!</b></p> 
       <p>SmashFinland will be heating up the competition on <b>21-23</b> of May with Melee Singles, Teams, Ladder and Smash Sisters and R5 of international crews!</p>
 
-      <p><b>Sweat of the stress and register at</b> <a target="_blank" href="https://smash.gg/smashsauna" target="_blank">smash.gg/regen</a></b></p>
+      <p><b>Sweat of the stress and register at</b> <a target="_blank" href="https://smash.gg/smashsauna" target="_blank">smash.gg/smashsauna</a></b></p>
 
       <p>More information will be added to this website soon but for now this website only houses the leaderboards.
       For more information about the circuit see <a href="https://smash.gg/SAMEcircuit" target="_blank">smash.gg/SAMEcircuit</a></p>
