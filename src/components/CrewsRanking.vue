@@ -378,33 +378,33 @@ export default {
     queryPlayers() {
 
       this.players1 = [
-        { name: "Germany", score: 2, wins: 2, loss: 0, stock_advantage:  40-16, country: "de", color: "lightgreen"},
-        { name: "Netherlands", score: 2, wins: 2, loss: 1, stock_advantage:  57-44, country: "nl", color: "lightgreen"},
-        { name: "France", score: 2, wins: 2, loss: 0, stock_advantage:  40-32, country: "fr", color: "lightgreen"},
-        { name: "Belgium", score: 1, wins: 1, loss: 1, stock_advantage:  33-30, country: "be", color: "lightgreen"},
-        { name: "Scotland", score: 0, wins: 1, loss: 1, stock_advantage:  29-32, country: "gb-sct"},
-        { name: "Spain", score: 0, wins: 1, loss: 1, stock_advantage:  27-33, country: "es"},
-        { name: "Wales", score: 0, wins: 1, loss: 2, stock_advantage:  41-50, country: "gb-wls"},
-        { name: "Switzerland", score: 0, wins: 0, loss: 2, stock_advantage:  30-40, country: "ch"},
-        { name: "Greece", score: 0, wins: 0, loss: 2, stock_advantage:  20-40, country: "gr"},
+        { name: "Germany", wins: 3, loss: 0, stock_advantage:  60-25, country: "de", color: "lightgreen"},
+        { name: "France", wins: 3, loss: 0, stock_advantage:  60-39, country: "fr", color: "lightgreen"},
+        { name: "Netherlands", wins: 3, loss: 1, stock_advantage:  77-58, country: "nl", color: "lightgreen"},
+        { name: "Spain", wins: 1, loss: 2, stock_advantage:  46-53, country: "es", color: "lightgreen"},
+        { name: "Switzerland", wins: 1, loss: 2, stock_advantage:  50-59, country: "ch"},
+        { name: "Belgium", wins: 1, loss: 2, stock_advantage:  40-50, country: "be"},
+        { name: "Scotland", wins: 1, loss: 2, stock_advantage:  38-52, country: "gb-sct"},
+        { name: "Wales", wins: 1, loss: 3, stock_advantage:  55-70, country: "gb-wls"},
+        { name: "Greece", wins: 0, loss: 2, stock_advantage:  20-40, country: "gr"},
       ].sort((a, b) => {
-        if (a.score === b.score)
+        if (a.wins === b.wins)
           return b.stock_advantage - a.stock_advantage
         else
-          return b.score - a.score
+          return b.wins - a.wins
       })
 
       this.players2 = [
-        { name: "Norway", score: 3, wins: 3, loss: 0, stock_advantage:  60-28, country: "no", color: "lightgreen"},
-        { name: "England", score: 2, wins: 2, loss: 0, stock_advantage:  40-24, country: "gb-eng", color: "lightgreen"},
-        { name: "Finland", score: 1, wins: 2, loss: 1, stock_advantage:  55-40, country: "fi", color: "lightgreen"},
-        { name: "Austria", score: 0, wins: 1, loss: 1, stock_advantage:  38-38, country: "at", color: "lightgreen"},
-        { name: "Ireland", score: 0, wins: 1, loss: 1, stock_advantage:  37-38, country: "ie"},
+        { name: "England", wins: 3, loss: 0, stock_advantage:  60-32, country: "gb-eng", color: "lightgreen"},
+        { name: "Norway", wins: 3, loss: 1, stock_advantage:  75-48, country: "no", color: "lightgreen"},
+        { name: "Finland", wins: 3, loss: 1, stock_advantage:  75-49, country: "fi", color: "lightgreen"},
+        { name: "Ireland", wins: 2, loss: 1, stock_advantage:  57-52, country: "ie", color: "lightgreen"},
+        { name: "Sweden", wins: 2, loss: 1, stock_advantage:  51-52, country: "swe"},
+        { name: "Austria", wins: 1, loss: 1, stock_advantage:  38-38, country: "at"},
 
-        { name: "Sweden", score: 0, wins: 1, loss: 1, stock_advantage:  31-37, country: "swe"},
-        { name: "Denmark", score: -1, wins: 0, loss: 1, stock_advantage:  15-20, country: "dk"},
-        { name: "Italy", score: -2, wins: 0, loss: 2, stock_advantage:  15-40, country: "it"},
-        { name: "Portugal", score: -3, wins: 0, loss: 3, stock_advantage:  34-60, country: "pt"},
+        { name: "Denmark", wins: 0, loss: 2, stock_advantage:  29-40, country: "dk"},
+        { name: "Italy", wins: 0, loss: 3, stock_advantage:  23-60, country: "it"},
+        { name: "Portugal", wins: 0, loss: 4, stock_advantage:  43-80, country: "pt"},
       ].sort((a, b) => {
         if (a.wins === b.wins)
           return b.stock_advantage - a.stock_advantage
