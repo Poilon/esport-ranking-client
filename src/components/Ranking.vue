@@ -158,6 +158,18 @@
             </v-layout>
           </template>
 
+          <template v-slot:item.results="{ item }">
+            <div v-for='result in item.results'>
+              <v-chip
+                class="ma-2"
+                color="#141414"
+                text-color="white"
+                small
+              >
+                <span>{{result.tournament.name.split(" - ")[0].split(":")[0].replace(" Online", "") }}: {{ result.rank }}</span>
+              </v-chip>
+            </div>
+          </template>
 
         </v-data-table>
       </v-card>
@@ -294,6 +306,12 @@ export default {
           align: "left",
           sortable: true,
           value: "elo"
+        },
+        {
+          text: "RESULTS",
+          align: "left",
+          sortable: false,
+          value: "results"
         }
       ]
       if (this.authorizationToken)
@@ -538,6 +556,7 @@ export default {
               elo
               country
               gender_pronoun
+              results { rank tournament { name } }
               characters {
                 id
                 name
