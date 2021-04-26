@@ -20,33 +20,31 @@
     >
       <v-tab
         key="about"
+        @click="changeTab(0)"
       >
         ABOUT
       </v-tab>
       <v-tab
         key="events"
+        @click="changeTab(1)"
       >
         EVENTS
       </v-tab>
-      <!--
-        <v-tab
-          key="prizes"
-        >
-          PRIZES
-        </v-tab>
-      -->
       <v-tab
         key="singles"
+        @click="changeTab(2)"
       >
         SINGLES
       </v-tab>
       <v-tab
         key="crews"
+        @click="changeTab(3)"
       >
         EUROPEAN CREWS
       </v-tab>
       <v-tab
         key="teams"
+        @click="changeTab(4)"
       >
         DOUBLES
       </v-tab>
@@ -64,13 +62,6 @@
       >
         <Events :background='background'/>
       </v-tab-item>
-
-<!--  <v-tab-item
-        key="prizes"
-      >
-      </v-tab-item>
- -->
-
       <v-tab-item
         key="singles"
       >
@@ -147,8 +138,6 @@ export default {
         return "About"
       if (this.tab == 1)
         return "Events"
-      // if (this.tab == 2)
-      //   return "Prizes"
       if (this.tab == 2)
         return "Singles Ranking"
       if (this.tab == 3)
@@ -156,8 +145,10 @@ export default {
       if (this.tab == 4)
         return "Doubles Ranking"
     },
-    test() {
-      this.tab = 2
+  },
+  methods: {
+    changeTab(tab) {
+      this.$router.push({ path: '/', query: { tab: tab }})
     }
   }
 

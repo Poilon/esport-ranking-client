@@ -187,10 +187,10 @@
           <v-list-item class="p-0" dense>
             <div style="width: 100px; font-weight: 600;"> Pool A 1st: </div>
             <v-list-item-avatar>
-              <CountryFlag :country="players1[0].country" />
+              <CountryFlag :country="(players1[0] && players1[0].country) || 'fr' " />
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{players1[0].name}}</v-list-item-title>
+              <v-list-item-title>{{players1[0] && players1[0].name}}</v-list-item-title>
               <v-list-item-subtitle></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -198,10 +198,10 @@
           <v-list-item class="p-0" dense>
             <div style="width: 100px; font-weight: 600;"> Pool B 4th: </div>
             <v-list-item-avatar>
-              <CountryFlag :country="players2[3].country" />
+              <CountryFlag :country="(players2[3] && players2[3].country) || 'fr' " />
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{players2[3].name}}</v-list-item-title>
+              <v-list-item-title>{{players2[3] && players2[3].name}}</v-list-item-title>
               <v-list-item-subtitle></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -210,10 +210,10 @@
           <v-list-item class="p-0" dense>
             <div style="width: 100px; font-weight: 600;"> Pool A 3rd: </div>
             <v-list-item-avatar>
-              <CountryFlag :country="players1[2].country" />
+              <CountryFlag :country="(players1[2] && players1[2].country) || 'fr' " />
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{players1[2].name}}</v-list-item-title>
+              <v-list-item-title>{{players1[2] && players1[2].name}}</v-list-item-title>
               <v-list-item-subtitle></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -222,10 +222,10 @@
           <v-list-item class="p-0" dense>
             <div style="width: 100px; font-weight: 600;"> Pool B 2nd: </div>
             <v-list-item-avatar>
-              <CountryFlag :country="players2[1].country" />
+              <CountryFlag :country="(players2[1] && players2[1].country) || 'fr' " />
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{players2[1].name}}</v-list-item-title>
+              <v-list-item-title>{{players2[1] && players2[1].name}}</v-list-item-title>
               <v-list-item-subtitle></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -235,10 +235,10 @@
           <v-list-item class="p-0" dense>
             <div style="width: 100px; font-weight: 600;"> Pool B 1st: </div>
             <v-list-item-avatar>
-              <CountryFlag :country="players2[0].country" />
+              <CountryFlag :country="(players2[0] && players2[0].country) || 'fr' " />
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{players2[0].name}}</v-list-item-title>
+              <v-list-item-title>{{players2[0] && players2[0].name}}</v-list-item-title>
               <v-list-item-subtitle></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -247,10 +247,10 @@
           <v-list-item class="p-0" dense>
             <div style="width: 100px; font-weight: 600;"> Pool A 4th: </div>
             <v-list-item-avatar>
-              <CountryFlag :country="players1[3].country" />
+              <CountryFlag :country="(players1[3] && players1[3].country) || 'fr' " />
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{players1[3].name}}</v-list-item-title>
+              <v-list-item-title>{{players1[3] && players1[3].name}}</v-list-item-title>
               <v-list-item-subtitle></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -259,10 +259,10 @@
           <v-list-item class="p-0" dense>
             <div style="width: 100px; font-weight: 600;"> Pool B 3rd: </div>
             <v-list-item-avatar>
-              <CountryFlag :country="players2[2].country" />
+              <CountryFlag :country="(players2[2] && players2[2].country) || 'fr' " />
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{players2[2].name}}</v-list-item-title>
+              <v-list-item-title>{{players2[2] && players2[2].name}}</v-list-item-title>
               <v-list-item-subtitle></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -271,10 +271,10 @@
           <v-list-item class="p-0" dense>
             <div style="width: 100px; font-weight: 600;"> Pool A 2nd: </div>
             <v-list-item-avatar>
-              <CountryFlag :country="players1[1].country" />
+              <CountryFlag :country="(players1[1] && players1[1].country) || 'fr' " />
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{players1[1].name}}</v-list-item-title>
+              <v-list-item-title>{{players1[1] && players1[1].name}}</v-list-item-title>
               <v-list-item-subtitle></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>

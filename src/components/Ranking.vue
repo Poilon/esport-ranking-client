@@ -369,7 +369,6 @@ export default {
       this.update()
     },
     clickOnCountry(country) {
-      console.log("toto")
       this.countries = [country]
       this.update()
     },
