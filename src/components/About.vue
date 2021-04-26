@@ -7,12 +7,12 @@
 
       <p>A collective of 11 premier European TO teams have joined forces under the S.A.M.E Circuit to give you a taste of some the best that European Melee can still offer (under the current circumstances).</p>
 
-      <b><p>Registration is live for the next S.A.M.E event Regen Online!</b></p> 
+      <p><b>Registration is live for the next S.A.M.E event Regen Online!</b></p>
       <p>The UK's first online Smash major & charity event in 2021 hosted on <b>April 23rd-25th</b>! Consider to donate to their <a target="_blank" href="https://www.specialeffect.org.uk/">SpecialEffect</a> Fundraiser at the link below!
 <a target="blank" href="https://www.justgiving.com/RegenOnline">justgiving.com/RegenOnline</a>
       </p>
 
-      <p><b>Register at</b> <a target="_blank" href="https://smash.gg/regen" target="_blank">smash.gg/regen</a></b></p>
+      <p><b>Register at</b> <a href="https://smash.gg/regen" target="_blank">smash.gg/regen</a></b></p>
 
       <p>More information will be added to this website soon but for now this website only houses the leaderboards.
       For more information about the circuit see <a href="https://smash.gg/SAMEcircuit" target="_blank">smash.gg/SAMEcircuit</a></p>
