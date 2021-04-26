@@ -97,6 +97,11 @@
             </v-layout>
           </template>
 
+          <template v-slot:item.results="{ item }">
+            <div v-for='result in item.results'>
+              <span>{{result.tournament.name.split(" - ")[0].split(":")[0].replace(" Online", "") }}: {{ ord(result.rank) }}</span>
+            </div>
+          </template>
 
         </v-data-table>
 
@@ -220,6 +225,12 @@ export default {
           align: "left",
           sortable: true,
           value: "elo"
+        },
+        {
+          text: "RESULTS",
+          align: "left",
+          sortable: false,
+          value: "results"
         }
       ]
       if (this.authorizationToken)
@@ -228,6 +239,9 @@ export default {
     }
   },
   methods: {
+    ord(n) {
+      return n.toString() + (["st","nd","rd"][(((n<0?-n:n)+90)%100-10)%10-1]||"th")
+    },
     changeCharactersOfPlayer(characterIds, playerId) {
       this.btnLoading[playerId] = true
       this.snackbarText = ""
@@ -458,6 +472,8 @@ export default {
               current_mpgr_ranking
               score
               elo
+              results { rank tournament { name } }
+
               characters {
                 id
                 name

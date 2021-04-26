@@ -160,14 +160,7 @@
 
           <template v-slot:item.results="{ item }">
             <div v-for='result in item.results'>
-              <v-chip
-                class="ma-2"
-                color="#141414"
-                text-color="white"
-                small
-              >
-                <span>{{result.tournament.name.split(" - ")[0].split(":")[0].replace(" Online", "") }}: {{ result.rank }}</span>
-              </v-chip>
+              <span>{{result.tournament.name.split(" - ")[0].split(":")[0].replace(" Online", "") }}: {{ ord(result.rank) }}</span>
             </div>
           </template>
 
@@ -320,6 +313,9 @@ export default {
     }
   },
   methods: {
+    ord(n) {
+      return n.toString() + (["st","nd","rd"][(((n<0?-n:n)+90)%100-10)%10-1]||"th")
+    },
     changeCharactersOfPlayer(characterIds, playerId) {
       this.btnLoading[playerId] = true
       this.snackbarText = ""
