@@ -6,25 +6,13 @@
 
       <p>A collective of 11 premier European TO teams have joined forces under the S.A.M.E Circuit to give you a taste of some the best that European Melee can still offer (under the current circumstances).</p>
 
-      <p>Tune in from Friday till Sunday to our 4th major,
-        <b>
-          <a target="_blank" href="https://smash.gg/tournament/regen-online/details">Regen Online</a>
-        </b>
-        , on
-        <b>
-          <a target="_blank" href="https://twitch.tv/btssmash">BTSsmash</a>
-        </b> and <b>
-          <a target="_blank" href="https://twitch.tv/btssmash">BTSsmash 2</a>
-        </b>
-      </p>
-
-      <p>Regen Online is raising funds for <a target="_blank" href="https://www.specialeffect.org.uk/">SpecialEffect</a> a charity driven to put fun and inclusion back into the lives of people with physical disabilities by helping them to play video games.
-      <p>Consider to donate at <a target="blank" href="https://www.justgiving.com/RegenOnline">justgiving.com/RegenOnline</a></p>
-
       <p><b>Registration is live for the next S.A.M.E event, Smash Sauna Online!</b></p>
       <p>SmashFinland will be heating up the competition on <b>21-23</b> of May with Melee Singles, Teams, Ladder and Smash Sisters and R5 of international crews!</p>
 
       <p><b>Sweat of the stress and register at</b> <a href="https://smash.gg/smashsauna" target="_blank">smash.gg/smashsauna</a></b></p>
+
+      <p>Smash Sauna Online is raising funds for <a target="_blank" href="https://kummit.fi/tietoa-meista/kummit-ry-info/in-english/">Kummit</a> a charitable organization, which supports the five Finnish university children’s hospitals, development and research, and attempts to improve the comfort of patients during their hospital stay. The association has also placed significant attention on the mental health work of children and adolescents.
+      <p>Consider to donate at <a target="blank" href="https://oma.kummit.fi/yleinen/16-3957">oma.kummit.fi/yleinen/16-3957</a></p>
 
       <p>More information will be added to this website soon but for now this website only houses the leaderboards.
       For more information about the circuit see <a href="https://smash.gg/SAMEcircuit" target="_blank">smash.gg/SAMEcircuit</a></p>
