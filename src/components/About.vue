@@ -7,7 +7,7 @@
       <p>A collective of 11 premier European TO teams have joined forces under the S.A.M.E Circuit to give you a taste of some the best that European Melee can still offer (under the current circumstances).</p>
       
       <p><b>Registration is live for the next S.A.M.E event, Fête Online!</b>
-      <br>TeamFête is hosting a week long party in their Minecraft venue from the <b>21st-27th of June</b> with Melee Singles, Teams, Round 6 of international crews, an Iron man bracket and much more to be revealed!</p>
+      <br><a target="_blank" href="https://twitter.com/FeteSmash">Team Fête</a> is hosting a week long party in their Minecraft venue from the <b>21st-27th of June</b> with Melee Singles, Teams, Round 6 of international crews, an Iron man bracket and much more to be revealed!</p>
 
       <p><b>Register at</b> <a href="https://smash.gg/fete" target="_blank">smash.gg/fete</a></b>🥳</p>
 
