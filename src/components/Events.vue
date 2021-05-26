@@ -33,7 +33,7 @@
         <v-col sm4 cols12>
           <a href="https://smash.gg/tournament/smash-sauna-online" target="_blank">
             <v-img src="../assets/tournaments/04_SAMEcal_may.png" style="width: 100%; height: 270px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto;" />
-            <v-img src="../assets/tournaments/04_samecal_may_sticker_spot.png" style="width: 100%; height: 250px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto; margin-top: -250px;" />
+            <v-img src="../assets/tournaments/04_SAMEcal_may__sso_sticker.png" style="width: 100%; height: 250px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto; margin-top: -250px;" />
           </a>
         </v-col>
 
