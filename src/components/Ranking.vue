@@ -551,6 +551,7 @@ export default {
               score
               elo
               country
+              prefix
               gender_pronoun
               results { rank tournament { name } }
               characters {
