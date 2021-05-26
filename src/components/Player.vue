@@ -275,6 +275,7 @@ export default {
             player(id: $id) {
               id
               name
+              prefix
               profile_picture_url
               current_mpgr_ranking
               score
@@ -320,6 +321,7 @@ export default {
               player(id: $id) {
                 id
                 name
+                prefix
                 gender_pronoun
                 profile_picture_url
                 current_mpgr_ranking
