@@ -56,14 +56,14 @@
         </v-col>
 
         <v-col sm4 cols12>
-          <a href="https://smash.gg/tournament/heir-online" target="_blank">
+          <a href="https://smash.gg/tournament/teaghlach-online" target="_blank">
             <v-img src="../assets/tournaments/07_SAMEcal_august.png" style="width: 100%; height: 270px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto;" />
             <v-img src="../assets/tournaments/07_samecal_august_sticker_spot.png" style="width: 100%; height: 250px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto; margin-top: -250px;" />
           </a>
         </v-col>
 
         <v-col sm4 cols12>
-          <a href="https://smash.gg/tournament/teaghlach-online" target="_blank">
+          <a href="https://smash.gg/tournament/bagarre" target="_blank">
             <v-img src="../assets/tournaments/08_SAMEcal_september.png" style="width: 100%; height: 270px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto;" />
             <v-img src="../assets/tournaments/08_samecal_sept_sticker_spot.png" style="width: 100%; height: 250px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto; margin-top: -250px;" />
           </a>
@@ -74,25 +74,19 @@
       <v-row no-gutters>
 
         <v-col sm4 cols12 style="justify-content: center;">
-          <a href="https://smash.gg/tournament/bagarre" target="_blank">
+          <a href="https://smash.gg/SAMEcircuit" target="_blank">
             <v-img src="../assets/tournaments/09_SAMEcal_october.png" style="width: 100%; height: 270px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto;" />
             <v-img src="../assets/tournaments/09_samecal_oct_sticker_spot.png" style="width: 100%; height: 250px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto; margin-top: -250px;" />
           </a>
         </v-col>
 
         <v-col sm4 cols12>
-          <a href="https://smash.gg/tournament/somnio-online" target="_blank">
+          <a href="https://smash.gg/SAMEcircuit" target="_blank">
             <v-img src="../assets/tournaments/10_SAMEcal_november.png" style="width: 100%; height: 270px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto;" />
             <v-img src="../assets/tournaments/10_samecal_nov_sticker_spot.png" style="width: 100%; height: 250px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto; margin-top: -250px;" />
           </a>
         </v-col>
 
-        <v-col sm4 cols12>
-          <a href="https://smash.gg/league/s-a-m-e-circuit-2021" target="_blank">
-            <v-img src="../assets/tournaments/11_SAMEcal_december.png" style="width: 100%; height: 270px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto;" />
-            <v-img src="../assets/tournaments/11_samecal_dev_sticker_spot.png" style="width: 100%; height: 250px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto; margin-top: -250px;" />
-          </a>
-        </v-col>
       </v-row>
     </v-container>
   </v-container>
