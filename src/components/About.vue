@@ -15,7 +15,7 @@
       For more information about the circuit see <a href="https://smash.gg/SAMEcircuit" target="_blank">smash.gg/SAMEcircuit</a></p>
 
       <p>We're proud that S.A.M.E 2021 is also a qualifier for <b>Smash Summit 11</b> and <b>Smash Summit 12</b>. We wish <a target="_blank" href="https://samecircuit.eu/#/players/d598526e-2531-47d7-84ec-d7bb46eea3cd">Pipsqueak</a> the best of luck at the event by <a target="_blank" href="https://beyondthesummit.tv/">Beyond The Summit</a>
-      <br>The highest placing uninvited singles player at the <b>SAME Finale</b> earn an invite to <b>Smash Summit 12</b> in December! Top 16 on the singles leaderboards qualify for the Finale!</p>
+      <br>The highest placing uninvited singles player at the <b>SAME Finale</b> earns an invite to <b>Smash Summit 12</b> in December! Top 16 on the singles leaderboards qualify for the Finale!</p>
       
       <p>When registering for an event please make sure to read the <b><a target="blank" href="https://docs.google.com/document/d/1vlzR5-27qDeAmpWxqbQb7133jSQ-7gaZr3wTz5fR_Vg/edit?usp=sharing">S.A.M.E ruleset document</a></b></p>
 
