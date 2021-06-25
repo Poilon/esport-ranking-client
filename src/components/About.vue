@@ -6,10 +6,12 @@
 
       <p>A collective of 11 premier European TO teams have joined forces under the S.A.M.E Circuit to give you a taste of some the best that European Melee can still offer (under the current circumstances).</p>
       
-      <p><b>Registration is live for the next S.A.M.E event, Fête Online!</b>
-      <br><a target="_blank" href="https://twitter.com/FeteSmash">Team Fête</a> is hosting a week long party in their Minecraft venue from the <b>21st-27th of June</b> with Melee Singles, Teams, Round 6 of international crews, an Iron man bracket and much more to be revealed!</p>
+      <p>Tune in this weekend to the sixth S.A.M.E event, 🥳Fete Online🥳! on <a target="_blank" href="https://www.twitch.tv/btssmash/squad">btssmash/squad</a></b> and help raise funds for <b><a target="_blank" href="https://www.justgiving.com/fundraising/feteonline">Doctors Without Borders</a></b></p>
+      
+      <p><b>Registration is live for the next S.A.M.E event, Super Bou Online!</b>
+      <br>Come chill with the <a target="_blank" href="https://twitter.com/BousCrew">Bous</a> in the virtual Mediterranean sun from the <b>31st of July until the 1st of August</b> with Melee Singles, Teams, Round 7 of International Crews, a Salty Suit, Combo Contest and much more to be revealed!</p>
 
-      <p><b>Register at</b> <a href="https://smash.gg/fete" target="_blank">smash.gg/fete</a></b>🥳</p>
+      <p><b>Register at</b> 🍸<a href="https://smash.gg/sbouonline" target="_blank">smash.gg/sbouonline</a></b>🌅</p>
 
       <p>More information will be added to this website soon but for now this website only houses the leaderboards.
       For more information about the circuit see <a href="https://smash.gg/SAMEcircuit" target="_blank">smash.gg/SAMEcircuit</a></p>
