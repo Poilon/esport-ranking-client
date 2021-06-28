@@ -6,15 +6,13 @@
 
       <p>A collective of 11 premier European TO teams have joined forces under the S.A.M.E Circuit to give you a taste of some the best that European Melee can still offer (under the current circumstances).</p>
       
-      <p>Tune in this weekend to the sixth S.A.M.E event, 🥳Fete Online🥳! on <a target="_blank" href="https://www.twitch.tv/btssmash/squad">btssmash/squad</a></b> and help raise funds for <b><a target="_blank" href="https://www.justgiving.com/fundraising/feteonline">Doctors Without Borders</a></b></p>
-      
       <p><b>Registration is live for the next S.A.M.E event, Super Bou Online!</b>
       <br>Come chill with the <a target="_blank" href="https://twitter.com/BousCrew">Bous</a> in the virtual Mediterranean sun from the <b>31st of July until the 1st of August</b> with Melee Singles, Teams, Round 7 of International Crews, a Salty Suit, Combo Contest and much more to be revealed!</p>
 
       <p><b>Register at</b> 🍸<a href="https://smash.gg/sbouonline" target="_blank">smash.gg/sbouonline</a></b>🌅</p>
 
       <p>More information will be added to this website soon but for now this website only houses the leaderboards.
-      For more information about the circuit see <a href="https://smash.gg/SAMEcircuit" target="_blank">smash.gg/SAMEcircuit</a></p>
+      <br>For more information about the circuit see <a href="https://smash.gg/SAMEcircuit" target="_blank">smash.gg/SAMEcircuit</a></p>
 
       <p>We're proud that S.A.M.E 2021 is also a qualifier for <b>Smash Summit 11</b> and <b>Smash Summit 12</b>. We wish <a target="_blank" href="https://samecircuit.eu/#/players/d598526e-2531-47d7-84ec-d7bb46eea3cd">Pipsqueak</a> the best of luck at the event by <a target="_blank" href="https://beyondthesummit.tv/">Beyond The Summit</a>
       <br>The highest placing uninvited singles player at the <b>SAME Finale</b> earns an invite to <b>Smash Summit 12</b> in December! Top 16 on the singles leaderboards qualify for the Finale!</p>
