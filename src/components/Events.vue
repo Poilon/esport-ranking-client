@@ -40,7 +40,7 @@
         <v-col sm4 cols12>
           <a href="https://smash.gg/tournament/f-te-online" target="_blank">
             <v-img src="../assets/tournaments/05_SAMEcal_june.png" style="width: 100%; height: 270px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto;" />
-            <v-img src="../assets/tournaments/05_samecal_june_fete_sticker.png" style="width: 100%; height: 250px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto; margin-top: -250px;" />
+            <v-img src="../assets/tournaments/05_samecal_june__fete_sticker.png" style="width: 100%; height: 250px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto; margin-top: -250px;" />
           </a>
         </v-col>
       </v-row>
