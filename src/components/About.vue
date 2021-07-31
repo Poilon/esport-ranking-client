@@ -11,7 +11,7 @@
       <p><b>Registration is live for the next S.A.M.E event, Teaghlach Online!</b>
       <br>Get the <a target="https://twitter.com/TeaghlachSSBM">Irish experience</a> of this brand new major on the <b>21st -22nd of August</b> with Melee Singles, Teams, Round 8 of International Crews and much more to be revealed!</p>
 
-      <p><b>Register at</b>🇮🇪<a href="https://smash.gg/sbouonline" target="_blank">smash.gg/teaghlach-online</a></b>🇮🇪</p>
+      <p><b>Register at</b><a href="https://smash.gg/sbouonline" target="_blank">smash.gg/teaghlach-online</a></b></p>
 
       <p>More information will be added to this website soon but for now this website only houses the leaderboards.
       <br>For more information about the circuit see <a href="https://smash.gg/SAMEcircuit" target="_blank">smash.gg/SAMEcircuit</a></p>
