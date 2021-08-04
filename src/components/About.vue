@@ -7,7 +7,7 @@
       <p>A collective of 11 premier European TO teams have joined forces under the S.A.M.E Circuit to give you a taste of some the best that European Melee can still offer (under the current circumstances).</p>
 
       <p><b>Registration is live for the next S.A.M.E event, Teaghlach Online!</b>
-      <br>Get the <a target="https://twitter.com/TeaghlachSSBM">Irish experience</a> of this brand new major on the <b>21st -22nd of August</b> with Melee Singles, Teams, Round 8 of International Crews and much more to be revealed!</p>
+      <br>Get the <a href="https://twitter.com/TeaghlachSSBM" target="_blank">Irish experience</a> of this brand new major on the <b>21st -22nd of August</b> with Melee Singles, Teams, Round 8 of International Crews and much more to be revealed!</p>
 
       <p><b>Register at </b><a href="https://smash.gg/sbouonline" target="_blank">smash.gg/teaghlach-online</a></b></p>
 
