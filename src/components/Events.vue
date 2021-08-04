@@ -51,7 +51,7 @@
         <v-col sm4 cols12 style="justify-content: center;">
           <a href="https://smash.gg/tournament/super-bou-online" target="_blank">
             <v-img src="../assets/tournaments/06_SAMEcal_july.png" style="width: 100%; height: 270px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto;" />
-            <v-img src="../assets/tournaments/06_samecal_july_sticker.png" style="width: 100%; height: 250px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto; margin-top: -250px;" />
+            <v-img src="../assets/tournaments/06_SAMEcal_july_sbo_sticker.png" style="width: 100%; height: 250px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto; margin-top: -250px;" />
           </a>
         </v-col>
 
