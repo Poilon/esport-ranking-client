@@ -5,8 +5,6 @@
       <p>Times have changed but we’re <b>S</b>till. <b>A</b>rranging. <b>M</b>elee. <b>E</b>vents. (or S.A.M.E for short).</p>
 
       <p>A collective of 11 premier European TO teams have joined forces under the S.A.M.E Circuit to give you a taste of some the best that European Melee can still offer (under the current circumstances).</p>
-      
-      <p>Tune in this weekend to <b>🐂Super Bou Online🐂</b>! on <a target="_blank" href="https://www.twitch.tv/btssmash/squad">btssmash/squad</a></b>, come and hang out with the BOUS in chat☀️</p>
 
       <p><b>Registration is live for the next S.A.M.E event, Teaghlach Online!</b>
       <br>Get the <a target="https://twitter.com/TeaghlachSSBM">Irish experience</a> of this brand new major on the <b>21st -22nd of August</b> with Melee Singles, Teams, Round 8 of International Crews and much more to be revealed!</p>
