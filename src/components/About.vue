@@ -5,11 +5,13 @@
       <p>Times have changed but we’re <b>S</b>till. <b>A</b>rranging. <b>M</b>elee. <b>E</b>vents. (or S.A.M.E for short).</p>
 
       <p>A collective of 11 premier European TO teams have joined forces under the S.A.M.E Circuit to give you a taste of some the best that European Melee can still offer (under the current circumstances).</p>
+      
+      <p>Tune in this weekend to <b>Teaghlach Online</b>🍀! on <a target="_blank" href="https://www.twitch.tv/btssmash/squad">btssmash/squad</a></b>, come experience Melee the Irish way</p>
+      
+      <p><b>Registration is live for the 9th and final S.A.M.E qualifier, Bagarre!</b>
+      <br>Join <a target="_blank" href="https://twitter.com/ParisSmashGang">ParisSmashGang</a> for an online scuffle on the <b>25th -26th of September</b> with Melee Singles, Teams, Round 9 of International Crews and a combo contest!</p>
 
-      <p><b>Registration is live for the next S.A.M.E event, Teaghlach Online!</b>
-      <br>Get the <a href="https://twitter.com/TeaghlachSSBM" target="_blank">Irish experience</a> of this brand new major on the <b>21st -22nd of August</b> with Melee Singles, Teams, Round 8 of International Crews and much more to be revealed!</p>
-
-      <p><b>Register at </b><a href="https://smash.gg/sbouonline" target="_blank">smash.gg/teaghlach-online</a></b></p>
+      <p><b>Register at </b><a href="https://smash.gg/bagarre" target="_blank">smash.gg/bagarre</a></b></p>
 
       <p>More information will be added to this website soon but for now this website only houses the leaderboards.
       <br>For more information about the circuit see <a href="https://smash.gg/SAMEcircuit" target="_blank">smash.gg/SAMEcircuit</a></p>
