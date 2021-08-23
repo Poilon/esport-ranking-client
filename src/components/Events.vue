@@ -58,7 +58,7 @@
         <v-col sm4 cols12>
           <a href="https://smash.gg/tournament/teaghlach-online" target="_blank">
             <v-img src="../assets/tournaments/07_SAMEcal_august.png" style="width: 100%; height: 270px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto;" />
-            <v-img src="../assets/tournaments/07_samecal_august_sticker_spot.png" style="width: 100%; height: 250px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto; margin-top: -250px;" />
+            <v-img src="../assets/tournaments/07_SAMEcal_aug_teaghlach_sticker.png" style="width: 100%; height: 250px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto; margin-top: -250px;" />
           </a>
         </v-col>
 
