@@ -8,7 +8,7 @@
       
       <p>After 9 events, each ran by a unique premier European TO team, the top 16 singles competitors, the top 8 doubles teams and the top 8 international crews will battle it out at the <b>S.A.M.E FINALE</b> for the champion titles!</p>
 
-      <p>Tune in on November 5th to 7th to BTS Smash for the conclusion of the S.A.M.E 2021 circuit..!<p>
+      <p>Tune in on <b>November 5th</b> to <b>7th</b> to <a target="_blank" href="https://www.twitch.tv/btssmash/">BTS Smash</a> for the conclusion of the S.A.M.E 2021 circuit..!<p>
 
       <p>There's an invite for <b>Smash Summit 13</b> (to be held in the Summer of 2022) on the line for the Circuit singles champion. The Doubles champions will earn an invite to <b>Heir 6</b>, provided by <a target="_blank" href="https://twitter.com/teamheir">Team Heir</a>.<p>
 
