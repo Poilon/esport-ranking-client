@@ -65,7 +65,7 @@
         <v-col sm4 cols12>
           <a href="https://smash.gg/tournament/bagarre" target="_blank">
             <v-img src="../assets/tournaments/08_SAMEcal_september.png" style="width: 100%; height: 270px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto;" />
-            <v-img src="../assets/tournaments/08_samecal_sept_sticker_spot.png" style="width: 100%; height: 250px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto; margin-top: -250px;" />
+            <v-img src="../assets/tournaments/08_SAMEcal_sept_bagarre_sticker.png" style="width: 100%; height: 250px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto; margin-top: -250px;" />
           </a>
         </v-col>
       </v-row>
@@ -76,7 +76,6 @@
         <v-col sm4 cols12 style="justify-content: center;">
           <a href="https://smash.gg/SAMEcircuit" target="_blank">
             <v-img src="../assets/tournaments/09_SAMEcal_october.png" style="width: 100%; height: 270px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto;" />
-            <v-img src="../assets/tournaments/09_samecal_oct_sticker_spot.png" style="width: 100%; height: 250px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto; margin-top: -250px;" />
           </a>
         </v-col>
 
