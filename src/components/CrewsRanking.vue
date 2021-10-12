@@ -378,16 +378,16 @@ export default {
     queryPlayers() {
 
       this.players1 = [
-        { name: "France", wins: 5, loss: 0, stock_advantage:  80-50, country: "fr", color: "lightgreen"},
-        { name: "Germany", wins: 4, loss: 0, stock_advantage:  80-33, country: "de", color: "lightgreen"},
-        { name: "Netherlands", wins: 4, loss: 1, stock_advantage:  97-66, country: "nl", color: "lightgreen"},
-        { name: "Scotland", wins: 2, loss: 2, stock_advantage:  38-52, country: "gb-sct", color: "lightgreen"},
+        { name: "France", wins: 7, loss: 1, stock_advantage:  134-95, country: "fr", color: "lightgreen"},
+        { name: "Germany", wins: 5, loss: 0, stock_advantage:  100-47, country: "de", color: "lightgreen"},
+        { name: "Netherlands", wins: 5, loss: 2, stock_advantage:  134-92, country: "nl", color: "lightgreen"},
+        { name: "Spain", wins: 3, loss: 4, stock_advantage:  86-85, country: "es", color: "lightgreen"},
 
-        { name: "Spain", wins: 1, loss: 4, stock_advantage:  46-53, country: "es"},
+        { name: "Scotland", wins: 3, loss: 3, stock_advantage:  76-81, country: "gb-sct"},
         { name: "Switzerland", wins: 1, loss: 2, stock_advantage:  50-59, country: "ch"},
         { name: "Belgium", wins: 1, loss: 3, stock_advantage:  48-70, country: "be"},
-        { name: "Wales", wins: 1, loss: 4, stock_advantage:  66-90, country: "gb-wls"},
-        { name: "Greece", wins: 0, loss: 3, stock_advantage:  28-60, country: "gr"},
+        { name: "Wales", wins: 1, loss: 5, stock_advantage:  681-110, country: "gb-wls"},
+        { name: "Greece", wins: 0, loss: 6, stock_advantage:  51-120, country: "gr"},
       ].sort((a, b) => {
         if (a.wins === b.wins)
           return b.stock_advantage - a.stock_advantage
@@ -396,16 +396,16 @@ export default {
       })
 
       this.players2 = [
-        { name: "Finland", wins: 5, loss: 1, stock_advantage:  115-73, country: "fi", color: "lightgreen"},
-        { name: "England", wins: 4, loss: 0, stock_advantage:  80-45, country: "gb-eng", color: "lightgreen"},
+        { name: "England", wins: 7, loss: 0, stock_advantage:  120-75, country: "gb-eng", color: "lightgreen"},
+        { name: "Finland", wins: 6, loss: 1, stock_advantage:  135-88, country: "fi", color: "lightgreen"},
+        { name: "Sweden", wins: 5, loss: 2, stock_advantage:  124-93, country: "swe", color: "lightgreen"},
         { name: "Norway", wins: 4, loss: 1, stock_advantage:  95-63, country: "no", color: "lightgreen"},
-        { name: "Sweden", wins: 2, loss: 1, stock_advantage:  51-52, country: "swe", color: "lightgreen"},
 
-        { name: "Ireland", wins: 2, loss: 3, stock_advantage:  87-92, country: "ie"},
-        { name: "Denmark", wins: 2, loss: 2, stock_advantage:  69-76, country: "dk"},
+        { name: "Ireland", wins: 2, loss: 4, stock_advantage:  87-92, country: "ie"},
+        { name: "Denmark", wins: 2, loss: 5, stock_advantage:  104-126, country: "dk"},
         { name: "Austria", wins: 1, loss: 3, stock_advantage:  70-78, country: "at"},
-        { name: "Italy", wins: 0, loss: 4, stock_advantage:  42-80, country: "it"},
-        { name: "Portugal", wins: 0, loss: 5, stock_advantage:  60-100, country: "pt"},
+        { name: "Italy", wins: 1, loss: 5, stock_advantage:  68-110, country: "it"},
+        { name: "Portugal", wins: 0, loss: 7, stock_advantage:  76-140, country: "pt"},
       ].sort((a, b) => {
         if (a.wins === b.wins)
           return b.stock_advantage - a.stock_advantage
