@@ -80,7 +80,7 @@
         </v-col>
 
         <v-col sm4 cols12>
-          <a href="https://smash.gg/SAMEcircuit" target="_blank">
+          <a href="https://smash.gg/same-finale-2021" target="_blank">
             <v-img src="../assets/tournaments/10_SAMEcal_november.png" style="width: 100%; height: 270px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto;" />
             <v-img src="../assets/tournaments/10_samecal_nov_sticker_spot.png" style="width: 100%; height: 250px; max-height: 270px; max-width: 300px; margin-left: auto; margin-right: auto; margin-top: -250px;" />
           </a>
