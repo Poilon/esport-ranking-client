@@ -10,7 +10,7 @@
 
       <p>Tune in on <b>November 5th</b> to <b>7th</b> to <a target="_blank" href="https://www.twitch.tv/btssmash/">BTS Smash</a> for the conclusion of the S.A.M.E 2021 circuit..!<p>
 
-      <p> -<a target="_blank" href="https://metafy.gg/">Metafy</a> is providing a <b>€1000</a> prize pool for singles - use the promo code "<b>SAME25</b>" for <b>25% off</b> on <b>all lessons</b>!
+      <p> - <a target="_blank" href="https://metafy.gg/">Metafy</a> is providing a <b>€1000 prize pool</b> for singles - use the promo code "<b>SAME25</b>" for <b>25% off</b> on <b>all lessons</b>!
       <br> - there's an invite for <b>Smash Summit 13</b>  on the line for the Circuit singles champion (to be held in the Summer of 2022). 
       <br> - The Doubles champions will earn an invite to <b>Heir 6</b>, provided by <a target="_blank" href="https://twitter.com/teamheir">Team Heir</a>.<p>
 
